@@ -23,21 +23,28 @@ DEBUG = env("DEBUG")
 
 ALLOWED_HOSTS = env("ALLOWED_HOSTS", default="").split(",")
 
-INSTALLED_APPS = [
+DEFAULT_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+]
 
+SERVICE_APPS = [
     "rest_framework",
     "django_filters",
     "drf_yasg",
     'corsheaders',  # для headers - см.ниже переменную CORS_ALLOWED_ORIGINS + Middleware
-
-    "apps.reviews",
 ]
+
+APPS = [
+    "apps.cards.apps.CardsConfig",
+
+]
+
+INSTALLED_APPS = DEFAULT_APPS + SERVICE_APPS + APPS
 
 # CORS_ALLOW_ALL_ORIGINS = True  # TODO: поправить в будущем
 CORS_ALLOWED_ORIGINS = [
@@ -54,8 +61,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    # "django.middleware.cache.CacheMiddleware",
-
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -105,11 +110,6 @@ DATABASES = {
         "ATOMIC_REQUESTS": True,
     }
 }
-
-CACHES = {
-    "default": env.cache(),
-}
-CACHE_TIMEOUT = int(env("CACHE_TIMEOUT"))
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
