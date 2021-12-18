@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.cards.models import Card, Try, CardDeck, Deck
+from apps.cards.models import Card, CardDeck, Deck
 
 
 class CardSerializer(serializers.ModelSerializer):
@@ -24,18 +24,30 @@ class CardSerializer(serializers.ModelSerializer):
         )
 
 
-class TrySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Try
-        fields = ("id", "name")
-
-
 class CardDeckSerializer(serializers.ModelSerializer):
-    card = CardSerializer(many=False, read_only=True)
+    id = serializers.IntegerField(source="card.id")
+    faction = serializers.CharField(source="card.faction.name")
+    color = serializers.CharField(source="card.color.name")
+    type = serializers.CharField(source="card.type.name")
+    ability = serializers.CharField(source="card.ability.name")
+    charges = serializers.IntegerField(source="card.charges")
+    damage = serializers.IntegerField(source="card.damage")
+    hp = serializers.IntegerField(source="card.hp")
+    heal = serializers.IntegerField(source="card.heal")
 
     class Meta:
         model = CardDeck
-        fields = ("card", )
+        fields = (
+            "id",
+            "faction",
+            "color",
+            "type",
+            "ability",
+            "charges",
+            "damage",
+            "hp",
+            "heal"
+        )
 
 
 class DeckSerializer(serializers.ModelSerializer):
@@ -44,7 +56,6 @@ class DeckSerializer(serializers.ModelSerializer):
     class Meta:
         model = Deck
         fields = ("id", "name", "health", "d")
-        # depth = 1
 
     def create(self, validated_data):
         print(validated_data)
