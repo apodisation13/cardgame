@@ -46,11 +46,11 @@ APPS = [
 
 INSTALLED_APPS = DEFAULT_APPS + SERVICE_APPS + APPS
 
-# CORS_ALLOW_ALL_ORIGINS = True  # TODO: поправить в будущем
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8080",
-    "http://127.0.0.1:8080",
-]
+CORS_ALLOW_ALL_ORIGINS = True  # TODO: поправить в будущем
+# CORS_ALLOWED_ORIGINS = [
+#     "https://localhost:8080",
+#     "https://127.0.0.1:8080",
+# ]
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",  # он должен стоять выше всех, так сказано
@@ -180,8 +180,8 @@ REST_FRAMEWORK = {
         'rest_framework.filters.SearchFilter',  # вот здесь импорт делать из рест-фреймворк, а не из джанго-филтер
         'rest_framework.filters.OrderingFilter',  # и здесь тоже
     ],
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 20,  # количество элементов на одной странице для пагинации
+    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    # 'PAGE_SIZE': 20,  # количество элементов на одной странице для пагинации
 }
 
 USE_X_FORWARDED_HOST = True
