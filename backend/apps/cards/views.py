@@ -13,7 +13,6 @@ class CardViewSet(ViewSet):
             select_related("color").\
             select_related("type").\
             select_related("ability").\
-            order_by("-hp").\
             all()
         serializer = CardSerializer(queryset, many=True)
         return Response(serializer.data)

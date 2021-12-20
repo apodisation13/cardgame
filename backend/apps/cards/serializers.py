@@ -25,37 +25,41 @@ class CardSerializer(serializers.ModelSerializer):
 
 
 class CardDeckSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(source="card.id")
-    faction = serializers.CharField(source="card.faction.name")
-    color = serializers.CharField(source="card.color.name")
-    type = serializers.CharField(source="card.type.name")
-    ability = serializers.CharField(source="card.ability.name")
-    charges = serializers.IntegerField(source="card.charges")
-    damage = serializers.IntegerField(source="card.damage")
-    hp = serializers.IntegerField(source="card.hp")
-    heal = serializers.IntegerField(source="card.heal")
+    # id = serializers.IntegerField(source="card.id")
+    # faction = serializers.CharField(source="card.faction.name")
+    # color = serializers.CharField(source="card.color.name")
+    # type = serializers.CharField(source="card.type.name")
+    # ability = serializers.CharField(source="card.ability.name")
+    # charges = serializers.IntegerField(source="card.charges")
+    # damage = serializers.IntegerField(source="card.damage")
+    # hp = serializers.IntegerField(source="card.hp")
+    # heal = serializers.IntegerField(source="card.heal")
+    # card = CardSerializer(many=False, )
 
     class Meta:
         model = CardDeck
-        fields = (
-            "id",
-            "faction",
-            "color",
-            "type",
-            "ability",
-            "charges",
-            "damage",
-            "hp",
-            "heal"
-        )
+        # fields = (
+        #     "id",
+        #     "faction",
+        #     "color",
+        #     "type",
+        #     "ability",
+        #     "charges",
+        #     "damage",
+        #     "hp",
+        #     "heal",
+        # )
+        fields = ("card", )
 
 
 class DeckSerializer(serializers.ModelSerializer):
     d = CardDeckSerializer(many=True, )
+    cards = CardSerializer(many=True, required=False)
 
     class Meta:
         model = Deck
-        fields = ("id", "name", "health", "d")
+        fields = ("id", "name", "health", "d", "cards")
+
 
     def create(self, validated_data):
         print(validated_data)

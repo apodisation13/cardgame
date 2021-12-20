@@ -45,8 +45,8 @@ class Card(models.Model):
 
 
 class CardDeck(models.Model):
-    card = models.ForeignKey("Card", related_name="d", on_delete=models.PROTECT)
-    deck = models.ForeignKey("Deck", related_name="d", on_delete=models.PROTECT)
+    card = models.ForeignKey("Card", related_name="d", on_delete=models.CASCADE)
+    deck = models.ForeignKey("Deck", related_name="d", on_delete=models.CASCADE)
 
 
 class Deck(models.Model):
