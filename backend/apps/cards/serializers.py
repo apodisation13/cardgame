@@ -39,7 +39,6 @@ class DeckSerializer(serializers.ModelSerializer):
         model = Deck
         fields = ("id", "name", "health", "d", "cards")
 
-
     def create(self, validated_data):
         print(validated_data)
         cards = validated_data.pop('d', None)  # если вопросы не пришли, то можно создать опрос

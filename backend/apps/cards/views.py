@@ -18,6 +18,10 @@ class CardViewSet(ViewSet):
         return Response(serializer.data)
 
 
-class DeckViewSet(GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin, mixins.RetrieveModelMixin):
+class DeckViewSet(GenericViewSet,
+                  mixins.ListModelMixin,
+                  mixins.CreateModelMixin,
+                  mixins.RetrieveModelMixin,
+                  mixins.DestroyModelMixin, ):
     queryset = Deck.objects.all()
     serializer_class = DeckSerializer
