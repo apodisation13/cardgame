@@ -10,7 +10,7 @@ COPY . .
 # Запустить команду внутри образа, установка зависимостей.
 RUN pip install --upgrade pip && pip install -r requirements.txt
 #RUN chmod +x entrypoint.sh
-RUN chmod +x ./entrypoint.sh
+RUN chmod +x entrypoint.sh
 
 # Добавить мета-информацию к образу для открытия порта к прослушиванию.
 #EXPOSE 8000 80 81
