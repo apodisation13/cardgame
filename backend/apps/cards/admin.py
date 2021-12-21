@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from apps.cards.models import Faction, Color, Type, Ability, Card, CardDeck, Deck
+from apps.cards.models import Ability, Card, CardDeck, Color, Deck, Faction, Type
 
 admin.site.register(Faction)
 admin.site.register(Color)

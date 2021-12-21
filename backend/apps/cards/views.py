@@ -1,6 +1,6 @@
 from rest_framework import mixins
 from rest_framework.response import Response
-from rest_framework.viewsets import ViewSet, GenericViewSet
+from rest_framework.viewsets import GenericViewSet, ViewSet
 
 from apps.cards.models import Card, Deck
 from apps.cards.serializers import CardSerializer, DeckSerializer
