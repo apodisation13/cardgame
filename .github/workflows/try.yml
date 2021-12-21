@@ -9,7 +9,7 @@ on:
 env:
 #  данные параметры будут доступны в этом файле
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+  IMAGE_NAME: ${{ github.repository }} | tr '[:upper:]' '[:lower:]'
   MODE: ${{ github.ref_name == 'master' && 'prod' || 'dev' }}
 
 jobs:
