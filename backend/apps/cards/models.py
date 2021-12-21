@@ -53,3 +53,6 @@ class Deck(models.Model):
     name = models.CharField(max_length=32, blank=False, null=False)
     cards = models.ManyToManyField(Card, related_name="cards", through=CardDeck)
     health = models.IntegerField(blank=False, null=False, default=0)
+
+    def __str__(self):
+        return f'{id}, health {self.health}'
