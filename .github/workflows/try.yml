@@ -10,7 +10,7 @@ env:
 #  данные параметры будут доступны в этом файле
 
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ secrets.IMAGE_NAME }}
+  IMAGE_NAME: ${{ github.repository }}
   MODE: ${{ github.ref_name == 'master' && 'prod' || 'dev' }}
 
 jobs:
