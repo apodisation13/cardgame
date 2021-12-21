@@ -15,4 +15,4 @@ RUN chmod +x ./entrypoint.sh
 # Добавить мета-информацию к образу для открытия порта к прослушиванию.
 #EXPOSE 8000 80 81
 
-ENTRYPOINT ["/cardgame/entrypoint.sh"]
+ENTRYPOINT ["./entrypoint.sh"]
