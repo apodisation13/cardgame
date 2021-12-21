@@ -4,8 +4,6 @@
 # Allowed
 !apps/
 !config/
-!scripts/
-!taskqueue/
 !manage.py
 !requirements.txt
 
