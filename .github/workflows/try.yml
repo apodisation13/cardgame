@@ -28,11 +28,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r backend/requirements-dev.txt
 
-      - name: Check imports ordering with isort
-        run: cd cardgame && isort -c .
-
       - name: Lint with flake8
-        run: cd netomerch && flake8 .
+        run: cd backend && flake8 .
+
+      - name: Check imports ordering with isort
+        run: cd backend && isort -c .
 
       - name: test with Pytest
         run: pytest
