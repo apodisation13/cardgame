@@ -6,6 +6,7 @@
 !config/
 !manage.py
 !requirements.txt
+!entrypoint.sh
 
 # Override allowed
 .idea/
