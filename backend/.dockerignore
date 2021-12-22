@@ -6,7 +6,7 @@
 !config/
 !manage.py
 !requirements.txt
-!entrypoint.sh
+!run.sh
 !wait.sh
 
 # Override allowed
