@@ -184,8 +184,8 @@ REST_FRAMEWORK = {
     # 'PAGE_SIZE': 20,  # количество элементов на одной странице для пагинации
 }
 
-USE_X_FORWARDED_HOST = True
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# USE_X_FORWARDED_HOST = True
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 SWAGGER_SETTINGS = {
     'LOGIN_URL': '/admin/login/',
