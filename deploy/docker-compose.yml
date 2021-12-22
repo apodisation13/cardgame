@@ -5,8 +5,8 @@ volumes:
 
 networks:
   private:
-  proxy:
-    external: true
+#  proxy:
+#    external: true
 
 services:
   postgres:
@@ -35,9 +35,9 @@ services:
   nginx:
     image: nginx:stable-alpine
     restart: unless-stopped
-    environment:
-      - VIRTUAL_HOST=${DOMAIN_NAME}
-      - LETSENCRYPT_HOST=${DOMAIN_NAME}
+#    environment:
+#      - VIRTUAL_HOST=${DOMAIN_NAME}
+#      - LETSENCRYPT_HOST=${DOMAIN_NAME}
     depends_on:
       - api
     volumes:
@@ -47,6 +47,6 @@ services:
       - ./logs:/var/log/nginx
     networks:
       - private
-      - proxy
+#      - proxy
 #    ports:
 #      - "82:80"
