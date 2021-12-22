@@ -1,6 +1,5 @@
 from django.urls import path, re_path
 from drf_yasg import openapi
-from drf_yasg.generators import OpenAPISchemaGenerator
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
 
@@ -11,17 +10,10 @@ openapi_info = openapi.Info(
     )
 
 
-class BothHttpAndHttpsSchemaGenerator(OpenAPISchemaGenerator):
-    def get_schema(self, request=None, public=False):
-        schema = super().get_schema(request, public)
-        schema.schemes = ["http", "https"]
-        return schema
-
-
 schema_view = get_schema_view(
     openapi_info,
     public=False,
-    generator_class=BothHttpAndHttpsSchemaGenerator, # Here
+    url='http://194.67.109.190:82/api/v1/',
     permission_classes=(permissions.AllowAny,),
 )
 
