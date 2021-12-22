@@ -13,7 +13,7 @@ openapi_info = openapi.Info(
 schema_view = get_schema_view(
     openapi_info,
     public=False,
-    url='http://194.67.109.190:82/api/v1/',
+    # url='http://194.67.109.190:82/api/v1/',
     permission_classes=(permissions.AllowAny,),
 )
 
