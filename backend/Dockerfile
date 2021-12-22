@@ -16,5 +16,6 @@ RUN chmod +x wait.sh
 # Добавить мета-информацию к образу для открытия порта к прослушиванию.
 #EXPOSE 8000 80 81
 
+#RUN
 #ENTRYPOINT ["/cardgame/backend/run.sh"]
 CMD bash run.sh

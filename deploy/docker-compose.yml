@@ -27,8 +27,8 @@ services:
     depends_on:
       - postgres
     volumes:
-      - ./static:/app/static
-      - ./media:/app/media
+      - ./static:/cardgame/static
+      - ./media:/cardgame/media
     networks:
       - private
 
