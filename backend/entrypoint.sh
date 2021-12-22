@@ -2,8 +2,10 @@
 
 set -euxo pipefail
 
-bash ./wait.sh "$POSTGRES_HOST:$POSTGRES_PORT" -- python manage.py migrate --no-input
+bash wait.sh "$POSTGRES_HOST:$POSTGRES_PORT" -- python manage.py migrate --no-input
 
-python manage.py collectstatic --no-input
+bash ls -a
 
-exec gunicorn config.wsgi:application -b 0.0.0.0 --reload
+python manage.py collectstatic
+
+gunicorn config.wsgi --bind 0.0.0.0:8000
