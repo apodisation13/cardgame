@@ -68,62 +68,62 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-#  deploy:
-#      needs: build
-#      runs-on: ubuntu-latest
-#      environment: ${{ github.ref_name == 'master' && 'prod' || 'dev' }}  # we can't use env here :(
-#      steps:
-#        - name: Check out the repo
-#          uses: actions/checkout@v2
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: ${{ github.ref_name == 'master' && 'prod' || 'dev' }}  # we can't use env here :(
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+
+      - name: Upload docker-compose
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_SERVER }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          source: "deploy/*"
+          target: "/srv/cardgame/backend/${{ env.MODE }}"
+          strip_components: 1
+
+      - name: Connect via SSH, pull, restart
+        uses: appleboy/ssh-action@master
+#        with:
+#          host: ${{ secrets.SSH_SERVER }}
+#          username: ${{ secrets.SSH_USER }}
+#          key: ${{ secrets.SSH_KEY }}
+#          script: |
+#            cd /srv/cardgame/backend/${{ env.MODE }}
 #
-#        - name: Upload docker-compose
-#          uses: appleboy/scp-action@master
-#          with:
-#            host: ${{ secrets.SSH_SERVER }}
-#            username: ${{ secrets.SSH_USER }}
-#            key: ${{ secrets.SSH_KEY }}
-#            source: "deploy/*"
-#            target: "/srv/cardgame/backend/${{ env.MODE }}"
-#            strip_components: 1
+#            export REGISTRY=${{ env.REGISTRY }}
+#            export IMAGE_NAME=${{ env.IMAGE_NAME }}
+#            export MODE=${{ env.MODE }}
+#            export DOMAIN_NAME=${{ secrets.DOMAIN_NAME }}
+##            чем это отличается от 124.2.1.1?.
 #
-#        - name: Connect via SSH, pull, restart
-#          uses: appleboy/ssh-action@master
-#          with:
-#            host: ${{ secrets.SSH_SERVER }}
-#            username: ${{ secrets.SSH_USER }}
-#            key: ${{ secrets.SSH_KEY }}
-#            script: |
-#              cd /srv/cardgame/backend/${{ env.MODE }}
+##            < пиши поверх, << перенос строки
+#            echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" > .env
+#            echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> .env
+#            echo "POSTGRES_DB=${{ secrets.POSTGRES_DB }}" >> .env
+#            echo "POSTGRES_HOST=postgres" >> .env
+#            echo "POSTGRES_PORT=5432" >> .env
+#            echo "DEBUG=False" >> .env
+#            echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
+#            echo "ALLOWED_HOSTS=${{ secrets.DOMAIN_NAME }}" >> .env
 #
-#              export REGISTRY=${{ env.REGISTRY }}
-#              export IMAGE_NAME=${{ env.IMAGE_NAME }}
-#              export MODE=${{ env.MODE }}
-#              export DOMAIN_NAME=${{ secrets.DOMAIN_NAME }}
-#  #            чем это отличается от 124.2.1.1?.
+##            что здесь делается?
+#            declare -a arr=(".env" "docker-compose.yml" "nginx.conf")
+#            for f in "${arr[@]}"; do chown :developer $f && chmod 660 $f; done
 #
-#  #            < пиши поверх, << перенос строки
-#              echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" > .env
-#              echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> .env
-#              echo "POSTGRES_DB=${{ secrets.POSTGRES_DB }}" >> .env
-#              echo "POSTGRES_HOST=postgres" >> .env
-#              echo "POSTGRES_PORT=5432" >> .env
-#              echo "DEBUG=False" >> .env
-#              echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
-#              echo "ALLOWED_HOSTS=${{ secrets.DOMAIN_NAME }}" >> .env
+##            команда для докер пул? он его стирает, или копию?
+#            echo "${{ github.token }}" | docker login ${{ env.REGISTRY }} --username ${{ github.actor }} --password-stdin
+#            docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.MODE }}
+##            копирует образ на сервер? в докере на сервере
 #
-#  #            что здесь делается?
-#              declare -a arr=(".env" "docker-compose.yml" "nginx.conf")
-#              for f in "${arr[@]}"; do chown :developer $f && chmod 660 $f; done
+##            api - имя из d-compose?
+#            docker-compose stop api
+#            docker-compose rm -f api
+#            docker-compose up -d
 #
-#  #            команда для докер пул? он его стирает, или копию?
-#              echo "${{ github.token }}" | docker login ${{ env.REGISTRY }} --username ${{ github.actor }} --password-stdin
-#              docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.MODE }}
-#  #            копирует образ на сервер? в докере на сервере
-#
-#  #            api - имя из d-compose?
-#              docker-compose stop api
-#              docker-compose rm -f api
-#              docker-compose up -d
-#
-#  #            а что это?
-#              for image in $(docker images | grep none | awk '{print $3}' | cat); do docker rmi "$image"; done
+##            а что это?
+#            for image in $(docker images | grep none | awk '{print $3}' | cat); do docker rmi "$image"; done
