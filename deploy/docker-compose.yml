@@ -48,5 +48,5 @@ services:
     networks:
       - private
       - proxy
-#    ports:
-#      - "82:80"
+    ports:
+      - "82:80"
