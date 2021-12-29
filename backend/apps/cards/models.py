@@ -53,6 +53,18 @@ class Deck(models.Model):
     name = models.CharField(max_length=32, blank=False, null=False)
     cards = models.ManyToManyField(Card, related_name="cards", through=CardDeck)
     health = models.IntegerField(blank=False, null=False, default=0)
+    leader = models.ForeignKey("Leader", related_name="decks", on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{id}, health {self.health}'
+        return f'{self.id}, health {self.health}, {self.leader}'
+
+
+class Leader(models.Model):
+    name = models.CharField(max_length=32, blank=False, null=False)
+    faction = models.ForeignKey(Faction, related_name="leaders", on_delete=models.CASCADE)
+    ability = models.ForeignKey(Ability, related_name='leaders', on_delete=models.PROTECT)
+    damage = models.IntegerField(default=0, blank=False, null=False)
+    charges = models.IntegerField(default=1, blank=False, null=False)
+
+    def __str__(self):
+        return f'{self.name}, ability {self.ability}, damage {self.damage} charges {self.charges}'
