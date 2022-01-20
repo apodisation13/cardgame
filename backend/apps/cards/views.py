@@ -14,7 +14,9 @@ class DeckViewSet(GenericViewSet,
                   mixins.ListModelMixin,
                   mixins.CreateModelMixin,
                   mixins.RetrieveModelMixin,
-                  mixins.DestroyModelMixin, ):
+                  mixins.DestroyModelMixin,
+                  mixins.UpdateModelMixin,
+                  ):
     queryset = Deck.objects.all()
     serializer_class = DeckSerializer
 

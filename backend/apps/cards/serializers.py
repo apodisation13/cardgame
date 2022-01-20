@@ -62,14 +62,35 @@ class DeckSerializer(serializers.ModelSerializer):
         cards = validated_data.pop("d", None)  # если вопросы не пришли, то можно создать опрос
         print(cards)
 
-        # leader = validated_data.pop("leader", None)
-        # print(leader)
-        # validated_data["leader"] = leader["id"]
-
         deck = super().create(validated_data)
 
         if cards:
             for position in cards:
                 CardDeck.objects.create(deck=deck, **position)
+
+        return deck
+
+    def update(self, instance, validated_data):
+        """изменение колоды - карт или лидера"""
+        cards = validated_data.pop("d", None)
+        print(cards)
+
+        deck = super().update(instance, validated_data)
+
+        # ищем записи по id колоды, обновляем все карты внутри них
+        current_cards = CardDeck.objects.filter(deck_id=deck.id)
+        for i in range(len(current_cards)):
+            print(current_cards[i].id, cards[i].get('card').id)
+            carddeck = CardDeck.objects.filter(id=current_cards[i].id).first()
+            carddeck.card_id=cards[i].get('card').id
+            carddeck.save()
+
+        # в любом случае удаляем все карты, которые там были до этого
+        # for card in current_cards:
+        #     CardDeck.objects.filter(id=card.id).delete()
+        #
+        # if cards:
+        #     for card in cards:
+        #         CardDeck.objects.create(deck=deck, **card)
 
         return deck
