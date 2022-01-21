@@ -82,7 +82,7 @@ class DeckSerializer(serializers.ModelSerializer):
         for i in range(len(current_cards)):
             print(current_cards[i].id, cards[i].get('card').id)
             carddeck = CardDeck.objects.filter(id=current_cards[i].id).first()
-            carddeck.card_id=cards[i].get('card').id
+            carddeck.card_id = cards[i].get('card').id
             carddeck.save()
 
         # в любом случае удаляем все карты, которые там были до этого
