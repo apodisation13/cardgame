@@ -70,6 +70,7 @@ class Deck(models.Model):
                                related_name="decks",
                                on_delete=models.CASCADE,
                                blank=True, null=True,
+                               default=None
                                )
 
     def __str__(self):
