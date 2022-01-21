@@ -51,7 +51,8 @@ class Card(models.Model):
     heal = models.IntegerField(default=0, blank=False, null=False)
 
     def __str__(self):
-        return f'{self.name}, hp {self.hp}, ability {self.ability}, damage {self.damage}, heal {self.heal} '
+        return f'{self.id} {self.name}, hp {self.hp}, ' \
+               f'ability {self.ability}, damage {self.damage}, heal {self.heal} '
 
 
 class CardDeck(models.Model):
@@ -65,7 +66,11 @@ class Deck(models.Model):
     name = models.CharField(max_length=32, blank=False, null=False)
     cards = models.ManyToManyField(Card, related_name="cards", through=CardDeck)
     health = models.IntegerField(blank=False, null=False, default=0)
-    leader = models.ForeignKey("Leader", related_name="decks", on_delete=models.CASCADE)
+    leader = models.ForeignKey("Leader",
+                               related_name="decks",
+                               on_delete=models.CASCADE,
+                               blank=True, null=True,
+                               )
 
     def __str__(self):
         return f'{self.id}, health {self.health}, {self.leader}'
