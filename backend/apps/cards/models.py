@@ -2,7 +2,7 @@ from django.db import models
 
 
 class Faction(models.Model):
-    """модель фракции - пока Soldiers, Animals, Monsters"""
+    """модель фракции - пока Soldiers, Animals, Monsters, Neutral"""
     name = models.CharField(max_length=32, blank=False, null=False)
 
     def __str__(self):
@@ -26,7 +26,12 @@ class Type(models.Model):
 
 
 class Ability(models.Model):
-    """способность карты"""
+    """
+    способность карты
+    damage-one
+    damage-all
+    heal
+    """
     name = models.CharField(max_length=32, blank=False, null=False)
     description = models.TextField(blank=True, null=True)
 
