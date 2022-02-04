@@ -49,6 +49,7 @@ class Card(models.Model):
     damage = models.IntegerField(default=0, blank=False, null=False)
     hp = models.IntegerField(default=0, blank=False, null=False)
     heal = models.IntegerField(default=0, blank=False, null=False)
+    image = models.ImageField(upload_to='cards/', blank=True, null=True)
 
     def __str__(self):
         return f'{self.id} {self.name}, hp {self.hp}, ' \

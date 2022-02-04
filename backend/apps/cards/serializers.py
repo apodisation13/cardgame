@@ -20,7 +20,8 @@ class CardSerializer(serializers.ModelSerializer):
             "charges",
             "damage",
             "hp",
-            "heal"
+            "heal",
+            "image",
         )
 
 
