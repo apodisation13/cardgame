@@ -17,7 +17,9 @@ class DeckViewSet(GenericViewSet,
                   mixins.DestroyModelMixin,
                   mixins.UpdateModelMixin,
                   ):
-    queryset = Deck.objects.all()
+    queryset = Deck.objects.select_related("leader__ability", "leader__faction").\
+        prefetch_related("cards__type", "cards__color", "cards__ability", "cards__faction", "d").\
+        all()
     serializer_class = DeckSerializer
 
 
@@ -27,5 +29,5 @@ class FactionViewSet(GenericViewSet, mixins.ListModelMixin):
 
 
 class LeaderViewSet(GenericViewSet, mixins.ListModelMixin):
-    queryset = Leader.objects.all()
+    queryset = Leader.objects.select_related("ability", "faction").all()
     serializer_class = LeaderSerializer

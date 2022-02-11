@@ -41,7 +41,7 @@ SERVICE_APPS = [
 
 APPS = [
     "apps.cards.apps.CardsConfig",
-
+    "apps.enemies.apps.EnemiesConfig",
 ]
 
 INSTALLED_APPS = DEFAULT_APPS + SERVICE_APPS + APPS
