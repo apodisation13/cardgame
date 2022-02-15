@@ -85,6 +85,7 @@ class Leader(models.Model):
     damage = models.IntegerField(default=0, blank=False, null=False)
     charges = models.IntegerField(default=1, blank=False, null=False)
     passive = models.BooleanField(default=False)
+    image = models.ImageField(upload_to='leaders/', blank=True, null=True)
 
     def __str__(self):
         return f'{self.name}, ability {self.ability}, damage {self.damage} charges {self.charges}'
