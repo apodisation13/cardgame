@@ -46,13 +46,16 @@ class Level(models.Model):
     starting_enemies_number = models.IntegerField(default=3, blank=False, null=False)  # сколько в начале появляется
     difficulty = models.CharField(choices=LEVEL_DIFFICULTY_CHOICES, blank=False, null=False, max_length=20)
     enemies = models.ManyToManyField(Enemy, through='LevelEnemy', related_name='levels')
+    enemy_leader = models.ForeignKey('EnemyLeader', related_name='levels',
+                                     on_delete=models.PROTECT,
+                                     blank=True, null=True, default=None)
 
     def __str__(self):
         return f'{self.id}:{self.name}, появление: {self.starting_enemies_number}, ' \
                f'сложность {self.difficulty}, врагов {len(self.l.all())}'
 
     class Meta:
-        ordering = ('id', )
+        ordering = ('id',)
 
 
 class LevelEnemy(models.Model):

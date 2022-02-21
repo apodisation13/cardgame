@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.enemies.models import Enemy, Level, LevelEnemy
+from apps.enemies.models import Enemy, EnemyLeader, EnemyLeaderAbility, Level
 
 
 class EnemySerializer(serializers.ModelSerializer):
@@ -23,16 +23,36 @@ class EnemySerializer(serializers.ModelSerializer):
         )
 
 
-class LevelEnemySerializer(serializers.ModelSerializer):
+class EnemyLeaderAbilitySerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = LevelEnemy
-        fields = ("enemy", )
+        model = EnemyLeaderAbility
+        fields = ("name", "description")
+
+
+class EnemyLeaderSerializer(serializers.ModelSerializer):
+    faction = serializers.CharField(source="faction.name")
+    ability = EnemyLeaderAbilitySerializer(many=False, read_only=True)
+
+    class Meta:
+        model = EnemyLeader
+        fields = (
+            "id",
+            "name",
+            "faction",
+            "image",
+            "passive",
+            "hp",
+            "ability",
+            "damage_once",
+            "damage_per_turn",
+            "heal_self_per_turn",
+        )
 
 
 class LevelSerializer(serializers.ModelSerializer):
-    # l = LevelEnemySerializer(many=True, read_only=True)
     enemies = EnemySerializer(many=True, read_only=True)
+    enemy_leader = EnemyLeaderSerializer(many=False, read_only=True)
 
     class Meta:
         model = Level
@@ -41,6 +61,6 @@ class LevelSerializer(serializers.ModelSerializer):
             "name",
             "starting_enemies_number",
             "difficulty",
-            # "l",
-            "enemies"
+            "enemies",
+            "enemy_leader",
         )
