@@ -44,7 +44,7 @@ class LeaderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Leader
-        fields = ("id", "name", "faction", "ability", "damage", "charges")
+        fields = ("id", "name", "faction", "ability", "damage", "charges", "image")
 
 
 class DeckSerializer(serializers.ModelSerializer):

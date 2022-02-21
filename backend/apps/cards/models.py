@@ -41,10 +41,14 @@ class Ability(models.Model):
 
 class Card(models.Model):
     name = models.CharField(max_length=64, blank=False, null=False)
-    faction = models.ForeignKey(Faction, related_name='cards', on_delete=models.PROTECT)
-    color = models.ForeignKey(Color, related_name='cards', on_delete=models.PROTECT)
-    type = models.ForeignKey(Type, related_name='cards', on_delete=models.PROTECT)
-    ability = models.ForeignKey(Ability, related_name='cards', on_delete=models.PROTECT)
+    faction = models.ForeignKey(Faction, related_name='cards',
+                                on_delete=models.PROTECT)
+    color = models.ForeignKey(Color, related_name='cards',
+                              on_delete=models.PROTECT)
+    type = models.ForeignKey(Type, related_name='cards',
+                             on_delete=models.PROTECT)
+    ability = models.ForeignKey(Ability, related_name='cards',
+                                on_delete=models.PROTECT)
     charges = models.IntegerField(default=1, blank=False, null=False)
     damage = models.IntegerField(default=0, blank=False, null=False)
     hp = models.IntegerField(default=0, blank=False, null=False)
@@ -54,6 +58,9 @@ class Card(models.Model):
     def __str__(self):
         return f'{self.id} {self.name}, hp {self.hp}, ' \
                f'ability {self.ability}, damage {self.damage}, heal {self.heal} '
+
+    class Meta:
+        ordering = ("-color", "-damage", "-hp", "-charges")
 
 
 class CardDeck(models.Model):
@@ -65,14 +72,13 @@ class CardDeck(models.Model):
 class Deck(models.Model):
     """модель колоды"""
     name = models.CharField(max_length=32, blank=False, null=False)
-    cards = models.ManyToManyField(Card, related_name="cards", through=CardDeck)
+    cards = models.ManyToManyField(Card,
+                                   related_name="cards",
+                                   through=CardDeck)
     health = models.IntegerField(blank=False, null=False, default=0)
-    leader = models.ForeignKey("Leader",
-                               related_name="decks",
+    leader = models.ForeignKey("Leader", related_name="decks",
                                on_delete=models.CASCADE,
-                               blank=True, null=True,
-                               default=None
-                               )
+                               blank=True, null=True, default=None)
 
     def __str__(self):
         return f'{self.id}, health {self.health}, {self.leader}'
@@ -80,8 +86,10 @@ class Deck(models.Model):
 
 class Leader(models.Model):
     name = models.CharField(max_length=32, blank=False, null=False)
-    faction = models.ForeignKey(Faction, related_name="leaders", on_delete=models.CASCADE)
-    ability = models.ForeignKey(Ability, related_name='leaders', on_delete=models.PROTECT)
+    faction = models.ForeignKey(Faction, related_name="leaders",
+                                on_delete=models.CASCADE)
+    ability = models.ForeignKey(Ability, related_name='leaders',
+                                on_delete=models.PROTECT)
     damage = models.IntegerField(default=0, blank=False, null=False)
     charges = models.IntegerField(default=1, blank=False, null=False)
     passive = models.BooleanField(default=False)
@@ -89,3 +97,6 @@ class Leader(models.Model):
 
     def __str__(self):
         return f'{self.name}, ability {self.ability}, damage {self.damage} charges {self.charges}'
+
+    class Meta:
+        ordering = ("faction", "-damage")
