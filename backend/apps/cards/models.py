@@ -31,6 +31,7 @@ class Ability(models.Model):
     damage-one
     damage-all
     heal
+    resurrect  --это в смысле damage-one + карту из кладбища в руку
     """
     name = models.CharField(max_length=32, blank=False, null=False)
     description = models.TextField(blank=True, null=True)

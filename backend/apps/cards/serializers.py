@@ -1,13 +1,20 @@
 from rest_framework import serializers
 
-from apps.cards.models import Card, CardDeck, Deck, Faction, Leader
+from apps.cards.models import Ability, Card, CardDeck, Deck, Faction, Leader
+
+
+class AbilitySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Ability
+        fields = ("name", "description")
 
 
 class CardSerializer(serializers.ModelSerializer):
     faction = serializers.CharField(source="faction.name")
     color = serializers.CharField(source="color.name")
     type = serializers.CharField(source="type.name")
-    ability = serializers.CharField(source="ability.name")
+    ability = AbilitySerializer(many=False, read_only=True)
 
     class Meta:
         model = Card
@@ -40,7 +47,7 @@ class FactionSerializer(serializers.ModelSerializer):
 
 class LeaderSerializer(serializers.ModelSerializer):
     faction = serializers.CharField(source="faction.name")
-    ability = serializers.CharField(source="ability.name")
+    ability = AbilitySerializer(many=False, read_only=True)
 
     class Meta:
         model = Leader
@@ -60,7 +67,7 @@ class DeckSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         print(validated_data)
 
-        cards = validated_data.pop("d", None)  # если вопросы не пришли, то можно создать опрос
+        cards = validated_data.pop("d", None)
         print(cards)
 
         deck = super().create(validated_data)

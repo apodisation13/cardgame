@@ -52,7 +52,7 @@ class Level(models.Model):
 
     def __str__(self):
         return f'{self.id}:{self.name}, появление: {self.starting_enemies_number}, ' \
-               f'сложность {self.difficulty}, врагов {len(self.l.all())}'
+               f'сложность {self.difficulty}, врагов {len(self.l.all())}, лидер {self.enemy_leader}'
 
     class Meta:
         ordering = ('id',)
