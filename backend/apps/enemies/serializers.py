@@ -1,12 +1,19 @@
 from rest_framework import serializers
 
-from apps.enemies.models import Enemy, EnemyLeader, EnemyLeaderAbility, Level
+from apps.enemies.models import Enemy, EnemyLeader, EnemyLeaderAbility, Level, Move
+
+
+class MoveSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Move
+        fields = ("name", "description")
 
 
 class EnemySerializer(serializers.ModelSerializer):
     faction = serializers.CharField(source="faction.name")
     color = serializers.CharField(source="color.name")
-    move = serializers.CharField(source="move.name")
+    move = MoveSerializer(many=False, read_only=True)
 
     class Meta:
         model = Enemy
