@@ -40,6 +40,7 @@ SERVICE_APPS = [
 ]
 
 APPS = [
+    "apps.core.apps.CoreConfig",
     "apps.cards.apps.CardsConfig",
     "apps.enemies.apps.EnemiesConfig",
 ]
