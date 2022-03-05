@@ -1,8 +1,8 @@
 from rest_framework import mixins
 from rest_framework.viewsets import GenericViewSet
 
-from apps.cards.models import Card, Deck, Faction, Leader
-from apps.cards.serializers import CardSerializer, DeckSerializer, FactionSerializer, LeaderSerializer
+from apps.cards.models import Card, Deck, Leader
+from apps.cards.serializers import CardSerializer, DeckSerializer, LeaderSerializer
 
 
 class CardViewSet(GenericViewSet, mixins.ListModelMixin):
@@ -22,11 +22,6 @@ class DeckViewSet(GenericViewSet,
         prefetch_related("cards__type", "cards__color", "cards__ability", "cards__faction", "d").\
         all()
     serializer_class = DeckSerializer
-
-
-class FactionViewSet(GenericViewSet, mixins.ListModelMixin):
-    queryset = Faction.objects.all()
-    serializer_class = FactionSerializer
 
 
 class LeaderViewSet(GenericViewSet, mixins.ListModelMixin):

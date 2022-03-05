@@ -7,6 +7,7 @@ from config.api_docs import urlpatterns as api_docs_urlpatterns
 
 urlpatterns = api_docs_urlpatterns + [
     path('admin/', admin.site.urls),
+    path('api/v1/', include("apps.core.urls")),
     path('api/v1/', include("apps.cards.urls")),
     path('api/v1/', include("apps.enemies.urls")),
 ]

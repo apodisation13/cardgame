@@ -1,6 +1,6 @@
 from django.db import models
 
-from apps.cards.models import Color, Faction
+from apps.core.models import Color, Faction
 
 LEVEL_DIFFICULTY_CHOICES = (
     ('easy', 'easy'),
@@ -16,7 +16,7 @@ class Move(models.Model):
     stand,
     random
     """
-    name = models.CharField(max_length=64, blank=False, null=False)
+    name = models.CharField(max_length=64, blank=False, null=False, unique=True)
     description = models.TextField(blank=True, null=True)
 
     def __str__(self):
@@ -24,7 +24,7 @@ class Move(models.Model):
 
 
 class Enemy(models.Model):
-    name = models.CharField(max_length=64, blank=False, null=False)
+    name = models.CharField(max_length=64, blank=False, null=False, unique=True)
     faction = models.ForeignKey(Faction, related_name='enemies',
                                 on_delete=models.PROTECT)
     color = models.ForeignKey(Color, related_name='enemies',
@@ -42,7 +42,7 @@ class Enemy(models.Model):
 
 
 class Level(models.Model):
-    name = models.CharField(max_length=64, blank=False, null=False)
+    name = models.CharField(max_length=64, blank=False, null=False, unique=True)
     starting_enemies_number = models.IntegerField(default=3, blank=False, null=False)  # сколько в начале появляется
     difficulty = models.CharField(choices=LEVEL_DIFFICULTY_CHOICES, blank=False, null=False, max_length=20)
     enemies = models.ManyToManyField(Enemy, through='LevelEnemy', related_name='levels')
@@ -69,7 +69,7 @@ class EnemyLeaderAbility(models.Model):
     damage-per-turn - урон каждый ход
     heal-self-per-turn - самолечение каждый ход
     """
-    name = models.CharField(max_length=64, blank=False, null=False)
+    name = models.CharField(max_length=64, blank=False, null=False, unique=True)
     description = models.TextField(blank=True, null=True)
 
     def __str__(self):
@@ -77,7 +77,7 @@ class EnemyLeaderAbility(models.Model):
 
 
 class EnemyLeader(models.Model):
-    name = models.CharField(max_length=64, blank=False, null=False)
+    name = models.CharField(max_length=64, blank=False, null=False, unique=True)
     faction = models.ForeignKey(Faction, related_name='enemy_leaders',
                                 on_delete=models.PROTECT)
     image = models.ImageField(upload_to='enemy_leaders/', blank=True, null=True)
