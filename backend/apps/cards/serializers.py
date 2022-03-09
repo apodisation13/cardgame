@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.cards.models import Ability, Card, CardDeck, Deck, Faction, Leader
+from apps.cards.models import Ability, Card, CardDeck, Deck, Leader
 
 
 class AbilitySerializer(serializers.ModelSerializer):
@@ -37,12 +37,6 @@ class CardDeckSerializer(serializers.ModelSerializer):
     class Meta:
         model = CardDeck
         fields = ("card", )
-
-
-class FactionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Faction
-        fields = ("name", )
 
 
 class LeaderSerializer(serializers.ModelSerializer):
