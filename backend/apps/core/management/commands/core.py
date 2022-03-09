@@ -19,6 +19,7 @@ class Command(BaseCommand):
 
         success = 0
         failed = 0
+        self.stdout.write(self.style.SUCCESS(f'Загружаем core.Faction'))
         for line in factions[1:]:
             if line:
                 try:
@@ -26,7 +27,8 @@ class Command(BaseCommand):
                         name=line[1]
                     )
                     success += 1
-                except Exception:
+                except Exception as e:
+                    self.stdout.write(self.style.ERROR(e))
                     failed += 1
 
         self.stdout.write(self.style.SUCCESS(f'Успешно, {success}'))
@@ -39,6 +41,7 @@ class Command(BaseCommand):
 
         success = 0
         failed = 0
+        self.stdout.write(self.style.SUCCESS(f'Загружаем core.Color'))
         for line in colors[1:]:
             if line:
                 try:
@@ -46,7 +49,8 @@ class Command(BaseCommand):
                         name=line[1]
                     )
                     success += 1
-                except Exception:
+                except Exception as e:
+                    self.stdout.write(self.style.ERROR(e))
                     failed += 1
 
         self.stdout.write(self.style.SUCCESS(f'Успешно, {success}'))
