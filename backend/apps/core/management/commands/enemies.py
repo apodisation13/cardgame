@@ -78,7 +78,7 @@ class Command(BaseCommand):
                         damage_per_turn=line[6],
                         heal_self_per_turn=line[7],
                         passive=line[8],
-                        image=line[9],
+                        # image=line[9],
                     )
                     success += 1
                 except Exception as e:
@@ -107,7 +107,7 @@ class Command(BaseCommand):
                         damage=line[5],
                         hp=line[6],
                         shield=line[7],
-                        image=line[8],
+                        # image=line[8],
                     )
                     success += 1
                 except Exception as e:
