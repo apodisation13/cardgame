@@ -52,10 +52,14 @@ class Level(models.Model):
 
     def __str__(self):
         return f'{self.id}:{self.name}, появление: {self.starting_enemies_number}, ' \
-               f'сложность {self.difficulty}, врагов {len(self.l.all())}, лидер {self.enemy_leader}'
+               f'сложность {self.difficulty}, врагов {self.number_of_enemies()}, лидер {self.enemy_leader}'
+
+    def number_of_enemies(self):
+        """для админки, чтобы показать это количество"""
+        return len(self.l.all())
 
     class Meta:
-        ordering = ('id',)
+        ordering = ('id', )
 
 
 class LevelEnemy(models.Model):
