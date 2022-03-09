@@ -74,7 +74,7 @@ class Command(BaseCommand):
                         ability_id=line[3],
                         damage=line[4],
                         charges=line[5],
-                        image=line[6],
+                        # image=line[6],
                         passive=line[7],
                     )
                     success += 1
@@ -106,7 +106,7 @@ class Command(BaseCommand):
                         charges=line[7],
                         hp=line[8],
                         heal=line[9],
-                        image=line[10],
+                        # image=line[10],
                     )
                     success += 1
                 except Exception as e:
