@@ -12,16 +12,7 @@ class Type(models.Model):
 
 
 class Ability(models.Model):
-    """
-    способность карты
-    damage-one
-    damage-all
-    heal
-    resurrect  --это в смысле damage-one + карту из кладбища в руку
-    draw-one-card
-    give-charges-to-card-in-hand-1
-    play-from-deck
-    """
+    """способность карты"""
     name = models.CharField(max_length=32, blank=False, null=False, unique=True)
     description = models.TextField(blank=True, null=True)
 
