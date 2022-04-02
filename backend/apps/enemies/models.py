@@ -45,8 +45,8 @@ class Enemy(models.Model):
     shield = models.BooleanField(default=False)  # щит, есть или нет, по умолчанию нет
     passive = models.BooleanField(default=False)
     passive_ability = models.ForeignKey(EnemyPassiveAbility, related_name="enemies",
-                                           on_delete=models.PROTECT,
-                                           blank=True, null=True)
+                                        on_delete=models.PROTECT,
+                                        blank=True, null=True)
     passive_increase_damage = models.IntegerField(default=0, blank=False, null=False)
     passive_heal = models.IntegerField(default=0, blank=False, null=False)
     passive_heal_leader = models.IntegerField(default=0, blank=False, null=False)
@@ -75,7 +75,7 @@ class Level(models.Model):
         return len(self.l.all())
 
     class Meta:
-        ordering = ('id', )
+        ordering = ('id',)
 
 
 class LevelEnemy(models.Model):
