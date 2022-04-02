@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.cards.models import Ability, Card, CardDeck, Deck, Leader
+from apps.cards.models import Ability, Card, CardDeck, Deck, Leader, PassiveAbility
 
 
 class AbilitySerializer(serializers.ModelSerializer):
@@ -10,16 +10,25 @@ class AbilitySerializer(serializers.ModelSerializer):
         fields = ("name", "description")
 
 
+class PassiveAbilitySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = PassiveAbility
+        fields = ("name", "description")
+
+
 class CardSerializer(serializers.ModelSerializer):
     faction = serializers.CharField(source="faction.name")
     color = serializers.CharField(source="color.name")
     type = serializers.CharField(source="type.name")
     ability = AbilitySerializer(many=False, read_only=True)
+    passive_ability = PassiveAbilitySerializer(many=False, read_only=True)
 
     class Meta:
         model = Card
         fields = (
             "id",
+            "name",
             "faction",
             "color",
             "type",
@@ -29,6 +38,8 @@ class CardSerializer(serializers.ModelSerializer):
             "hp",
             "heal",
             "image",
+            "has_passive",
+            "passive_ability",
         )
 
 
@@ -42,10 +53,11 @@ class CardDeckSerializer(serializers.ModelSerializer):
 class LeaderSerializer(serializers.ModelSerializer):
     faction = serializers.CharField(source="faction.name")
     ability = AbilitySerializer(many=False, read_only=True)
+    passive_ability = PassiveAbilitySerializer(many=False, read_only=True)
 
     class Meta:
         model = Leader
-        fields = ("id", "name", "faction", "ability", "damage", "charges", "image")
+        fields = ("id", "name", "faction", "ability", "damage", "charges", "image", "has_passive", "passive_ability")
 
 
 class DeckSerializer(serializers.ModelSerializer):
