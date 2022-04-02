@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from pyexcel_odsr import get_data
 
-from apps.enemies.models import Enemy, EnemyLeader, EnemyLeaderAbility, Level, LevelEnemy, Move
+from apps.enemies.models import Enemy, EnemyLeader, EnemyLeaderAbility, EnemyPassiveAbility, Level, LevelEnemy, Move
 
 
 class Command(BaseCommand):
@@ -24,6 +24,29 @@ class Command(BaseCommand):
             if line:
                 try:
                     Move.objects.create(
+                        name=line[1],
+                        description=line[2],
+                    )
+                    success += 1
+                except Exception as e:
+                    self.stdout.write(self.style.ERROR(e))
+                    failed += 1
+
+        self.stdout.write(self.style.SUCCESS(f'Успешно, {success}'))
+        self.stdout.write(self.style.ERROR(f'Провалено, {failed}'))
+        # -----------------------------------------------------------
+
+        # Загрузка enemies.EnemyPassiveAbility
+        enemies_enemy_passive_abilities = data["Enemies.EnemyPassiveAbility"]
+        # print(enemies_enemy_passive_abilities)
+
+        success = 0
+        failed = 0
+        self.stdout.write(self.style.SUCCESS(f'Загружаем Enemies.EnemyPassiveAbility'))
+        for line in enemies_enemy_passive_abilities[1:]:
+            if line:
+                try:
+                    EnemyPassiveAbility.objects.create(
                         name=line[1],
                         description=line[2],
                     )
@@ -78,7 +101,7 @@ class Command(BaseCommand):
                         damage_per_turn=line[6],
                         heal_self_per_turn=line[7],
                         passive=line[8],
-                        # image=line[9],
+                        image=line[9],
                     )
                     success += 1
                 except Exception as e:
@@ -99,17 +122,37 @@ class Command(BaseCommand):
         for line in enemies_enemies[1:]:
             if line:
                 try:
-                    Enemy.objects.create(
-                        name=line[1],
-                        faction_id=line[2],
-                        color_id=line[3],
-                        move_id=line[4],
-                        damage=line[5],
-                        hp=line[6],
-                        shield=line[7],
-                        # image=line[8],
-                    )
-                    success += 1
+                    passive = line[9]
+                    if passive == "False":
+                        Enemy.objects.create(
+                            name=line[1],
+                            faction_id=line[2],
+                            color_id=line[3],
+                            move_id=line[4],
+                            damage=line[5],
+                            hp=line[6],
+                            shield=line[7],
+                            image=line[8],
+                        )
+                        success += 1
+                    else:
+                        Enemy.objects.create(
+                            name=line[1],
+                            faction_id=line[2],
+                            color_id=line[3],
+                            move_id=line[4],
+                            damage=line[5],
+                            hp=line[6],
+                            shield=line[7],
+                            image=line[8],
+                            passive=line[9],
+                            passive_ability_id=line[10],
+                            passive_increase_damage=line[11],
+                            passive_heal=line[12],
+                            passive_heal_leader=line[13],
+                            passive_damage=line[14],
+                        )
+                        success += 1
                 except Exception as e:
                     self.stdout.write(self.style.ERROR(e))
                     failed += 1
