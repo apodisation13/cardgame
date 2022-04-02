@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from pyexcel_odsr import get_data
 
-from apps.cards.models import Ability, Card, CardDeck, Deck, Leader, Type
+from apps.cards.models import Ability, Card, CardDeck, Deck, Leader, PassiveAbility, Type
 
 
 class Command(BaseCommand):
@@ -58,6 +58,29 @@ class Command(BaseCommand):
         self.stdout.write(self.style.ERROR(f'Провалено, {failed}'))
         # -----------------------------------------------------------
 
+        # ЗАГРУЗКА cards.PassiveAbility
+        cards_passive_ability = data["Cards.PassiveAbility"]
+        # print(cards_ability)
+
+        success = 0
+        failed = 0
+        self.stdout.write(self.style.SUCCESS(f'Загружаем cards.PassiveAbility'))
+        for line in cards_passive_ability[1:]:
+            if line:
+                try:
+                    PassiveAbility.objects.create(
+                        name=line[1],
+                        description=line[2],
+                    )
+                    success += 1
+                except Exception as e:
+                    self.stdout.write(self.style.ERROR(e))
+                    failed += 1
+
+        self.stdout.write(self.style.SUCCESS(f'Успешно, {success}'))
+        self.stdout.write(self.style.ERROR(f'Провалено, {failed}'))
+        # -----------------------------------------------------------
+
         # ЗАГРУЗКА cards.Leader
         cards_leaders = data["Cards.Leader"]
         # print(cards_leaders)
@@ -68,16 +91,30 @@ class Command(BaseCommand):
         for line in cards_leaders[1:]:
             if line:
                 try:
-                    Leader.objects.create(
-                        name=line[1],
-                        faction_id=line[2],
-                        ability_id=line[3],
-                        damage=line[4],
-                        charges=line[5],
-                        # image=line[6],
-                        passive=line[7],
-                    )
-                    success += 1
+                    p_l_a_id = line[8]
+                    if p_l_a_id != "NULL":
+                        Leader.objects.create(
+                            name=line[1],
+                            faction_id=line[2],
+                            ability_id=line[3],
+                            damage=line[4],
+                            charges=line[5],
+                            image=line[6],
+                            has_passive=line[7],
+                            passive_ability_id=p_l_a_id,
+                        )
+                        success += 1
+                    else:
+                        Leader.objects.create(
+                            name=line[1],
+                            faction_id=line[2],
+                            ability_id=line[3],
+                            damage=line[4],
+                            charges=line[5],
+                            image=line[6],
+                            has_passive=line[7],
+                        )
+                        success += 1
                 except Exception as e:
                     self.stdout.write(self.style.ERROR(e))
                     failed += 1
@@ -96,19 +133,38 @@ class Command(BaseCommand):
         for line in cards_cards[1:]:
             if line:
                 try:
-                    Card.objects.create(
-                        name=line[1],
-                        faction_id=line[2],
-                        color_id=line[3],
-                        type_id=line[4],
-                        ability_id=line[5],
-                        damage=line[6],
-                        charges=line[7],
-                        hp=line[8],
-                        heal=line[9],
-                        # image=line[10],
-                    )
-                    success += 1
+                    passive_card_ability_id = line[12]
+                    if passive_card_ability_id != "NULL":
+                        Card.objects.create(
+                            name=line[1],
+                            faction_id=line[2],
+                            color_id=line[3],
+                            type_id=line[4],
+                            ability_id=line[5],
+                            damage=line[6],
+                            charges=line[7],
+                            hp=line[8],
+                            heal=line[9],
+                            image=line[10],
+                            has_passive=line[11],
+                            passive_ability_id=passive_card_ability_id
+                        )
+                        success += 1
+                    else:
+                        Card.objects.create(
+                            name=line[1],
+                            faction_id=line[2],
+                            color_id=line[3],
+                            type_id=line[4],
+                            ability_id=line[5],
+                            damage=line[6],
+                            charges=line[7],
+                            hp=line[8],
+                            heal=line[9],
+                            image=line[10],
+                            has_passive=line[11],
+                        )
+                        success += 1
                 except Exception as e:
                     self.stdout.write(self.style.ERROR(e))
                     failed += 1

@@ -23,6 +23,14 @@ class Move(models.Model):
         return f'{self.id} - {self.name}'
 
 
+class EnemyPassiveAbility(models.Model):
+    name = models.CharField(max_length=64, blank=False, null=False, unique=True)
+    description = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return f'{self.id} - {self.name}'
+
+
 class Enemy(models.Model):
     name = models.CharField(max_length=64, blank=False, null=False, unique=True)
     faction = models.ForeignKey(Faction, related_name='enemies',
@@ -35,6 +43,14 @@ class Enemy(models.Model):
     move = models.ForeignKey(Move, related_name='enemies',
                              on_delete=models.PROTECT)
     shield = models.BooleanField(default=False)  # щит, есть или нет, по умолчанию нет
+    passive = models.BooleanField(default=False)
+    passive_ability = models.ForeignKey(EnemyPassiveAbility, related_name="enemies",
+                                        on_delete=models.PROTECT,
+                                        blank=True, null=True)
+    passive_increase_damage = models.IntegerField(default=0, blank=False, null=False)
+    passive_heal = models.IntegerField(default=0, blank=False, null=False)
+    passive_heal_leader = models.IntegerField(default=0, blank=False, null=False)
+    passive_damage = models.IntegerField(default=0, blank=False, null=False)
 
     def __str__(self):
         return f'{self.id}:{self.name}, {self.faction}, {self.color}, ' \
@@ -59,7 +75,7 @@ class Level(models.Model):
         return len(self.l.all())
 
     class Meta:
-        ordering = ('id', )
+        ordering = ('id',)
 
 
 class LevelEnemy(models.Model):

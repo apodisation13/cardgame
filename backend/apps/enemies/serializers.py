@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.enemies.models import Enemy, EnemyLeader, EnemyLeaderAbility, Level, Move
+from apps.enemies.models import Enemy, EnemyLeader, EnemyLeaderAbility, EnemyPassiveAbility, Level, Move
 
 
 class MoveSerializer(serializers.ModelSerializer):
@@ -10,10 +10,18 @@ class MoveSerializer(serializers.ModelSerializer):
         fields = ("name", "description")
 
 
+class EnemyPassiveAbilitySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = EnemyPassiveAbility
+        fields = ("name", "description")
+
+
 class EnemySerializer(serializers.ModelSerializer):
     faction = serializers.CharField(source="faction.name")
     color = serializers.CharField(source="color.name")
     move = MoveSerializer(many=False, read_only=True)
+    passive_ability = EnemyPassiveAbilitySerializer(many=False, read_only=True)
 
     class Meta:
         model = Enemy
@@ -27,6 +35,12 @@ class EnemySerializer(serializers.ModelSerializer):
             "hp",
             "image",
             "shield",
+            "passive",
+            "passive_ability",
+            "passive_increase_damage",
+            "passive_heal",
+            "passive_heal_leader",
+            "passive_damage",
         )
 
 
