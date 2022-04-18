@@ -95,24 +95,26 @@ class Command(BaseCommand):
                     if p_l_a_id != "NULL":
                         Leader.objects.create(
                             name=line[1],
-                            faction_id=line[2],
-                            ability_id=line[3],
-                            damage=line[4],
-                            charges=line[5],
-                            image=line[6],
-                            has_passive=line[7],
+                            locked=line[2],
+                            faction_id=line[3],
+                            ability_id=line[4],
+                            damage=line[5],
+                            charges=line[6],
+                            image=line[7],
+                            has_passive=line[8],
                             passive_ability_id=p_l_a_id,
                         )
                         success += 1
                     else:
                         Leader.objects.create(
                             name=line[1],
-                            faction_id=line[2],
-                            ability_id=line[3],
-                            damage=line[4],
-                            charges=line[5],
-                            image=line[6],
-                            has_passive=line[7],
+                            locked=line[2],
+                            faction_id=line[3],
+                            ability_id=line[4],
+                            damage=line[5],
+                            charges=line[6],
+                            image=line[7],
+                            has_passive=line[8],
                         )
                         success += 1
                 except Exception as e:
@@ -137,32 +139,34 @@ class Command(BaseCommand):
                     if passive_card_ability_id != "NULL":
                         Card.objects.create(
                             name=line[1],
-                            faction_id=line[2],
-                            color_id=line[3],
-                            type_id=line[4],
-                            ability_id=line[5],
-                            damage=line[6],
-                            charges=line[7],
-                            hp=line[8],
-                            heal=line[9],
-                            image=line[10],
-                            has_passive=line[11],
+                            locked=line[2],
+                            faction_id=line[3],
+                            color_id=line[4],
+                            type_id=line[5],
+                            ability_id=line[6],
+                            damage=line[7],
+                            charges=line[8],
+                            hp=line[9],
+                            heal=line[10],
+                            image=line[11],
+                            has_passive=line[12],
                             passive_ability_id=passive_card_ability_id
                         )
                         success += 1
                     else:
                         Card.objects.create(
                             name=line[1],
-                            faction_id=line[2],
-                            color_id=line[3],
-                            type_id=line[4],
-                            ability_id=line[5],
-                            damage=line[6],
-                            charges=line[7],
-                            hp=line[8],
-                            heal=line[9],
-                            image=line[10],
-                            has_passive=line[11],
+                            locked=line[2],
+                            faction_id=line[3],
+                            color_id=line[4],
+                            type_id=line[5],
+                            ability_id=line[6],
+                            damage=line[7],
+                            charges=line[8],
+                            hp=line[9],
+                            heal=line[10],
+                            image=line[11],
+                            has_passive=line[12],
                         )
                         success += 1
                 except Exception as e:
