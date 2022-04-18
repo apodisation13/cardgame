@@ -1,10 +1,15 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from apps.accounts.models import CustomUser
+from apps.accounts.models import CustomUser, CardUser
+
+
+class CardUserInLine(admin.TabularInline):
+    model = CardUser
 
 
 class CustomUserAdmin(UserAdmin):
+    inlines = [CardUserInLine, ]
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
