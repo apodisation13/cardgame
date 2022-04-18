@@ -31,6 +31,7 @@ class PassiveAbility(models.Model):
 
 class Card(models.Model):
     name = models.CharField(max_length=64, blank=False, null=False, unique=True)
+    locked = models.BooleanField(default=True)  # True - locked, False - unlocked
     faction = models.ForeignKey(Faction, related_name='cards',
                                 on_delete=models.PROTECT)
     color = models.ForeignKey(Color, related_name='cards',
@@ -56,6 +57,19 @@ class Card(models.Model):
     class Meta:
         ordering = ("-color", "-damage", "-hp", "-charges")
 
+    # def save(self, *args, **kwargs):
+    #     """метод вызывается при изменении карты в базе"""
+    #     decks = Deck.objects.filter(d__card_id=self.id)
+    #     print(len(decks))
+    #     print(decks)
+    #     for deck in decks:
+    #         print(deck.cards.all())
+    #         health = sum([card.hp for card in deck.cards.all()])
+    #         print(health)
+    #         deck.health = health
+    #         deck.save()
+    #     super(Card, self).save(*args, **kwargs)
+
 
 class CardDeck(models.Model):
     """Связи колод и карт в них"""
@@ -80,6 +94,7 @@ class Deck(models.Model):
 
 class Leader(models.Model):
     name = models.CharField(max_length=32, blank=False, null=False, unique=True)
+    locked = models.BooleanField(default=True)  # True - locked, False - unlocked
     faction = models.ForeignKey(Faction, related_name="leaders",
                                 on_delete=models.CASCADE)
     ability = models.ForeignKey(Ability, related_name='leaders',
