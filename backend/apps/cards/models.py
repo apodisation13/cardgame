@@ -31,7 +31,7 @@ class PassiveAbility(models.Model):
 
 class Card(models.Model):
     name = models.CharField(max_length=64, blank=False, null=False, unique=True)
-    locked = models.BooleanField(default=True)  # True - locked, False - unlocked
+    unlocked = models.BooleanField(default=True)  # True - unlocked, False - locked
     faction = models.ForeignKey(Faction, related_name='cards',
                                 on_delete=models.PROTECT)
     color = models.ForeignKey(Color, related_name='cards',
@@ -81,7 +81,7 @@ class Deck(models.Model):
 
 class Leader(models.Model):
     name = models.CharField(max_length=32, blank=False, null=False, unique=True)
-    locked = models.BooleanField(default=True)  # True - locked, False - unlocked
+    unlocked = models.BooleanField(default=True)  # True - unlocked, False - locked
     faction = models.ForeignKey(Faction, related_name="leaders",
                                 on_delete=models.CASCADE)
     ability = models.ForeignKey(Ability, related_name='leaders',

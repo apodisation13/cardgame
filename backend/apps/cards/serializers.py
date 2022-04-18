@@ -29,6 +29,7 @@ class CardSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "name",
+            "locked",
             "faction",
             "color",
             "type",
@@ -68,7 +69,7 @@ class DeckSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Deck
-        fields = ("id", "name", "health", "d", "cards", "leader", "leader_id")
+        fields = ("id", "name", "locked", "health", "d", "cards", "leader", "leader_id")
 
     def create(self, validated_data):
         print(validated_data)
@@ -98,13 +99,5 @@ class DeckSerializer(serializers.ModelSerializer):
             carddeck = CardDeck.objects.filter(id=current_cards[i].id).first()
             carddeck.card_id = cards[i].get('card').id
             carddeck.save()
-
-        # в любом случае удаляем все карты, которые там были до этого
-        # for card in current_cards:
-        #     CardDeck.objects.filter(id=card.id).delete()
-        #
-        # if cards:
-        #     for card in cards:
-        #         CardDeck.objects.create(deck=deck, **card)
 
         return deck
