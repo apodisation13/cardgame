@@ -1,11 +1,11 @@
 from django.contrib.auth.hashers import make_password
 from rest_framework import mixins
 from rest_framework.response import Response
-from rest_framework.status import HTTP_200_OK, HTTP_404_NOT_FOUND, HTTP_401_UNAUTHORIZED
+from rest_framework.status import HTTP_200_OK, HTTP_401_UNAUTHORIZED, HTTP_404_NOT_FOUND
 from rest_framework.viewsets import GenericViewSet
 
 from apps.accounts.models import CustomUser
-from apps.accounts.serializers import UserSerializer, LoginSerializer
+from apps.accounts.serializers import LoginSerializer, UserSerializer
 
 
 class CreateUserViewSet(GenericViewSet, mixins.CreateModelMixin):
