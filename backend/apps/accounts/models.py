@@ -14,4 +14,4 @@ class CustomUser(AbstractUser):
         cards = Card.objects.all()
         print(cards[:10])
 
-    email = models.EmailField("email", blank=False)
+    email = models.EmailField("email", blank=False, unique=True)
