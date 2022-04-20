@@ -22,12 +22,11 @@ class EnemySerializer(serializers.ModelSerializer):
             "hp",
             "image",
             "shield",
-            "passive",
+            "has_passive",
             "passive_ability",
             "passive_increase_damage",
             "passive_heal",
             "passive_heal_leader",
-            "passive_damage",
         )
 
 
@@ -42,7 +41,7 @@ class EnemyLeaderSerializer(serializers.ModelSerializer):
             "name",
             "faction",
             "image",
-            "passive",
+            "has_passive",
             "hp",
             "ability",
             "damage_once",
