@@ -1,62 +1,26 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-from apps.cards.models import Card
-
-
-# class CustomUserManager(models.Manager):
-#
-#     def create_user(self, **kwargs):
-#         user = self.create(**kwargs)
-#         print(user.id, user.username, user.email)
-#         print(111111)
-#         return user
+from apps.accounts.utils import set_unlocked_cards
 
 
 class CustomUser(AbstractUser):
-
     email = models.EmailField("email", blank=False, unique=True)
-    cards = models.ManyToManyField(Card,
-                                   related_name="cards_users",
-                                   through="CardUser")
-
-    # # objects = CustomUserManager()
+    cards = models.ManyToManyField("cards.Card",
+                                   related_name="user_cards",
+                                   through="cards.UserCard")
+    leaders = models.ManyToManyField("cards.Leader",
+                                     related_name="user_leaders",
+                                     through="cards.UserLeader")
+    decks = models.ManyToManyField("cards.Deck",
+                                   related_name="user_decks",
+                                   through="cards.UserDeck")
 
     def save(self, *args, **kwargs):
-
-        # first_time = False
-        print(self.id)
-
-        # сюда идём если пользователь создаётся первый раз!
+        # если юзер создаётся первый раз, то self.if=None, то открываем ему все карты
+        if not self.id:
+            super(CustomUser, self).save(*args, **kwargs)
+            set_unlocked_cards(self)
+            return
 
         super(CustomUser, self).save(*args, **kwargs)
-        # first_time = True
-        return
-
-        unlocked_cards = Card.objects.filter(unlocked=True).all()
-
-        for card in unlocked_cards:
-            carduser = CardUser.objects.filter(card_id=card.id, user_id=self.id).first()
-            if not carduser:
-                CardUser.objects.create(card_id=card.id, user_id=self.id)
-                print(f'Для юзера {self.id}, {self.username} открыли карту {card.id}')
-            else:
-                print('Такая карта у него уже есть')
-
-        cards = CardUser.objects.filter(user_id=self.id).all()
-        print(len(cards))
-
-        if not first_time:
-            super(CustomUser, self).save(*args, **kwargs)
-
-
-class CardUser(models.Model):
-    card = models.ForeignKey(Card, related_name="u",
-                             on_delete=models.CASCADE,
-                             blank=False, null=False)
-    user = models.ForeignKey(CustomUser, related_name="u",
-                             on_delete=models.CASCADE,
-                             blank=False, null=False)
-
-    class Meta:
-        unique_together = ('card_id', 'user_id')
