@@ -10,6 +10,10 @@ class CardViewSet(GenericViewSet, mixins.ListModelMixin):
     queryset = Card.objects.select_related("faction", "color", "type", "ability").all()
     serializer_class = CardSerializer
 
+    # # ВОТ ТАК ТУДА МОЖНО ПЕРЕДАТЬ ПАРАМЕТР request, self.context['request']
+    # def get_serializer_context(self):
+    #     return {'request': self.request}
+
 
 class DeckViewSet(GenericViewSet,
                   mixins.ListModelMixin,

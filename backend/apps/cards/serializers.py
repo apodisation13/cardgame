@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from apps.accounts.models import CustomUser
-from apps.cards.models import Card, CardDeck, Deck, Leader
+from apps.cards.models import Card, CardDeck, Deck, Leader, UserCard, UserLeader
 from apps.core.serializers import AbilitySerializer, PassiveAbilitySerializer
 
 
@@ -103,10 +103,28 @@ class DeckSerializer(serializers.ModelSerializer):
         return deck
 
 
+class UserCardsThroughSerializer(serializers.ModelSerializer):
+    card = CardSerializer(many=False)  # если это не указать,то будет просто card_id, count
+
+    class Meta:
+        model = UserCard
+        fields = ("card", "count")
+
+
+class UserLeadersThroughSerializer(serializers.ModelSerializer):
+    leader = LeaderSerializer(many=False)
+
+    class Meta:
+        model = UserLeader
+        fields = ("leader", "count")
+
+
 class UserCardsSerializer(serializers.ModelSerializer):
-    cards = CardSerializer(many=True)
+    u_c = UserCardsThroughSerializer(many=True)
+    # cards = CardSerializer(many=True)
     locked_cards = serializers.SerializerMethodField()
-    leaders = LeaderSerializer(many=True)
+    # leaders = LeaderSerializer(many=True)
+    u_l = UserLeadersThroughSerializer(many=True)
     locked_leaders = serializers.SerializerMethodField()
     decks = DeckSerializer(many=True)
 
@@ -116,10 +134,12 @@ class UserCardsSerializer(serializers.ModelSerializer):
             "id",
             "email",
             "username",
+            "u_c",
             "locked_cards",
-            "cards",
+            # "cards",
+            "u_l",
             "locked_leaders",
-            "leaders",
+            # "leaders",
             "decks"
         )
 
