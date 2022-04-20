@@ -5,7 +5,7 @@ from apps.cards.models import Card, CardDeck, Deck, Leader
 
 
 class Command(BaseCommand):
-    help = 'cards: Types, Abilities, Leaders, Cards, Decks(base-deck)+CardDeck'
+    help = 'cards: Leaders, Cards, Decks(base-deck)+CardDeck'
 
     def add_arguments(self, parser):
         pass
@@ -67,7 +67,7 @@ class Command(BaseCommand):
         for line in cards_cards[1:]:
             if line:
                 try:
-                    passive_card_ability_id = line[13]
+                    passive_card_ability_id = line[14]
                     if passive_card_ability_id != "NULL":
                         Card.objects.create(
                             name=line[1],
@@ -82,6 +82,7 @@ class Command(BaseCommand):
                             heal=line[10],
                             image=line[11],
                             has_passive=line[12],
+                            has_passive_in_hand=line[13],
                             passive_ability_id=passive_card_ability_id
                         )
                         success += 1
@@ -99,6 +100,7 @@ class Command(BaseCommand):
                             heal=line[10],
                             image=line[11],
                             has_passive=line[12],
+                            has_passive_in_hand=line[13],
                         )
                         success += 1
                 except Exception as e:
