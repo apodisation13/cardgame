@@ -1,20 +1,8 @@
 from rest_framework import serializers
 
-from apps.cards.models import Ability, Card, CardDeck, Deck, Leader, PassiveAbility
-
-
-class AbilitySerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Ability
-        fields = ("name", "description")
-
-
-class PassiveAbilitySerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = PassiveAbility
-        fields = ("name", "description")
+from apps.accounts.models import CustomUser
+from apps.cards.models import Card, CardDeck, Deck, Leader
+from apps.core.serializers import AbilitySerializer, PassiveAbilitySerializer
 
 
 class CardSerializer(serializers.ModelSerializer):
@@ -29,7 +17,7 @@ class CardSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "name",
-            "locked",
+            "unlocked",
             "faction",
             "color",
             "type",
@@ -40,6 +28,7 @@ class CardSerializer(serializers.ModelSerializer):
             "heal",
             "image",
             "has_passive",
+            "has_passive_in_hand",
             "passive_ability",
         )
 
@@ -58,7 +47,18 @@ class LeaderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Leader
-        fields = ("id", "name", "faction", "ability", "damage", "charges", "image", "has_passive", "passive_ability")
+        fields = (
+            "id",
+            "name",
+            "unlocked",
+            "faction",
+            "ability",
+            "damage",
+            "charges",
+            "image",
+            "has_passive",
+            "passive_ability"
+        )
 
 
 class DeckSerializer(serializers.ModelSerializer):
@@ -69,7 +69,7 @@ class DeckSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Deck
-        fields = ("id", "name", "locked", "health", "d", "cards", "leader", "leader_id")
+        fields = ("id", "name", "health", "d", "cards", "leader", "leader_id")
 
     def create(self, validated_data):
         print(validated_data)
@@ -101,3 +101,34 @@ class DeckSerializer(serializers.ModelSerializer):
             carddeck.save()
 
         return deck
+
+
+class UserCardsSerializer(serializers.ModelSerializer):
+    cards = CardSerializer(many=True)
+    locked_cards = serializers.SerializerMethodField()
+    leaders = LeaderSerializer(many=True)
+    locked_leaders = serializers.SerializerMethodField()
+    decks = DeckSerializer(many=True)
+
+    class Meta:
+        model = CustomUser
+        fields = (
+            "id",
+            "email",
+            "username",
+            "locked_cards",
+            "cards",
+            "locked_leaders",
+            "leaders",
+            "decks"
+        )
+
+    def get_locked_cards(self, user):
+        user_id = user.id
+        user_locked_cards = Card.objects.exclude(u_c__user_id=user_id).all()
+        return CardSerializer(user_locked_cards, many=True).data
+
+    def get_locked_leaders(self, user):
+        user_id = user.id
+        user_locked_leaders = Leader.objects.exclude(u_l__user_id=user_id).all()
+        return LeaderSerializer(user_locked_leaders, many=True).data
