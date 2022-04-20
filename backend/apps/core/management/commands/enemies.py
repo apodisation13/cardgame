@@ -31,7 +31,7 @@ class Command(BaseCommand):
                         damage_once=line[5],
                         damage_per_turn=line[6],
                         heal_self_per_turn=line[7],
-                        passive=line[8],
+                        has_passive=line[8],
                         image=line[9],
                     )
                     success += 1
@@ -76,12 +76,11 @@ class Command(BaseCommand):
                             hp=line[6],
                             shield=line[7],
                             image=line[8],
-                            passive=line[9],
+                            has_passive=line[9],
                             passive_ability_id=line[10],
                             passive_increase_damage=line[11],
                             passive_heal=line[12],
                             passive_heal_leader=line[13],
-                            passive_damage=line[14],
                         )
                         success += 1
                 except Exception as e:
