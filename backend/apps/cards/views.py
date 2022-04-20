@@ -34,7 +34,7 @@ class LeaderViewSet(GenericViewSet, mixins.ListModelMixin):
     serializer_class = LeaderSerializer
 
 
-class UserCardsViewSet(GenericViewSet, mixins.RetrieveModelMixin):
-
+class UserDatabaseViewSet(GenericViewSet, mixins.RetrieveModelMixin):
+    """user_database, id: user_id"""
     queryset = CustomUser.objects.all()
     serializer_class = UserCardsSerializer
