@@ -10,7 +10,8 @@ urlpatterns = api_docs_urlpatterns + [
     path('api/v1/', include("apps.core.urls")),
     path('api/v1/', include("apps.cards.urls")),
     path('api/v1/', include("apps.enemies.urls")),
-    path('accounts/', include("apps.accounts.urls"))
+    path('accounts/', include("apps.accounts.urls")),
+    path('api/v1/', include("apps.user_database.urls")),
 ]
 
 if settings.DEBUG:

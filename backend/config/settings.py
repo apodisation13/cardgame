@@ -44,6 +44,7 @@ APPS = [
     "apps.cards.apps.CardsConfig",
     "apps.enemies.apps.EnemiesConfig",
     "apps.accounts.apps.AccountsConfig",
+    "apps.user_database.apps.UserDatabaseConfig",
 ]
 
 INSTALLED_APPS = DEFAULT_APPS + SERVICE_APPS + APPS
