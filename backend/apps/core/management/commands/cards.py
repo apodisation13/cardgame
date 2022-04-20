@@ -111,49 +111,49 @@ class Command(BaseCommand):
         self.stdout.write(self.style.ERROR(f'Провалено, {failed}'))
         # -----------------------------------------------------------
 
-        # # ЗАГРУЗКА cards.Deck (base-deck)
-        # cards_deck = data["Cards.Deck"]
-        # # print(cards_deck)
-        #
-        # success = 0
-        # failed = 0
-        # self.stdout.write(self.style.SUCCESS(f'Загружаем cards.Deck'))
-        # for line in cards_deck[1:]:
-        #     if line:
-        #         try:
-        #             Deck.objects.create(
-        #                 name=line[1],
-        #                 health=line[2],
-        #                 leader_id=line[3],
-        #             )
-        #             success += 1
-        #         except Exception as e:
-        #             self.stdout.write(self.style.ERROR(e))
-        #             failed += 1
-        #
-        # self.stdout.write(self.style.SUCCESS(f'Успешно, {success}'))
-        # self.stdout.write(self.style.ERROR(f'Провалено, {failed}'))
-        # # -----------------------------------------------------------
-        #
-        # # ЗАГРУЗКА cards.CardDeck (for base-deck)
-        # cards_carddeck = data["Cards.CardDeck"]
-        # # print(cards_carddeck)
-        #
-        # success = 0
-        # failed = 0
-        # self.stdout.write(self.style.SUCCESS(f'Загружаем cards.CardDeck'))
-        # for line in cards_carddeck[1:]:
-        #     if line:
-        #         try:
-        #             CardDeck.objects.create(
-        #                 deck_id=line[1],
-        #                 card_id=line[2],
-        #             )
-        #             success += 1
-        #         except Exception as e:
-        #             self.stdout.write(self.style.ERROR(e))
-        #             failed += 1
-        #
-        # self.stdout.write(self.style.SUCCESS(f'Успешно, {success}'))
-        # self.stdout.write(self.style.ERROR(f'Провалено, {failed}'))
-        # # -----------------------------------------------------------
+        # ЗАГРУЗКА cards.Deck (base-deck)
+        cards_deck = data["Cards.Deck"]
+        # print(cards_deck)
+
+        success = 0
+        failed = 0
+        self.stdout.write(self.style.SUCCESS(f'Загружаем cards.Deck'))
+        for line in cards_deck[1:]:
+            if line:
+                try:
+                    Deck.objects.create(
+                        name=line[1],
+                        health=line[2],
+                        leader_id=line[3],
+                    )
+                    success += 1
+                except Exception as e:
+                    self.stdout.write(self.style.ERROR(e))
+                    failed += 1
+
+        self.stdout.write(self.style.SUCCESS(f'Успешно, {success}'))
+        self.stdout.write(self.style.ERROR(f'Провалено, {failed}'))
+        # -----------------------------------------------------------
+
+        # ЗАГРУЗКА cards.CardDeck (for base-deck)
+        cards_carddeck = data["Cards.CardDeck"]
+        # print(cards_carddeck)
+
+        success = 0
+        failed = 0
+        self.stdout.write(self.style.SUCCESS(f'Загружаем cards.CardDeck'))
+        for line in cards_carddeck[1:]:
+            if line:
+                try:
+                    CardDeck.objects.create(
+                        deck_id=line[1],
+                        card_id=line[2],
+                    )
+                    success += 1
+                except Exception as e:
+                    self.stdout.write(self.style.ERROR(e))
+                    failed += 1
+
+        self.stdout.write(self.style.SUCCESS(f'Успешно, {success}'))
+        self.stdout.write(self.style.ERROR(f'Провалено, {failed}'))
+        # -----------------------------------------------------------
