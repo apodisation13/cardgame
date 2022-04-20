@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from pyexcel_odsr import get_data
 
-from apps.cards.models import Ability, Card, CardDeck, Deck, Leader, PassiveAbility, Type
+from apps.cards.models import Card, CardDeck, Deck, Leader
 
 
 class Command(BaseCommand):
@@ -12,74 +12,6 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         data = get_data("database.ods")
-
-        # Загрузка cards.Type
-        card_types = data["Cards.Type"]
-        # print(card_types)
-
-        success = 0
-        failed = 0
-        self.stdout.write(self.style.SUCCESS(f'Загружаем cards.Type'))
-        for line in card_types[1:]:
-            if line:
-                try:
-                    Type.objects.create(
-                        name=line[1]
-                    )
-                    success += 1
-                except Exception as e:
-                    self.stdout.write(self.style.ERROR(e))
-                    failed += 1
-
-        self.stdout.write(self.style.SUCCESS(f'Успешно, {success}'))
-        self.stdout.write(self.style.ERROR(f'Провалено, {failed}'))
-        # -----------------------------------------------------------
-
-        # ЗАГРУЗКА cards.Ability
-        cards_ability = data["Cards.Ability"]
-        # print(cards_ability)
-
-        success = 0
-        failed = 0
-        self.stdout.write(self.style.SUCCESS(f'Загружаем cards.Ability'))
-        for line in cards_ability[1:]:
-            if line:
-                try:
-                    Ability.objects.create(
-                        name=line[1],
-                        description=line[2],
-                    )
-                    success += 1
-                except Exception as e:
-                    self.stdout.write(self.style.ERROR(e))
-                    failed += 1
-
-        self.stdout.write(self.style.SUCCESS(f'Успешно, {success}'))
-        self.stdout.write(self.style.ERROR(f'Провалено, {failed}'))
-        # -----------------------------------------------------------
-
-        # ЗАГРУЗКА cards.PassiveAbility
-        cards_passive_ability = data["Cards.PassiveAbility"]
-        # print(cards_ability)
-
-        success = 0
-        failed = 0
-        self.stdout.write(self.style.SUCCESS(f'Загружаем cards.PassiveAbility'))
-        for line in cards_passive_ability[1:]:
-            if line:
-                try:
-                    PassiveAbility.objects.create(
-                        name=line[1],
-                        description=line[2],
-                    )
-                    success += 1
-                except Exception as e:
-                    self.stdout.write(self.style.ERROR(e))
-                    failed += 1
-
-        self.stdout.write(self.style.SUCCESS(f'Успешно, {success}'))
-        self.stdout.write(self.style.ERROR(f'Провалено, {failed}'))
-        # -----------------------------------------------------------
 
         # ЗАГРУЗКА cards.Leader
         cards_leaders = data["Cards.Leader"]

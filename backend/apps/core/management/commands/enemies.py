@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from pyexcel_odsr import get_data
 
-from apps.enemies.models import Enemy, EnemyLeader, EnemyLeaderAbility, EnemyPassiveAbility, Level, LevelEnemy, Move
+from apps.enemies.models import Enemy, EnemyLeader, Level, LevelEnemy
 
 
 class Command(BaseCommand):
@@ -12,75 +12,6 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         data = get_data("database.ods")
-
-        # Загрузка enemies.Move
-        enemies_moves = data["Enemies.Move"]
-        # print(enemies_moves)
-
-        success = 0
-        failed = 0
-        self.stdout.write(self.style.SUCCESS(f'Загружаем enemies.Move'))
-        for line in enemies_moves[1:]:
-            if line:
-                try:
-                    Move.objects.create(
-                        name=line[1],
-                        description=line[2],
-                    )
-                    success += 1
-                except Exception as e:
-                    self.stdout.write(self.style.ERROR(e))
-                    failed += 1
-
-        self.stdout.write(self.style.SUCCESS(f'Успешно, {success}'))
-        self.stdout.write(self.style.ERROR(f'Провалено, {failed}'))
-        # -----------------------------------------------------------
-
-        # Загрузка enemies.EnemyPassiveAbility
-        enemies_enemy_passive_abilities = data["Enemies.EnemyPassiveAbility"]
-        # print(enemies_enemy_passive_abilities)
-
-        success = 0
-        failed = 0
-        self.stdout.write(self.style.SUCCESS(f'Загружаем Enemies.EnemyPassiveAbility'))
-        for line in enemies_enemy_passive_abilities[1:]:
-            if line:
-                try:
-                    EnemyPassiveAbility.objects.create(
-                        name=line[1],
-                        description=line[2],
-                    )
-                    success += 1
-                except Exception as e:
-                    self.stdout.write(self.style.ERROR(e))
-                    failed += 1
-
-        self.stdout.write(self.style.SUCCESS(f'Успешно, {success}'))
-        self.stdout.write(self.style.ERROR(f'Провалено, {failed}'))
-        # -----------------------------------------------------------
-
-        # Загрузка enemies.EnemyLeaderAbility
-        enemies_enemy_leader_abilities = data["Enemies.EnemyLeaderAbility"]
-        # print(enemies_enemy_leader_abilities)
-
-        success = 0
-        failed = 0
-        self.stdout.write(self.style.SUCCESS(f'Загружаем enemies.EnemyLeaderAbility'))
-        for line in enemies_enemy_leader_abilities[1:]:
-            if line:
-                try:
-                    EnemyLeaderAbility.objects.create(
-                        name=line[1],
-                        description=line[2],
-                    )
-                    success += 1
-                except Exception as e:
-                    self.stdout.write(self.style.ERROR(e))
-                    failed += 1
-
-        self.stdout.write(self.style.SUCCESS(f'Успешно, {success}'))
-        self.stdout.write(self.style.ERROR(f'Провалено, {failed}'))
-        # -----------------------------------------------------------
 
         # Загрузка enemies.EnemyLeader
         enemies_enemy_leaders = data["Enemies.EnemyLeader"]
