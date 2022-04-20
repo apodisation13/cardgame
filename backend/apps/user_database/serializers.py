@@ -2,8 +2,13 @@ from rest_framework import serializers
 
 from apps.accounts.models import CustomUser
 from apps.cards.models import Card, Leader
-from apps.cards.serializers import UserCardsThroughSerializer, UserLeadersThroughSerializer, DeckSerializer, \
-    CardSerializer, LeaderSerializer
+from apps.cards.serializers import (
+    CardSerializer,
+    DeckSerializer,
+    LeaderSerializer,
+    UserCardsThroughSerializer,
+    UserLeadersThroughSerializer,
+)
 
 
 class UserDatabaseSerializer(serializers.ModelSerializer):
