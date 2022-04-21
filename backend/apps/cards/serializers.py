@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.cards.models import Card, CardDeck, Deck, Leader, UserCard, UserLeader
+from apps.cards.models import Card, CardDeck, Deck, Leader, UserCard, UserDeck, UserLeader
 from apps.core.serializers import AbilitySerializer, PassiveAbilitySerializer
 
 
@@ -92,6 +92,7 @@ class DeckSerializer(serializers.ModelSerializer):
         deck = super().update(instance, validated_data)
 
         # ищем записи по id колоды, обновляем все карты внутри них
+        # FIXME: будет глюк если в колоде будет не ровно 12 карт, а допустим не менее 20. было 22, пришло 20, ГЛЮК
         current_cards = CardDeck.objects.filter(deck_id=deck.id)
         for i in range(len(current_cards)):
             print(current_cards[i].id, cards[i].get('card').id)
@@ -170,3 +171,11 @@ class MillUserLeaderSerializer(serializers.ModelSerializer):
 
         instance.delete()
         return instance
+
+
+class UserDecksThroughSerializer(serializers.ModelSerializer):
+    # deck = DeckSerializer(many=False)
+
+    class Meta:
+        model = UserDeck
+        fields = ("id", "deck", "user")

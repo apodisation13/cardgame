@@ -1,11 +1,21 @@
 from rest_framework import mixins
 # from rest_framework.decorators import action
 from rest_framework.viewsets import GenericViewSet
+
+from apps.cards.models import Card, Deck, Leader, UserCard, UserDeck, UserLeader
+from apps.cards.serializers import (
+    CardSerializer,
+    CraftUserCardSerializer,
+    CraftUserLeaderSerializer,
+    DeckSerializer,
+    LeaderSerializer,
+    MillUserCardSerializer,
+    MillUserLeaderSerializer,
+    UserDecksThroughSerializer,
+)
+
 # from rest_framework.views import Response
 
-from apps.cards.models import Card, Deck, Leader, UserCard, UserLeader
-from apps.cards.serializers import CardSerializer, DeckSerializer, LeaderSerializer, CraftUserCardSerializer, \
-    MillUserCardSerializer, CraftUserLeaderSerializer, MillUserLeaderSerializer
 
 
 class CardViewSet(GenericViewSet, mixins.ListModelMixin):
@@ -84,3 +94,8 @@ class MillUserLeaderViewSet(GenericViewSet,
     queryset = UserLeader.objects.all()
     serializer_class = MillUserLeaderSerializer
     http_method_names = ["patch"]
+
+
+class UserDeckViewSet(GenericViewSet, mixins.CreateModelMixin, mixins.DestroyModelMixin):
+    queryset = UserDeck.objects.all()
+    serializer_class = UserDecksThroughSerializer

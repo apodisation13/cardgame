@@ -1,7 +1,15 @@
 from rest_framework.routers import DefaultRouter
 
-from apps.cards.views import CardViewSet, DeckViewSet, LeaderViewSet, CraftUserCardViewSet, MillUserCardViewSet, \
-    CraftUserLeaderViewSet, MillUserLeaderViewSet
+from apps.cards.views import (
+    CardViewSet,
+    CraftUserCardViewSet,
+    CraftUserLeaderViewSet,
+    DeckViewSet,
+    LeaderViewSet,
+    MillUserCardViewSet,
+    MillUserLeaderViewSet,
+    UserDeckViewSet,
+)
 
 router = DefaultRouter()
 router.register("cards", CardViewSet, basename="cards")
@@ -11,5 +19,6 @@ router.register("patchcards/craft_user_cards", CraftUserCardViewSet, basename="c
 router.register("patchcards/mill_user_cards", MillUserCardViewSet, basename="mill_user_cards")
 router.register("patchleaders/craft_user_leaders", CraftUserLeaderViewSet, basename="craft_user_leaders")
 router.register("patchleaders/mill_user_leaders", MillUserLeaderViewSet, basename="mill_user_leaders")
+router.register("userdecks", UserDeckViewSet, basename="userdecks")
 
 urlpatterns = router.urls
