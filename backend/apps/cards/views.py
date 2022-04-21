@@ -3,9 +3,9 @@ from rest_framework import mixins
 from rest_framework.viewsets import GenericViewSet
 # from rest_framework.views import Response
 
-from apps.cards.models import Card, Deck, Leader, UserCard
+from apps.cards.models import Card, Deck, Leader, UserCard, UserLeader
 from apps.cards.serializers import CardSerializer, DeckSerializer, LeaderSerializer, CraftUserCardSerializer, \
-    MillUserCardSerializer
+    MillUserCardSerializer, CraftUserLeaderSerializer, MillUserLeaderSerializer
 
 
 class CardViewSet(GenericViewSet, mixins.ListModelMixin):
@@ -58,4 +58,29 @@ class MillUserCardViewSet(GenericViewSet,
                           ):
     queryset = UserCard.objects.all()
     serializer_class = MillUserCardSerializer
+    http_method_names = ["patch"]
+
+
+class CraftUserLeaderViewSet(GenericViewSet,
+                             # mixins.ListModelMixin,
+                             mixins.CreateModelMixin,
+                             # mixins.RetrieveModelMixin,
+                             mixins.UpdateModelMixin,
+                             ):
+    queryset = UserLeader.objects.all()
+    serializer_class = CraftUserLeaderSerializer
+    http_method_names = ["patch", "post", "get"]  # убрать метод PUT, который не нужен
+
+    # @action(methods=["get", "patch"], detail=True)
+    # def userleaders(self, request, pk=None):
+    #     userleaders = self.queryset.filter(user_id=pk).all()
+    #     serializer = self.serializer_class(userleaders, many=True)
+    #     return Response(serializer.data)
+
+
+class MillUserLeaderViewSet(GenericViewSet,
+                            mixins.UpdateModelMixin
+                            ):
+    queryset = UserLeader.objects.all()
+    serializer_class = MillUserLeaderSerializer
     http_method_names = ["patch"]

@@ -115,7 +115,7 @@ class UserLeadersThroughSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserLeader
-        fields = ("leader", "count")
+        fields = ("leader", "count", "id")
 
 
 class CraftUserCardSerializer(serializers.ModelSerializer):
@@ -134,6 +134,33 @@ class MillUserCardSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserCard
         fields = ("id", "user", "card", "count")
+
+    def update(self, instance, validated_data):
+        validated_data['count'] -= 1
+
+        if validated_data['count'] != 0:
+            return super().update(instance, validated_data)
+
+        instance.delete()
+        return instance
+
+
+class CraftUserLeaderSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = UserLeader
+        fields = ("id", "user", "leader", "count")
+
+    def update(self, instance, validated_data):
+        validated_data['count'] += 1  # ВОТ ЭТО САМОЕ ГЛАВНОЕ! Увеличиваем на 1 запас ЭТОЙ КАРТЫ у юзера
+        return super().update(instance, validated_data)
+
+
+class MillUserLeaderSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = UserLeader
+        fields = ("id", "user", "leader", "count")
 
     def update(self, instance, validated_data):
         validated_data['count'] -= 1
