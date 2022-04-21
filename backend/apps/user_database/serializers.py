@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from apps.accounts.models import CustomUser
 from apps.cards.models import Card, Leader
-from apps.cards.serializers import (
+from apps.cards.serializers import (  # UserDecksThroughSerializer,
     CardSerializer,
     DeckSerializer,
     LeaderSerializer,
@@ -18,7 +18,8 @@ class UserDatabaseSerializer(serializers.ModelSerializer):
     # leaders = LeaderSerializer(many=True)
     u_l = UserLeadersThroughSerializer(many=True)
     locked_leaders = serializers.SerializerMethodField()
-    decks = DeckSerializer(many=True)
+    decks = DeckSerializer(many=True)  # FIXME: а тут почему-то работает
+    # u_d = UserDecksThroughSerializer(many=True)
 
     class Meta:
         model = CustomUser
@@ -32,7 +33,8 @@ class UserDatabaseSerializer(serializers.ModelSerializer):
             "u_l",
             "locked_leaders",
             # "leaders",
-            "decks"
+            "decks",
+            # "u_d",
         )
 
     def get_locked_cards(self, user):
