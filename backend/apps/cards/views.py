@@ -17,7 +17,6 @@ from apps.cards.serializers import (
 # from rest_framework.views import Response
 
 
-
 class CardViewSet(GenericViewSet, mixins.ListModelMixin):
     queryset = Card.objects.select_related("faction", "color", "type", "ability").all()
     serializer_class = CardSerializer

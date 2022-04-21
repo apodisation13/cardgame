@@ -15,6 +15,10 @@ class CustomUser(AbstractUser):
     decks = models.ManyToManyField("cards.Deck",
                                    related_name="user_decks",
                                    through="cards.UserDeck")
+    levels = models.ManyToManyField("enemies.Level",
+                                    related_name="user_levels",
+                                    through="enemies.UserLevel")
+    resource = models.IntegerField(default=1000, blank=False, null=False)
 
     def save(self, *args, **kwargs):
         # если юзер создаётся первый раз, то self.if=None, то открываем ему все карты

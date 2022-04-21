@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from apps.core.serializers import EnemyLeaderAbilitySerializer, EnemyPassiveAbilitySerializer, MoveSerializer
-from apps.enemies.models import Enemy, EnemyLeader, Level
+from apps.enemies.models import Enemy, EnemyLeader, Level, UserLevel
 
 
 class EnemySerializer(serializers.ModelSerializer):
@@ -64,3 +64,11 @@ class LevelSerializer(serializers.ModelSerializer):
             "enemies",
             "enemy_leader",
         )
+
+
+class UserLevelsThroughSerializer(serializers.ModelSerializer):
+    level = LevelSerializer
+
+    class Meta:
+        model = UserLevel
+        fields = ("level", "id")

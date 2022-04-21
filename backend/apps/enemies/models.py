@@ -1,5 +1,6 @@
 from django.db import models
 
+from apps.accounts.models import CustomUser
 from apps.core.models import Color, EnemyLeaderAbility, EnemyPassiveAbility, Faction, Move
 
 LEVEL_DIFFICULTY_CHOICES = (
@@ -64,6 +65,7 @@ class Level(models.Model):
     enemy_leader = models.ForeignKey('EnemyLeader', related_name='levels',
                                      on_delete=models.PROTECT,
                                      blank=True, null=True, default=None)
+    unlocked = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.id}:{self.name}, появление: {self.starting_enemies_number}, ' \
@@ -80,3 +82,12 @@ class Level(models.Model):
 class LevelEnemy(models.Model):
     level = models.ForeignKey(Level, related_name='l', on_delete=models.CASCADE)
     enemy = models.ForeignKey(Enemy, related_name='l', on_delete=models.CASCADE)
+
+
+class UserLevel(models.Model):
+    level = models.ForeignKey(Level, related_name="u_level",
+                              on_delete=models.CASCADE,
+                              blank=False, null=False)
+    user = models.ForeignKey(CustomUser, related_name="u_level",
+                             on_delete=models.CASCADE,
+                             blank=False, null=False)
