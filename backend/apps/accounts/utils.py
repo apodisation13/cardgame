@@ -6,7 +6,7 @@ def set_unlocked_cards(user):
     """
     эта функция выполняется 1 раз, когда регистрируется новый юзер.
     при этом ему добавляются все открытые карты, лидеры, уровни, по одной через поле count=1
-    добавление через CardUser, LeaderUser, LevelUser
+    добавление через UserCard, UserLeader, UserLevel
     """
 
     # чтобы избежать ошибки цикличности импорта!
@@ -41,3 +41,16 @@ def set_unlocked_cards(user):
     # Сохранение колоды base-deck (id=1), в которой есть все открытые карты и открытый лидер
     UserDeck = apps.get_model('cards.UserDeck')
     UserDeck.objects.create(deck_id=1, user_id=user.id)
+
+    # Сохранение уровней
+    Level = apps.get_model('enemies.Level')
+    UserLevel = apps.get_model('enemies.UserLevel')
+
+    unlocked_levels = Level.objects.filter(unlocked=True).all()
+    for level in unlocked_levels:
+        UserLevel.objects.create(level_id=level.id, user_id=user.id)
+        print(f'Для юзера {user.id}, {user.username} открыли уровень {level.id}')
+
+    # просто проверка что все уровни загрузились
+    levels = UserLevel.objects.filter(user_id=user.id).all()
+    print(len(levels))  # вот здесь должно быть столько, сколько в базе открытых лидеров

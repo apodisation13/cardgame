@@ -106,6 +106,7 @@ class Command(BaseCommand):
                         starting_enemies_number=line[2],
                         difficulty=line[3],
                         enemy_leader_id=line[4],
+                        unlocked=line[5],
                     )
                     success += 1
                 except Exception as e:
