@@ -37,6 +37,7 @@ SERVICE_APPS = [
     "django_filters",
     "drf_yasg",
     'corsheaders',  # для headers - см.ниже переменную CORS_ALLOWED_ORIGINS + Middleware
+    'rest_framework.authtoken',
 ]
 
 APPS = [
@@ -170,6 +171,15 @@ REST_FRAMEWORK = {
         'django_filters.rest_framework.DjangoFilterBackend',
         'rest_framework.filters.SearchFilter',  # вот здесь импорт делать из рест-фреймворк, а не из джанго-филтер
         'rest_framework.filters.OrderingFilter',  # и здесь тоже
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.IsAdminUser',
     ],
     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     # 'PAGE_SIZE': 20,  # количество элементов на одной странице для пагинации
