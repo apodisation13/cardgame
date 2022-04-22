@@ -72,6 +72,7 @@ class DeckSerializer(serializers.ModelSerializer):
         fields = ("id", "name", "health", "d", "cards", "leader", "leader_id")
 
     def create(self, validated_data):
+        print('МЫ ТУТ БЛЯТЬ СУКА НАХУЙ')
         print(validated_data)
 
         cards = validated_data.pop("d", None)
@@ -175,7 +176,16 @@ class MillUserLeaderSerializer(serializers.ModelSerializer):
 
 
 class UserDecksThroughSerializer(serializers.ModelSerializer):
+    """этот используется для user-database, где всё полностью"""
     deck = DeckSerializer(many=False)
+
+    class Meta:
+        model = UserDeck
+        fields = ("id", "deck", "user")
+
+
+class UserDeckSerializer(serializers.ModelSerializer):
+    """этот используется для post user deck: user: id, deck: id"""
 
     class Meta:
         model = UserDeck
