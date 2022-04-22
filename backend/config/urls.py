@@ -2,6 +2,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
+from rest_framework.authtoken import views
 
 from config.api_docs import urlpatterns as api_docs_urlpatterns
 
@@ -12,6 +13,7 @@ urlpatterns = api_docs_urlpatterns + [
     path('api/v1/', include("apps.enemies.urls")),
     path('accounts/', include("apps.accounts.urls")),
     path('api/v1/', include("apps.user_database.urls")),
+    path('accounts/api-token-auth/', views.obtain_auth_token),
 ]
 
 if settings.DEBUG:
