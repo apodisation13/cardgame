@@ -64,7 +64,8 @@ class DeckSerializer(serializers.ModelSerializer):
     d = CardDeckSerializer(many=True, )
     cards = CardSerializer(many=True, required=False)
     leader = LeaderSerializer(many=False, required=False)
-    leader_id = serializers.PrimaryKeyRelatedField(source="leader", queryset=Leader.objects.all())
+    leader_id = serializers.PrimaryKeyRelatedField(source="leader",
+                                                   queryset=Leader.objects.select_related("faction", "ability", "passive_ability").all())
 
     class Meta:
         model = Deck
@@ -174,7 +175,7 @@ class MillUserLeaderSerializer(serializers.ModelSerializer):
 
 
 class UserDecksThroughSerializer(serializers.ModelSerializer):
-    # deck = DeckSerializer(many=False)
+    deck = DeckSerializer(many=False)
 
     class Meta:
         model = UserDeck

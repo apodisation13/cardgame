@@ -18,7 +18,7 @@ from apps.cards.serializers import (
 
 
 class CardViewSet(GenericViewSet, mixins.ListModelMixin):
-    queryset = Card.objects.select_related("faction", "color", "type", "ability").all()
+    queryset = Card.objects.select_related("faction", "color", "type", "ability", "passive_ability").all()
     serializer_class = CardSerializer
 
     # # ВОТ ТАК ТУДА МОЖНО ПЕРЕДАТЬ ПАРАМЕТР request, self.context['request']
@@ -34,14 +34,15 @@ class DeckViewSet(GenericViewSet,
                   mixins.UpdateModelMixin,
                   ):
     queryset = Deck.objects. \
-        select_related("leader__ability", "leader__faction"). \
-        prefetch_related("cards__type", "cards__color", "cards__ability", "cards__faction", "d"). \
+        select_related("leader__ability", "leader__faction", "leader__passive_ability"). \
+        prefetch_related("cards__type", "cards__color", "cards__ability",
+                         "cards__faction", "cards__passive_ability", "d"). \
         all()
     serializer_class = DeckSerializer
 
 
 class LeaderViewSet(GenericViewSet, mixins.ListModelMixin):
-    queryset = Leader.objects.select_related("ability", "faction").all()
+    queryset = Leader.objects.select_related("ability", "faction", "passive_ability").all()
     serializer_class = LeaderSerializer
 
 

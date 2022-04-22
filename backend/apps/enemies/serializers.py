@@ -67,7 +67,7 @@ class LevelSerializer(serializers.ModelSerializer):
 
 
 class UserLevelsThroughSerializer(serializers.ModelSerializer):
-    level = LevelSerializer
+    level = LevelSerializer(many=False)
 
     class Meta:
         model = UserLevel
