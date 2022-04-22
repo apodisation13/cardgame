@@ -12,6 +12,7 @@ class CreateUserViewSet(GenericViewSet, mixins.CreateModelMixin):
     """Создание пользователя и хэшированного пароля"""
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
+    permission_classes = []
 
     def create(self, request, *args, **kwargs):
         data = request.data
@@ -25,6 +26,7 @@ class LoginViewSet(GenericViewSet, mixins.CreateModelMixin):
 
     queryset = CustomUser.objects.all()
     serializer_class = LoginSerializer
+    permission_classes = []
 
     def create(self, request, *args, **kwargs):
         data = request.data
