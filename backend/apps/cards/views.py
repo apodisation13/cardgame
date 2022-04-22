@@ -1,7 +1,10 @@
 from rest_framework import mixins
 # from rest_framework.decorators import action
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.viewsets import GenericViewSet
 
+from apps.cards.permissions import IsOwner
 from apps.cards.models import Card, Deck, Leader, UserCard, UserDeck, UserLeader
 from apps.cards.serializers import (
     CardSerializer,
@@ -11,13 +14,23 @@ from apps.cards.serializers import (
     LeaderSerializer,
     MillUserCardSerializer,
     MillUserLeaderSerializer,
-    UserDecksThroughSerializer,
+    UserDeckSerializer,
 )
 
-# from rest_framework.views import Response
+
+class BaseMixin:
+    def get_permissions(self):
+        """get - только админ, post,patch - только тот юзер, который там в теле запроса"""
+        if self.action in ["create", "partial_update"]:
+            return [IsOwner()]
+        elif self.action == "list":
+            return [IsAdminUser()]
+        return []
 
 
-class CardViewSet(GenericViewSet, mixins.ListModelMixin):
+class CardViewSet(GenericViewSet,
+                  mixins.ListModelMixin
+                  ):
     queryset = Card.objects.select_related("faction", "color", "type", "ability", "passive_ability").all()
     serializer_class = CardSerializer
 
@@ -39,63 +52,75 @@ class DeckViewSet(GenericViewSet,
                          "cards__faction", "cards__passive_ability", "d"). \
         all()
     serializer_class = DeckSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
 
-class LeaderViewSet(GenericViewSet, mixins.ListModelMixin):
+class LeaderViewSet(GenericViewSet,
+                    mixins.ListModelMixin
+                    ):
     queryset = Leader.objects.select_related("ability", "faction", "passive_ability").all()
     serializer_class = LeaderSerializer
 
 
-class CraftUserCardViewSet(GenericViewSet,
-                           # mixins.ListModelMixin,
+class CraftUserCardViewSet(BaseMixin,
+                           GenericViewSet,
+                           mixins.ListModelMixin,
                            mixins.CreateModelMixin,
-                           # mixins.RetrieveModelMixin,
                            mixins.UpdateModelMixin,
                            ):
     queryset = UserCard.objects.all()
     serializer_class = CraftUserCardSerializer
-    http_method_names = ["patch", "post"]  # убрать метод PUT, который не нужен
+    http_method_names = ["patch", "post", "get"]  # убрать метод PUT, который не нужен
+    authentication_classes = [TokenAuthentication]
 
     # @action(methods=["get", "patch"], detail=True)
     # def usercards(self, request, pk=None):
+    # from rest_framework.views import Response
     #     usercards = self.queryset.filter(user_id=pk).all()
     #     serializer = self.serializer_class(usercards, many=True)
     #     return Response(serializer.data)
 
 
-class MillUserCardViewSet(GenericViewSet,
+class MillUserCardViewSet(BaseMixin,
+                          GenericViewSet,
                           mixins.UpdateModelMixin
                           ):
     queryset = UserCard.objects.all()
     serializer_class = MillUserCardSerializer
     http_method_names = ["patch"]
+    authentication_classes = [TokenAuthentication]
 
 
-class CraftUserLeaderViewSet(GenericViewSet,
-                             # mixins.ListModelMixin,
+class CraftUserLeaderViewSet(BaseMixin,
+                             GenericViewSet,
+                             mixins.ListModelMixin,
                              mixins.CreateModelMixin,
-                             # mixins.RetrieveModelMixin,
                              mixins.UpdateModelMixin,
                              ):
     queryset = UserLeader.objects.all()
     serializer_class = CraftUserLeaderSerializer
     http_method_names = ["patch", "post", "get"]  # убрать метод PUT, который не нужен
-
-    # @action(methods=["get", "patch"], detail=True)
-    # def userleaders(self, request, pk=None):
-    #     userleaders = self.queryset.filter(user_id=pk).all()
-    #     serializer = self.serializer_class(userleaders, many=True)
-    #     return Response(serializer.data)
+    authentication_classes = [TokenAuthentication]
 
 
-class MillUserLeaderViewSet(GenericViewSet,
+class MillUserLeaderViewSet(BaseMixin,
+                            GenericViewSet,
                             mixins.UpdateModelMixin
                             ):
     queryset = UserLeader.objects.all()
     serializer_class = MillUserLeaderSerializer
     http_method_names = ["patch"]
+    authentication_classes = [TokenAuthentication]
 
 
-class UserDeckViewSet(GenericViewSet, mixins.CreateModelMixin, mixins.DestroyModelMixin):
+class UserDeckViewSet(BaseMixin,
+                      GenericViewSet,
+                      mixins.ListModelMixin,
+                      mixins.CreateModelMixin,
+                      mixins.DestroyModelMixin
+                      ):
     queryset = UserDeck.objects.all()
-    serializer_class = UserDecksThroughSerializer
+    # serializer_class = UserDecksThroughSerializer
+    serializer_class = UserDeckSerializer
+    authentication_classes = [TokenAuthentication]
