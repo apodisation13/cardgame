@@ -38,9 +38,9 @@ class UserDatabaseSerializer(serializers.ModelSerializer):
             "u_l",
             "locked_leaders",
             # "decks",
-            "u_d",
             "u_level",
             "locked_levels",
+            "u_d",
         )
 
     def get_locked_cards(self, user):
