@@ -68,7 +68,7 @@ class Deck(models.Model):
                                blank=True, null=True, default=None)
 
     def __str__(self):
-        return f'{self.id}, health {self.health}, {self.leader}'
+        return f'{self.id}, name {self.name}, health {self.health}, {self.leader}'
 
 
 class CardDeck(models.Model):
