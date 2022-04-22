@@ -1,12 +1,16 @@
 from rest_framework import mixins
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.viewsets import GenericViewSet
 
 from apps.accounts.models import CustomUser
+from apps.user_database.permissions import IsOwner
 from apps.user_database.serializers import UserDatabaseSerializer
 
 
 class UserDatabaseViewSet(GenericViewSet, mixins.RetrieveModelMixin):
     """user_database, id: user_id"""
+    authentication_classes = [TokenAuthentication]
+
     queryset = CustomUser.objects. \
         prefetch_related("u_c__card__color",
                          "u_c__card__type",
@@ -33,3 +37,6 @@ class UserDatabaseViewSet(GenericViewSet, mixins.RetrieveModelMixin):
                          ). \
         all()
     serializer_class = UserDatabaseSerializer
+
+    def get_permissions(self):
+        return [IsOwner()]
