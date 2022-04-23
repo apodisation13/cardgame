@@ -1,6 +1,6 @@
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 
-from apps.cards.permissions import IsDeckOwner, IsOwner, IsLeaderOwner, IsCardOwner
+from apps.cards.permissions import IsCardOwner, IsDeckOwner, IsLeaderOwner, IsOwner
 
 
 class CardBaseMixin:

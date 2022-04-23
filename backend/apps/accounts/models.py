@@ -21,7 +21,7 @@ class CustomUser(AbstractUser):
     resource = models.IntegerField(default=1000, blank=False, null=False)
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["password",]
+    REQUIRED_FIELDS = ["password", ]
 
     def save(self, *args, **kwargs):
         # если юзер создаётся первый раз, то self.if=None, то открываем ему все карты

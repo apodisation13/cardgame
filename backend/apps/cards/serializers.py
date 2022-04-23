@@ -66,7 +66,10 @@ class DeckSerializer(serializers.ModelSerializer):
     cards = CardSerializer(many=True, required=False)
     leader = LeaderSerializer(many=False, required=False)
     leader_id = serializers.PrimaryKeyRelatedField(source="leader",
-                                                   queryset=Leader.objects.select_related("faction", "ability", "passive_ability").all())
+                                                   queryset=Leader.objects.
+                                                   select_related("faction", "ability", "passive_ability").
+                                                   all()
+                                                   )
 
     class Meta:
         model = Deck
@@ -107,22 +110,6 @@ class DeckSerializer(serializers.ModelSerializer):
             carddeck.save()
 
         return deck
-
-
-class UserCardsThroughSerializer(serializers.ModelSerializer):
-    card = CardSerializer(many=False)  # если это не указать,то будет просто card_id, count
-
-    class Meta:
-        model = UserCard
-        fields = ("card", "count", "id")
-
-
-class UserLeadersThroughSerializer(serializers.ModelSerializer):
-    leader = LeaderSerializer(many=False)
-
-    class Meta:
-        model = UserLeader
-        fields = ("leader", "count", "id")
 
 
 class CraftUserCardSerializer(serializers.ModelSerializer):
@@ -179,17 +166,8 @@ class MillUserLeaderSerializer(serializers.ModelSerializer):
         return instance
 
 
-class UserDecksThroughSerializer(serializers.ModelSerializer):
-    """этот используется для user-database, где всё полностью"""
-    deck = DeckSerializer(many=False)
-
-    class Meta:
-        model = UserDeck
-        fields = ("id", "deck", "user")
-
-
 class UserDeckSerializer(serializers.ModelSerializer):
-    """этот используется для post user deck: user: id, deck: id"""
+    """используется только для проверки, больше нигде"""
 
     class Meta:
         model = UserDeck

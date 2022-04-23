@@ -1,16 +1,35 @@
 from rest_framework import serializers
 
 from apps.accounts.models import CustomUser
-from apps.cards.models import Card, Leader
-from apps.cards.serializers import ( UserDecksThroughSerializer,
-    CardSerializer,
-    DeckSerializer,
-    LeaderSerializer,
-    UserCardsThroughSerializer,
-    UserLeadersThroughSerializer,
-)
+from apps.cards.models import Card, Leader, UserCard, UserDeck, UserLeader
+from apps.cards.serializers import CardSerializer, DeckSerializer, LeaderSerializer
 from apps.enemies.models import Level
-from apps.enemies.serializers import UserLevelsThroughSerializer, LevelSerializer
+from apps.enemies.serializers import LevelSerializer, UserLevelsThroughSerializer
+
+
+class UserCardsThroughSerializer(serializers.ModelSerializer):
+    card = CardSerializer(many=False)  # если это не указать,то будет просто card_id, count
+
+    class Meta:
+        model = UserCard
+        fields = ("card", "count", "id")
+
+
+class UserLeadersThroughSerializer(serializers.ModelSerializer):
+    leader = LeaderSerializer(many=False)
+
+    class Meta:
+        model = UserLeader
+        fields = ("leader", "count", "id")
+
+
+class UserDecksThroughSerializer(serializers.ModelSerializer):
+    """этот используется для user-database, где всё полностью"""
+    deck = DeckSerializer(many=False)
+
+    class Meta:
+        model = UserDeck
+        fields = ("id", "deck", "user")
 
 
 class UserDatabaseSerializer(serializers.ModelSerializer):
