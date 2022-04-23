@@ -5,7 +5,7 @@ from apps.accounts.utils import set_unlocked_cards
 
 
 class CustomUser(AbstractUser):
-    email = models.EmailField("email", blank=False, unique=True)
+    email = models.EmailField("email", unique=True)
     cards = models.ManyToManyField("cards.Card",
                                    related_name="user_cards",
                                    through="cards.UserCard")
@@ -19,6 +19,9 @@ class CustomUser(AbstractUser):
                                     related_name="user_levels",
                                     through="enemies.UserLevel")
     resource = models.IntegerField(default=1000, blank=False, null=False)
+
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["password",]
 
     def save(self, *args, **kwargs):
         # если юзер создаётся первый раз, то self.if=None, то открываем ему все карты

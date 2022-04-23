@@ -61,6 +61,7 @@ class LeaderSerializer(serializers.ModelSerializer):
 
 
 class DeckSerializer(serializers.ModelSerializer):
+    """здесь мы сохраняем колоду, добавляем CardDeck на неё, добавляем UserDeck через context[request]"""
     d = CardDeckSerializer(many=True, )
     cards = CardSerializer(many=True, required=False)
     leader = LeaderSerializer(many=False, required=False)
@@ -72,11 +73,11 @@ class DeckSerializer(serializers.ModelSerializer):
         fields = ("id", "name", "health", "d", "cards", "leader", "leader_id")
 
     def create(self, validated_data):
-        print('МЫ ТУТ БЛЯТЬ СУКА НАХУЙ')
-        print(validated_data)
+        user_id = self.context.get('request').user.id
+        # print(validated_data)
 
         cards = validated_data.pop("d", None)
-        print(cards)
+        # print(cards)
 
         deck = super().create(validated_data)
 
@@ -84,12 +85,15 @@ class DeckSerializer(serializers.ModelSerializer):
             for position in cards:
                 CardDeck.objects.create(deck=deck, **position)
 
+        UserDeck.objects.create(deck_id=deck.id, user_id=user_id)
+        # print(UserDeck.objects.all())
+
         return deck
 
     def update(self, instance, validated_data):
         """изменение колоды - карт или лидера"""
         cards = validated_data.pop("d", None)
-        print(cards)
+        # print(cards)
 
         deck = super().update(instance, validated_data)
 
@@ -97,7 +101,7 @@ class DeckSerializer(serializers.ModelSerializer):
         # FIXME: будет глюк если в колоде будет не ровно 12 карт, а допустим не менее 20. было 22, пришло 20, ГЛЮК
         current_cards = CardDeck.objects.filter(deck_id=deck.id)
         for i in range(len(current_cards)):
-            print(current_cards[i].id, cards[i].get('card').id)
+            # print(current_cards[i].id, cards[i].get('card').id)
             carddeck = CardDeck.objects.filter(id=current_cards[i].id).first()
             carddeck.card_id = cards[i].get('card').id
             carddeck.save()
