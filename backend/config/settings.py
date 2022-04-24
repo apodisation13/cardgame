@@ -37,12 +37,15 @@ SERVICE_APPS = [
     "django_filters",
     "drf_yasg",
     'corsheaders',  # для headers - см.ниже переменную CORS_ALLOWED_ORIGINS + Middleware
+    'rest_framework.authtoken',
 ]
 
 APPS = [
     "apps.core.apps.CoreConfig",
     "apps.cards.apps.CardsConfig",
     "apps.enemies.apps.EnemiesConfig",
+    "apps.accounts.apps.AccountsConfig",
+    "apps.user_database.apps.UserDatabaseConfig",
 ]
 
 INSTALLED_APPS = DEFAULT_APPS + SERVICE_APPS + APPS
@@ -52,6 +55,10 @@ CORS_ALLOW_ALL_ORIGINS = True  # TODO: поправить в будущем
 #     "https://localhost:8080",
 #     "https://127.0.0.1:8080",
 # ]
+
+
+AUTH_USER_MODEL = 'accounts.CustomUser'
+
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",  # он должен стоять выше всех, так сказано
@@ -98,20 +105,20 @@ DATABASES = {
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
-    },
-]
+# AUTH_PASSWORD_VALIDATORS = [
+#     {
+#         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+#     },
+#     {
+#         "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+#     },
+#     {
+#         "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+#     },
+#     {
+#         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+#     },
+# ]
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
@@ -164,6 +171,15 @@ REST_FRAMEWORK = {
         'django_filters.rest_framework.DjangoFilterBackend',
         'rest_framework.filters.SearchFilter',  # вот здесь импорт делать из рест-фреймворк, а не из джанго-филтер
         'rest_framework.filters.OrderingFilter',  # и здесь тоже
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.IsAdminUser',
     ],
     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     # 'PAGE_SIZE': 20,  # количество элементов на одной странице для пагинации

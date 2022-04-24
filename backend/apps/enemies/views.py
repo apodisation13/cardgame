@@ -6,14 +6,14 @@ from apps.enemies.serializers import EnemyLeaderSerializer, EnemySerializer, Lev
 
 
 class EnemyViewSet(GenericViewSet, mixins.ListModelMixin):
-    queryset = Enemy.objects.select_related('faction', 'color', 'move').all()
+    queryset = Enemy.objects.select_related("faction", "color", "move", "passive_ability").all()
     serializer_class = EnemySerializer
 
 
 class LevelViewSet(GenericViewSet, mixins.ListModelMixin):
     queryset = Level.objects.\
         select_related("enemy_leader__ability", "enemy_leader__faction").\
-        prefetch_related("enemies__faction", "enemies__color", "enemies__move").\
+        prefetch_related("enemies__faction", "enemies__color", "enemies__move", "enemies__passive_ability").\
         all()
     serializer_class = LevelSerializer
 
