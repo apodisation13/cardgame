@@ -16,11 +16,11 @@ class UserCardsThroughSerializer(serializers.ModelSerializer):
 
 
 class UserLeadersThroughSerializer(serializers.ModelSerializer):
-    leader = LeaderSerializer(many=False)
+    card = LeaderSerializer(many=False, source='leader')
 
     class Meta:
         model = UserLeader
-        fields = ("leader", "count", "id")
+        fields = ("card", "count", "id")
 
 
 class UserDecksThroughSerializer(serializers.ModelSerializer):
@@ -68,7 +68,11 @@ class UserDatabaseSerializer(serializers.ModelSerializer):
             select_related("faction", "color", "type", "ability", "passive_ability").\
             exclude(u_c__user_id=user_id).\
             all()
-        return CardSerializer(user_locked_cards, many=True).data
+        c = []
+        for u in user_locked_cards:
+            s = {'card': CardSerializer(u).data, 'count': 0}
+            c.append(s)
+        return c
 
     def get_locked_leaders(self, user):
         user_id = user.id
@@ -76,7 +80,11 @@ class UserDatabaseSerializer(serializers.ModelSerializer):
             select_related("faction", "ability", "passive_ability").\
             exclude(u_l__user_id=user_id).\
             all()
-        return LeaderSerializer(user_locked_leaders, many=True).data
+        c = []
+        for u in user_locked_leaders:
+            s = {'card': LeaderSerializer(u).data, 'count': 0}
+            c.append(s)
+        return c
 
     def get_locked_levels(self, user):
         user_id = user.id
@@ -85,4 +93,8 @@ class UserDatabaseSerializer(serializers.ModelSerializer):
             prefetch_related("enemies__faction", "enemies__color", "enemies__move", "enemies__passive_ability").\
             exclude(u_level__user_id=user_id).\
             all()
-        return LevelSerializer(user_locked_levels, many=True).data
+        c = []
+        for u in user_locked_levels:
+            s = {'level': LevelSerializer(u).data}
+            c.append(s)
+        return c
