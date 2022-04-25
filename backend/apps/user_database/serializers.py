@@ -41,9 +41,9 @@ class UserDatabaseSerializer(serializers.ModelSerializer):
 
     # decks = DeckSerializer(many=True)  # FIXME: а тут почему-то работает
 
-    # cards = serializers.SerializerMethodField()
-    # leaders = serializers.SerializerMethodField()
-    # levels = serializers.SerializerMethodField()
+    cards = serializers.SerializerMethodField()
+    leaders = serializers.SerializerMethodField()
+    levels = serializers.SerializerMethodField()
 
     u_d = UserDecksThroughSerializer(many=True)
     #
@@ -56,9 +56,9 @@ class UserDatabaseSerializer(serializers.ModelSerializer):
             "id",
             "email",
             "username",
-            # "cards",
-            # "leaders",
-            # "levels",
+            "cards",
+            "leaders",
+            "levels",
             # "u_c",
             # "locked_cards",
             # "u_l",
