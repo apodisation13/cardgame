@@ -71,7 +71,8 @@ class LeaderSerializer(serializers.ModelSerializer):
 class DeckSerializer(serializers.ModelSerializer):
     """здесь мы сохраняем колоду, добавляем CardDeck на неё, добавляем UserDeck через context[request]"""
     d = CardDeckSerializer(many=True, )
-    cards = CardSerializer(many=True, required=False)
+    # cards = CardSerializer(many=True, required=False)
+    cards = serializers.SerializerMethodField()
     leader = LeaderSerializer(many=False, required=False)
     leader_id = serializers.PrimaryKeyRelatedField(source="leader",
                                                    queryset=Leader.objects.
@@ -118,6 +119,14 @@ class DeckSerializer(serializers.ModelSerializer):
             carddeck.save()
 
         return deck
+
+    def get_cards(self, obj):
+        # print(CardSerializer(obj.cards, many=True, context={"request": self.context["request"]}).data)
+        c = []
+        for u in obj.cards.all():
+            s = {'card': CardSerializer(u, context={'request': self.context.get('request')}).data}
+            c.append(s)
+        return c
 
 
 class CraftUserCardSerializer(serializers.ModelSerializer):
