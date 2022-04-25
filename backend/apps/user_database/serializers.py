@@ -4,8 +4,7 @@ from apps.accounts.models import CustomUser
 from apps.cards.models import Card, Leader, UserCard, UserDeck, UserLeader
 from apps.cards.serializers import CardSerializer, DeckSerializer, LeaderSerializer
 from apps.enemies.models import Level, UserLevel
-from apps.enemies.serializers import LevelSerializer, UserLevelsThroughSerializer
-
+from apps.enemies.serializers import LevelSerializer
 
 # class UserCardsThroughSerializer(serializers.ModelSerializer):
 #     card = CardSerializer(many=False)  # если это не указать,то будет просто card_id, count
@@ -78,15 +77,15 @@ class UserDatabaseSerializer(serializers.ModelSerializer):
             usercard = UserCard.objects.filter(card=card, user_id=user_id).first()
             if usercard:
                 cards.append({
-                    "card": CardSerializer(card, context={"request": self.context["request"]} ).data,
+                    "card": CardSerializer(card, context={"request": self.context["request"]}).data,
                     "count": usercard.count,
                     "id": usercard.id,
                 })
             else:
                 cards.append({
                     "card": CardSerializer(card, context={"request": self.context["request"]}).data,
-                    "count": 0,}
-                )
+                    "count": 0,
+                })
         return cards
 
     def get_leaders(self, user):
