@@ -70,7 +70,7 @@ class UserDatabaseSerializer(serializers.ModelSerializer):
             all()
         c = []
         for u in user_locked_cards:
-            s = {'card': CardSerializer(u).data, 'count': 0}
+            s = {'card': CardSerializer(u, context={'request': self.context.get('request')}).data, 'count': 0}
             c.append(s)
         return c
 
@@ -82,7 +82,7 @@ class UserDatabaseSerializer(serializers.ModelSerializer):
             all()
         c = []
         for u in user_locked_leaders:
-            s = {'card': LeaderSerializer(u).data, 'count': 0}
+            s = {'card': LeaderSerializer(u, context={'request': self.context.get('request')}).data, 'count': 0}
             c.append(s)
         return c
 
@@ -95,6 +95,6 @@ class UserDatabaseSerializer(serializers.ModelSerializer):
             all()
         c = []
         for u in user_locked_levels:
-            s = {'level': LevelSerializer(u).data}
+            s = {'level': LevelSerializer(u, context={'request': self.context.get('request')}).data}
             c.append(s)
         return c

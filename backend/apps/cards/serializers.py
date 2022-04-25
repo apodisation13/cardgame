@@ -10,6 +10,7 @@ class CardSerializer(serializers.ModelSerializer):
     type = serializers.CharField(source="type.name")
     ability = AbilitySerializer(many=False, read_only=True)
     passive_ability = PassiveAbilitySerializer(many=False, read_only=True)
+    image = serializers.SerializerMethodField()
 
     class Meta:
         model = Card
@@ -31,6 +32,9 @@ class CardSerializer(serializers.ModelSerializer):
             "passive_ability",
         )
 
+    def get_image(self, obj):
+        return self.context['request'].build_absolute_uri(obj.image.url)
+
 
 class CardDeckSerializer(serializers.ModelSerializer):
 
@@ -43,6 +47,7 @@ class LeaderSerializer(serializers.ModelSerializer):
     faction = serializers.CharField(source="faction.name")
     ability = AbilitySerializer(many=False, read_only=True)
     passive_ability = PassiveAbilitySerializer(many=False, read_only=True)
+    image = serializers.SerializerMethodField()
 
     class Meta:
         model = Leader
@@ -58,6 +63,9 @@ class LeaderSerializer(serializers.ModelSerializer):
             "has_passive",
             "passive_ability"
         )
+
+    def get_image(self, obj):
+        return self.context['request'].build_absolute_uri(obj.image.url)
 
 
 class DeckSerializer(serializers.ModelSerializer):

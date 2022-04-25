@@ -40,3 +40,6 @@ class UserDatabaseViewSet(GenericViewSet, mixins.RetrieveModelMixin):
 
     def get_permissions(self):
         return [IsOwner()]
+
+    def get_serializer_context(self):
+        return {'request': self.request}
