@@ -22,12 +22,18 @@ class CardViewSet(GenericViewSet,
     queryset = Card.objects.select_related("faction", "color", "type", "ability", "passive_ability").all()
     serializer_class = CardSerializer
 
+    def get_serializer_context(self):
+        return {'request': self.request}
+
 
 class LeaderViewSet(GenericViewSet,
                     mixins.ListModelMixin
                     ):
     queryset = Leader.objects.select_related("ability", "faction", "passive_ability").all()
     serializer_class = LeaderSerializer
+
+    def get_serializer_context(self):
+        return {'request': self.request}
 
 
 class DeckViewSet(DeckBaseMixin,
