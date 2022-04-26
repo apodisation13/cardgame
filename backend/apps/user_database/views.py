@@ -4,7 +4,7 @@ from rest_framework.viewsets import GenericViewSet
 
 from apps.accounts.models import CustomUser
 from apps.user_database.permissions import IsOwner
-from apps.user_database.serializers import UserDatabaseSerializer
+from apps.user_database.serializers import UserDatabaseSerializer, UserResourceSerializer
 
 
 class UserDatabaseViewSet(GenericViewSet, mixins.RetrieveModelMixin):
@@ -43,3 +43,17 @@ class UserDatabaseViewSet(GenericViewSet, mixins.RetrieveModelMixin):
 
     def get_serializer_context(self):
         return {'request': self.request}
+
+
+class UserResourceViewSet(GenericViewSet,
+                          mixins.RetrieveModelMixin,
+                          mixins.UpdateModelMixin,
+                          ):
+
+    authentication_classes = [TokenAuthentication]
+    queryset = CustomUser.objects.all()
+    serializer_class = UserResourceSerializer
+    http_method_names = ["get", "patch"]
+
+    def get_permissions(self):
+        return [IsOwner()]
