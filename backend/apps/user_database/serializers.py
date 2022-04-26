@@ -56,6 +56,7 @@ class UserDatabaseSerializer(serializers.ModelSerializer):
             "id",
             "email",
             "username",
+            "resource",
             "cards",
             "leaders",
             "levels",
@@ -126,3 +127,10 @@ class UserDatabaseSerializer(serializers.ModelSerializer):
                     'level': LevelSerializer(level, context={'request': self.context.get('request')}).data,
                 })
         return levels
+
+
+class UserResourceSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CustomUser
+        fields = ("resource", )
