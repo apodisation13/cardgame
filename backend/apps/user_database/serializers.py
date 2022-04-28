@@ -56,7 +56,6 @@ class UserDatabaseSerializer(serializers.ModelSerializer):
             "id",
             "email",
             "username",
-            "resource",
             "cards",
             "leaders",
             "levels",
@@ -133,4 +132,4 @@ class UserResourceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ("resource", )
+        fields = ("scraps", "wood", "kegs", "big_kegs", "chests")

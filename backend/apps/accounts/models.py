@@ -18,7 +18,11 @@ class CustomUser(AbstractUser):
     levels = models.ManyToManyField("enemies.Level",
                                     related_name="user_levels",
                                     through="enemies.UserLevel")
-    resource = models.IntegerField(default=1000, blank=False, null=False)
+    scraps = models.IntegerField(default=1000, blank=False, null=False)
+    wood = models.IntegerField(default=1000, blank=False, null=False)
+    kegs = models.IntegerField(default=3, blank=False, null=False)
+    big_kegs = models.IntegerField(default=1, blank=False, null=False)
+    chests = models.IntegerField(default=0, blank=False, null=False)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["password", "username"]
