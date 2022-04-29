@@ -1,4 +1,5 @@
 from rest_framework import mixins
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import GenericViewSet
 
 from apps.enemies.models import Enemy, EnemyLeader, Level
@@ -8,6 +9,7 @@ from apps.enemies.serializers import EnemyLeaderSerializer, EnemySerializer, Lev
 class EnemyViewSet(GenericViewSet, mixins.ListModelMixin):
     queryset = Enemy.objects.select_related("faction", "color", "move", "passive_ability").all()
     serializer_class = EnemySerializer
+    permission_classes = [IsAuthenticated]
 
 
 class LevelViewSet(GenericViewSet, mixins.ListModelMixin):
@@ -21,3 +23,4 @@ class LevelViewSet(GenericViewSet, mixins.ListModelMixin):
 class EnemyLeaderViewSet(GenericViewSet, mixins.ListModelMixin):
     queryset = EnemyLeader.objects.select_related("faction", "ability").all()
     serializer_class = EnemyLeaderSerializer
+    permission_classes = [IsAuthenticated]
