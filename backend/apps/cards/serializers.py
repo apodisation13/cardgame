@@ -30,6 +30,7 @@ class CardSerializer(serializers.ModelSerializer):
             "has_passive",
             "has_passive_in_hand",
             "passive_ability",
+            "timer",
         )
 
     def get_image(self, obj):
