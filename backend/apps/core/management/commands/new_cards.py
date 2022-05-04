@@ -17,7 +17,7 @@ class Command(BaseCommand):
         cards_cards = data["Cards.Card"]
 
         last_card = Card.objects.order_by('pk').last()
-        print(last_card.pk)
+        # print(last_card.pk)
 
         success = 0
         failed = 0
