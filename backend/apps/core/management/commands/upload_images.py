@@ -21,6 +21,7 @@ class Command(BaseCommand):
         i = 1
         for c in cards:
             c.image = cards_cards[i][11]
+            c.name = cards_cards[i][1]
             c.save()
             i += 1
         # -----------------------------------------------------------
@@ -32,6 +33,7 @@ class Command(BaseCommand):
         i = 1
         for l in leaders:
             l.image = cards_leaders[i][7]
+            l.name = cards_leaders[i][1]
             l.save()
             i += 1
         # -----------------------------------------------------------
