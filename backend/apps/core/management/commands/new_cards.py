@@ -41,7 +41,8 @@ class Command(BaseCommand):
                             image=line[11],
                             has_passive=line[12],
                             has_passive_in_hand=line[13],
-                            passive_ability_id=passive_card_ability_id
+                            passive_ability_id=passive_card_ability_id,
+                            timer=line[15],
                         )
                         success += 1
                     else:
@@ -59,6 +60,7 @@ class Command(BaseCommand):
                             image=line[11],
                             has_passive=line[12],
                             has_passive_in_hand=line[13],
+                            timer=line[15],
                         )
                         success += 1
                 except Exception as e:

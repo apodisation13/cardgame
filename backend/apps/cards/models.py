@@ -47,6 +47,7 @@ class Card(models.Model):
     passive_ability = models.ForeignKey(PassiveAbility, related_name='cards',
                                         on_delete=models.PROTECT,
                                         blank=True, null=True, default=None)
+    timer = models.IntegerField(default=0, blank=False, null=False)
 
     def __str__(self):
         return f'{self.id} {self.name}, hp {self.hp}, ' \
