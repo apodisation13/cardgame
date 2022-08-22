@@ -22,7 +22,14 @@ def create_admin(db, django_user_model, test_password):
     return make_admin
 
 
-@pytest.fixture
-def load_database():
-    core = Command()
-    core.handle()
+@pytest.fixture(scope='session')
+def django_db_setup(django_db_setup, django_db_blocker):
+    with django_db_blocker.unblock():
+        core = Command()
+        core.handle()
+
+#
+# @pytest.fixture
+# def load_database():
+#     core = Command()
+#     core.handle()
