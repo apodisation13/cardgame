@@ -35,7 +35,7 @@ jobs:
         run: cd backend && isort -c .
 
       - name: test with Pytest
-        run: pytest
+        run: cd backend && pytest
 
   build:
     if: github.event_name == 'push'
