@@ -1,15 +1,10 @@
 import pytest
+from rest_framework.status import HTTP_401_UNAUTHORIZED
 from rest_framework.test import APIClient
-from rest_framework.status import HTTP_401_UNAUTHORIZED, HTTP_200_OK
 
 from apps.core.models import Faction
 
-
 api_client = APIClient()
-
-
-# TODO: ВНИМАНИЕ!!!!!!!
-# FIXME: ВРЕМЕННО НАДО ЗАКОММЕНТИТЬ СТРОКИ 42-43 в accounts/utils.py
 
 
 # ПЕРВЫЙ СПОСОБ - КЛАССАМИ
@@ -19,20 +14,18 @@ class TestModels:
         self.api_client = APIClient()
 
     def test_factions(self):
+        # Тест метода __str__ у модели, он должен показать то, как бы она print()
         faction = Faction.objects.first()
         expected_result = "1 - Neutral"
         assert expected_result == faction.__str__()
 
     def test_faction_api(self, create_admin):
-        faction = Faction.objects.first()
-        expected_result = "1 - Neutral"
-        assert expected_result == faction.__str__()
+        # Тест эндпоинта фракций
         response = self.api_client.get("/api/v1/factions/")
         assert response.status_code == HTTP_401_UNAUTHORIZED
-        admin = create_admin()
-        self.api_client.force_authenticate(admin)
-        response = self.api_client.get("/api/v1/factions/")
-        assert response.status_code == HTTP_200_OK
+        admin = create_admin()  # поюзали фикстуру создания админа
+        self.api_client.force_authenticate(admin)  # принудительно прошли аутентификацию
+        # TODO: ну а вот тут надо дальше проверять
 
 
 # Второй способ - функциями
@@ -44,15 +37,3 @@ class TestModels:
 #     factions = Faction.objects.all()
 #     assert len(factions) == 4
 #
-#
-# @pytest.mark.django_db
-# def test_factions_2(create_admin):
-#     faction = Faction.objects.first()
-#     expected_result = "1 - Neutral"
-#     assert expected_result == faction.__str__()
-#     response = api_client.get("/api/v1/factions/")
-#     assert response.status_code == HTTP_401_UNAUTHORIZED
-#     admin = create_admin()
-#     api_client.force_authenticate(admin)
-#     response = api_client.get("/api/v1/factions/")
-#     assert response.status_code == HTTP_200_OK

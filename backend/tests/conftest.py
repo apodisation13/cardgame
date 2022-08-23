@@ -1,7 +1,9 @@
 import pytest
 from django.contrib.auth.hashers import make_password
 
-from apps.core.management.commands.core import Command
+from apps.core.management.commands.cards import Command as Cards
+from apps.core.management.commands.core import Command as Core
+from apps.core.management.commands.enemies import Command as Enemies
 
 
 @pytest.fixture
@@ -9,6 +11,7 @@ def test_password():
     return 'VEry-1-strong-test-passWorD'
 
 
+# Фикстура создания админа (вызывается КАЖДЫЙ раз, когда в тесте стоит в аргументах)
 @pytest.fixture
 def create_admin(db, django_user_model, test_password):
     def make_admin(**kwargs):
@@ -22,14 +25,15 @@ def create_admin(db, django_user_model, test_password):
     return make_admin
 
 
+# Вызов management команд: python manage.py core, python manage.py cards, python manage.py enemies
+# благодаря тегу session выполняется только 1 раз перед началом тестов
+# TODO: есть более красивый способ вызвать эти команды
 @pytest.fixture(scope='session')
 def django_db_setup(django_db_setup, django_db_blocker):
     with django_db_blocker.unblock():
-        core = Command()
+        core = Core()
         core.handle()
-
-#
-# @pytest.fixture
-# def load_database():
-#     core = Command()
-#     core.handle()
+        cards = Cards()
+        cards.handle()
+        enemies = Enemies()
+        enemies.handle()
