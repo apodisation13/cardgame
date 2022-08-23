@@ -49,6 +49,9 @@ jobs:
 
       - name: test with Pytest
         run: cd backend && pytest
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: secret
 
   build:
     if: github.event_name == 'push'
