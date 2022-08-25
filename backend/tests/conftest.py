@@ -1,12 +1,12 @@
+import os
+
 import pytest
 from django.conf import settings
 from django.contrib.auth.hashers import make_password
-
-from apps.accounts.models import CustomUser
+from django.core.management import call_command
 from model_bakery import baker
 
-import os
-from django.core.management import call_command
+from apps.accounts.models import CustomUser
 
 
 @pytest.fixture
