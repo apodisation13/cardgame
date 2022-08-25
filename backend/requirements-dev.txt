@@ -6,3 +6,4 @@ pytest-cov
 pytest-env
 isort
 pytest-mock
+model-bakery
