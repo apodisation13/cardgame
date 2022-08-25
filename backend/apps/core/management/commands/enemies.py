@@ -8,10 +8,18 @@ class Command(BaseCommand):
     help = 'enemies: Moves, EnemyLeaderAbilities, EnemyLeaders, Enemies, Level+LevelEnemy'
 
     def add_arguments(self, parser):
-        pass
+        parser.add_argument(
+            "--path",
+            dest="path",
+        )
 
     def handle(self, *args, **options):
-        data = get_data("database.ods")
+        path = options.get("path")
+
+        if path:
+            data = get_data(f"{path}/database.ods")
+        else:
+            data = get_data("database.ods")
 
         # Загрузка enemies.EnemyLeader
         enemies_enemy_leaders = data["Enemies.EnemyLeader"]
