@@ -4,6 +4,11 @@ from django.contrib.auth.hashers import make_password
 from apps.core.management.commands.cards import Command as Cards
 from apps.core.management.commands.core import Command as Core
 from apps.core.management.commands.enemies import Command as Enemies
+from django.core.management import call_command
+from apps.accounts.models import CustomUser
+from model_bakery import baker
+
+import os
 
 
 @pytest.fixture
@@ -30,10 +35,15 @@ def create_admin(db, django_user_model, test_password):
 # TODO: есть более красивый способ вызвать эти команды
 @pytest.fixture(scope='session')
 def django_db_setup(django_db_setup, django_db_blocker):
+    print(os.getcwd())
     with django_db_blocker.unblock():
-        core = Core()
-        core.handle()
-        cards = Cards()
-        cards.handle()
-        enemies = Enemies()
-        enemies.handle()
+        call_command('core')
+        call_command('cards')
+        call_command('enemies')
+
+
+@pytest.fixture
+def create_user():
+    def user_factory(*args, **kwargs):
+        return baker.make(CustomUser, *args, **kwargs)
+    return user_factory
