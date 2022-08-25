@@ -17,10 +17,18 @@ class Command(BaseCommand):
     help = 'core.Factions, core.Colors'
 
     def add_arguments(self, parser):
-        pass
+        parser.add_argument(
+            "--path",
+            dest="path",
+        )
 
     def handle(self, *args, **options):
-        data = get_data("database.ods")
+        path = options.get("path")
+
+        if path:
+            data = get_data(f"{path}/database.ods")
+        else:
+            data = get_data("database.ods")
 
         # ЗАГРУЗКА core.Faction
         factions = data["Faction"]

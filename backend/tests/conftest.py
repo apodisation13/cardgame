@@ -1,14 +1,12 @@
 import pytest
+from django.conf import settings
 from django.contrib.auth.hashers import make_password
 
-from apps.core.management.commands.cards import Command as Cards
-from apps.core.management.commands.core import Command as Core
-from apps.core.management.commands.enemies import Command as Enemies
-from django.core.management import call_command
 from apps.accounts.models import CustomUser
 from model_bakery import baker
 
 import os
+from django.core.management import call_command
 
 
 @pytest.fixture
@@ -20,7 +18,6 @@ def test_password():
 @pytest.fixture
 def create_admin(db, django_user_model, test_password):
     def make_admin(**kwargs):
-        print('ПАРОЛЬ', test_password, make_password(test_password))
         kwargs['password'] = make_password(test_password)
         if 'username' not in kwargs:
             kwargs['username'] = 'Some UserName'
@@ -32,14 +29,13 @@ def create_admin(db, django_user_model, test_password):
 
 # Вызов management команд: python manage.py core, python manage.py cards, python manage.py enemies
 # благодаря тегу session выполняется только 1 раз перед началом тестов
-# TODO: есть более красивый способ вызвать эти команды
 @pytest.fixture(scope='session')
 def django_db_setup(django_db_setup, django_db_blocker):
     print(os.getcwd())
     with django_db_blocker.unblock():
-        call_command('core')
-        call_command('cards')
-        call_command('enemies')
+        call_command('core', path=f'{settings.BASE_DIR}')
+        call_command('cards', path=f'{settings.BASE_DIR}')
+        call_command('enemies', path=f'{settings.BASE_DIR}')
 
 
 @pytest.fixture
