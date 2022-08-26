@@ -28,7 +28,7 @@ def test_get_news(user, create_user, create_news, api_client):
         api_client.force_authenticate(test_user)
     response = api_client.get('/api/v1/news/')
     assert response.status_code == 200
-    assert len(response.json()) == len(news)
+    assert len(response.data) == len(news)
 
 
 @pytest.mark.parametrize(
@@ -44,7 +44,7 @@ def test_post_news(
         test_user = create_user()
     api_client.force_authenticate(test_user)
     response = api_client.post('/api/v1/news/', data=news, format='json')
-    data_news_title = response.json().get('title')
+    data_news_title = response.data.get('title')
     assert response.status_code == resp_status_code
     if data_news_title:
         assert data_news_title == news['title']

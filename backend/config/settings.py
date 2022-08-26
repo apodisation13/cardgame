@@ -46,7 +46,7 @@ APPS = [
     "apps.enemies.apps.EnemiesConfig",
     "apps.accounts.apps.AccountsConfig",
     "apps.user_database.apps.UserDatabaseConfig",
-    "apps.news.apps.NewsConfig"
+    "apps.news.apps.NewsConfig",
 ]
 
 INSTALLED_APPS = DEFAULT_APPS + SERVICE_APPS + APPS
