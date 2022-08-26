@@ -1,5 +1,3 @@
-import os
-
 import pytest
 from django.conf import settings
 from django.contrib.auth.hashers import make_password
@@ -31,7 +29,6 @@ def create_admin(db, django_user_model, test_password):
 # благодаря тегу session выполняется только 1 раз перед началом тестов
 @pytest.fixture(scope='session')
 def django_db_setup(django_db_setup, django_db_blocker):
-    print(os.getcwd())
     with django_db_blocker.unblock():
         call_command('core', path=f'{settings.BASE_DIR}')
         call_command('cards', path=f'{settings.BASE_DIR}')

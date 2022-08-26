@@ -26,9 +26,7 @@ def test_get_news(user, create_user, create_news, api_client):
     if user:
         test_user = create_user()
         api_client.force_authenticate(test_user)
-        response = api_client.get('/api/v1/news/')
-    else:
-        response = api_client.get('/api/v1/news/')
+    response = api_client.get('/api/v1/news/')
     assert response.status_code == 200
     assert len(response.json()) == len(news)
 
