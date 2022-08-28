@@ -1,6 +1,6 @@
 import pytest
-
 from apps.core.models import Faction, Color, Type, Ability, Move, EnemyPassiveAbility, EnemyLeaderAbility
+
 
 @pytest.mark.django_db
 class TestModels:
@@ -57,23 +57,3 @@ class TestModels:
         expected_result = '1 - damage-once'
         # print(enemy_leader_ability)
         assert expected_result == enemy_leader_ability.__str__()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

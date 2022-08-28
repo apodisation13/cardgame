@@ -1,5 +1,4 @@
 import pytest
-
 from apps.cards.models import Leader, Card, Deck
 
 
@@ -29,5 +28,3 @@ class TestCardsModels:
             assert i in deck.__str__()
         deck = Deck.objects.first()
         assert len(deck) == 2
-
-

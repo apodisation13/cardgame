@@ -1,6 +1,6 @@
 import pytest
-
 from apps.enemies.models import Enemy, EnemyLeader, Level
+
 
 @pytest.mark.django_db
 class TestModels:
@@ -22,5 +22,4 @@ class TestModels:
 
     def test_level(self):
         level = Level.objects.all()
-        # print(level)
-
+        print(level)
