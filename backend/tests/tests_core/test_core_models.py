@@ -15,7 +15,7 @@ class TestModels:
         """Проверка цвета карт"""
         color = Color.objects.all()
         expected_result = ['Bronze', 'Silver', 'Gold']
-        print(color)
+        # print(color)
         for i in expected_result:
             assert i in color.__str__()
 
@@ -23,7 +23,7 @@ class TestModels:
         """Проверка типов карт"""
         type = Type.objects.all()
         expected_result = ['Unit', 'Special']
-        #print(type)
+        # print(type)
         for i in expected_result:
             assert i in type.__str__()
         type = Type.objects.all()
@@ -33,14 +33,14 @@ class TestModels:
         """Проверка атрибутов карт"""
         ability = Ability.objects.first()
         expected_result = '1 - damage-one'
-        #print(ability)
+        # print(ability)
         assert expected_result == ability.__str__()
 
     def test_move(self):
         """Проверка способностей врагов ходить: down, stand, random"""
         move = Move.objects.all()
         expected_result = ['down', 'stand', 'random']
-        #print(move)
+        # print(move)
         for i in expected_result:
             assert i in move.__str__()
 
@@ -48,14 +48,14 @@ class TestModels:
         """Проверка пассивных способностей врагов"""
         enemy_passive_ability = EnemyPassiveAbility.objects.first()
         expected_result = '1 - increase-damage'
-        #print(enemy_passive_ability)
+        # print(enemy_passive_ability)
         assert expected_result == enemy_passive_ability.__str__()
 
     def test_enemy_leader_ability(self):
         """Проверка способностей лидеров врагов"""
         enemy_leader_ability = EnemyLeaderAbility.objects.first()
         expected_result = '1 - damage-once'
-        #print(enemy_leader_ability)
+        # print(enemy_leader_ability)
         assert expected_result == enemy_leader_ability.__str__()
 
 

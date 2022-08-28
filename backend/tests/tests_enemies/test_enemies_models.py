@@ -7,7 +7,7 @@ class TestModels:
     def test_enemy(self):
         enemy = Enemy.objects.first()
         expected_result = ['Soldiers', 'Bronze']
-        #print(enemy)
+        # print(enemy)
         for i in expected_result:
             assert i in enemy.__str__()
         enemy = Enemy.objects.all()
@@ -22,5 +22,5 @@ class TestModels:
 
     def test_level(self):
         level = Level.objects.all()
-        #print(level)
+        # print(level)
 

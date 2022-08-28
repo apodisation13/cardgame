@@ -10,7 +10,7 @@ class TestCardsModels:
         # Тест метода __str__ у модели, он должен показать то, как бы она print()
         leader = Leader.objects.first()
         expected_result = 'Foltest, ability 1 - damage-one, damage 2 charges 2'
-        #print(leader)
+        # print(leader)
         assert expected_result == leader.__str__()
 
     def test_cards(self):
@@ -24,7 +24,7 @@ class TestCardsModels:
         """Проверка на наличие полей 'Bronze', 'Silver', 'Gold' и на длину строки"""
         deck = Deck.objects.first()
         expected_result = ['Bronze', 'Silver', 'Gold']
-        print(deck)
+        # print(deck)
         for i in expected_result:
             assert i in deck.__str__()
         deck = Deck.objects.first()
