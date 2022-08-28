@@ -1,5 +1,6 @@
 import pytest
-from apps.core.models import Faction, Color, Type, Ability, Move, EnemyPassiveAbility, EnemyLeaderAbility
+
+from apps.core.models import Ability, Color, EnemyLeaderAbility, EnemyPassiveAbility, Faction, Move, Type
 
 
 @pytest.mark.django_db

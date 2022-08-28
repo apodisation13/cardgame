@@ -1,5 +1,6 @@
 import pytest
-from apps.cards.models import Leader, Card, Deck
+
+from apps.cards.models import Card, Deck, Leader
 
 
 @pytest.mark.django_db

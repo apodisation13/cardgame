@@ -1,4 +1,5 @@
 import pytest
+
 from apps.enemies.models import Enemy, EnemyLeader, Level
 
 
