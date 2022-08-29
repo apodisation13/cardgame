@@ -10,7 +10,8 @@ class TestModels:
         faction = Faction.objects.first()
         expected_result = '1 - Neutral'
         # print(faction)
-        assert expected_result == faction.__str__()
+        assert expected_result in faction.__str__()
+        assert len(faction) == 4
 
     def test_color(self):
         """Проверка цвета карт"""
@@ -27,7 +28,6 @@ class TestModels:
         # print(type)
         for i in expected_result:
             assert i in type.__str__()
-        type = Type.objects.all()
         assert len(type) == 2
 
     def test_ability(self):
