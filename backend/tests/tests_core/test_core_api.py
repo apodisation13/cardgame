@@ -3,6 +3,7 @@ from rest_framework.status import HTTP_200_OK, HTTP_401_UNAUTHORIZED, HTTP_405_M
 from rest_framework.test import APIClient
 
 
+
 @pytest.mark.django_db
 class TestModels:
     def setup(self):
@@ -20,9 +21,9 @@ class TestModels:
         response = self.api_client.get("/api/v1/factions/")
         assert response.status_code == HTTP_200_OK
 
-    def test_api_user(self, create_user):
+    def test_api_user(self, create_user_api):
         """Проверка на доступ юзеру"""
-        user = create_user()
+        user = create_user_api()
         self.api_client.force_authenticate(user)
         response = self.api_client.get("/api/v1/factions/")
         assert response.status_code == HTTP_200_OK
@@ -36,9 +37,9 @@ class TestModels:
     #     response = self.api_client.get("/accounts/api-token-auth/")
     #     print(rep.data)
 
-    def test_api_method(self, create_user):
+    def test_api_method(self, create_user_api):
         """Проверка на другие методы"""
-        user = create_user()
+        user = create_user_api()
         self.api_client.force_authenticate(user)
         response_post = self.api_client.post("/api/v1/factions/")
         response_delete = self.api_client.delete("/api/v1/factions/")  # Не уверен, что надо проверять
