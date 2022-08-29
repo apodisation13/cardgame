@@ -26,7 +26,7 @@ def create_admin(db, django_user_model, test_password):
 
 
 @pytest.fixture
-def create_user(db, django_user_model, test_password):
+def create_user_api(db, django_user_model, test_password):
     def make_user(**kwargs):
         kwargs['password'] = make_password(test_password)
         if 'username' not in kwargs:
