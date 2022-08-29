@@ -14,6 +14,7 @@ urlpatterns = api_docs_urlpatterns + [
     path('accounts/', include("apps.accounts.urls")),
     path('api/v1/', include("apps.user_database.urls")),
     path('accounts/api-token-auth/', CustomAuthToken.as_view()),
+    path('api/v1/', include("apps.news.urls")),
 ]
 
 if settings.DEBUG:
