@@ -2,6 +2,9 @@ import pytest
 from django.conf import settings
 from django.contrib.auth.hashers import make_password
 from django.core.management import call_command
+from model_bakery import baker
+
+from apps.accounts.models import CustomUser
 
 
 @pytest.fixture
@@ -30,3 +33,10 @@ def django_db_setup(django_db_setup, django_db_blocker):
         call_command('core', path=f'{settings.BASE_DIR}')
         call_command('cards', path=f'{settings.BASE_DIR}')
         call_command('enemies', path=f'{settings.BASE_DIR}')
+
+
+@pytest.fixture
+def create_user():
+    def user_factory(*args, **kwargs):
+        return baker.make(CustomUser, *args, **kwargs)
+    return user_factory
