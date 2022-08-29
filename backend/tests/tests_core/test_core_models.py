@@ -23,7 +23,6 @@ class TestModels:
         data_color = '1 - Bronze'
         assert data_color == first_color.__str__()
 
-
     def test_type(self):
         """Проверка типов карт"""
         type_all = Type.objects.all()
