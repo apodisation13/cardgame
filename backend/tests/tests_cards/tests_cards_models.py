@@ -22,6 +22,6 @@ class TestCardsModels:
         """Проверка на наличие полей 'Bronze', 'Silver', 'Gold' и на длину строки"""
         deck = Deck.objects.first()
         expected_result = ['Bronze', 'Silver', 'Gold']
-        for i in expected_result:
-            assert i in deck.__str__()
+        for color in expected_result:
+            assert color in deck.__str__()
         assert len(deck) == 2

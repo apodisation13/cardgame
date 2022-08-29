@@ -15,17 +15,21 @@ class TestModels:
 
     def test_color(self):
         """Проверка цвета карт"""
-        color = Color.objects.all()
+        color_all = Color.objects.all()
         expected_result = ['Bronze', 'Silver', 'Gold']
-        for i in expected_result:
-            assert i in color.__str__()
+        for color in expected_result:
+            assert color in color_all.__str__()
+        first_color = Color.objects.first()
+        data_color = '1 - Bronze'
+        assert data_color == first_color.__str__()
+
 
     def test_type(self):
         """Проверка типов карт"""
         type_all = Type.objects.all()
         expected_result = ['Unit', 'Special']
-        for i in expected_result:
-            assert i in type_all.__str__()
+        for type_card in expected_result:
+            assert type_card in type_all.__str__()
         assert len(type_all) == 2
 
     def test_ability(self):
@@ -38,8 +42,8 @@ class TestModels:
         """Проверка способностей врагов ходить: down, stand, random"""
         move = Move.objects.all()
         expected_result = ['down', 'stand', 'random']
-        for i in expected_result:
-            assert i in move.__str__()
+        for ability in expected_result:
+            assert ability in move.__str__()
 
     def test_enemy_passive_ability(self):
         """Проверка пассивных способностей врагов"""
