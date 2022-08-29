@@ -3,7 +3,6 @@ from rest_framework.status import HTTP_200_OK, HTTP_401_UNAUTHORIZED, HTTP_405_M
 from rest_framework.test import APIClient
 
 
-
 @pytest.mark.django_db
 class TestModels:
     def setup(self):
@@ -27,15 +26,6 @@ class TestModels:
         self.api_client.force_authenticate(user)
         response = self.api_client.get("/api/v1/factions/")
         assert response.status_code == HTTP_200_OK
-
-    # def test_api_token(self, create_admin):
-    #     """Проверка на токен"""
-    #     admin = create_admin()
-    #     self.api_client.force_authenticate(admin)
-    #     rep = self.api_client.post("/accounts/api-token-auth/", data={"username": "kopljjj4444@yandex.ru",
-    #                                                                   "password": "Qwerty1111"})
-    #     response = self.api_client.get("/accounts/api-token-auth/")
-    #     print(rep.data)
 
     def test_api_method(self, create_user_api):
         """Проверка на другие методы"""
