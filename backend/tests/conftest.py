@@ -25,18 +25,6 @@ def create_admin(db, django_user_model, test_password):
     return make_admin
 
 
-@pytest.fixture
-def create_user_api(db, django_user_model, test_password):
-    def make_user(**kwargs):
-        kwargs['password'] = make_password(test_password)
-        if 'username' not in kwargs:
-            kwargs['username'] = 'Some UserName_1'
-            kwargs['email'] = 'some_test_email_1@mail.ru'
-        user = django_user_model.objects.create_user(is_staff=True, **kwargs)
-        return user
-    return make_user
-
-
 # Вызов management команд: python manage.py core, python manage.py cards, python manage.py enemies
 # благодаря тегу session выполняется только 1 раз перед началом тестов
 @pytest.fixture(scope='session')
