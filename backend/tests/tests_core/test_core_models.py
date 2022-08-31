@@ -1,27 +1,35 @@
 import pytest
 
-from apps.core.models import Ability, Color, EnemyLeaderAbility, EnemyPassiveAbility, Faction, Move, Type
+from apps.core.models import (
+    Ability,
+    Color,
+    EnemyLeaderAbility,
+    EnemyPassiveAbility,
+    Faction,
+    Move,
+    PassiveAbility,
+    Type,
+)
 
 
 @pytest.mark.django_db
 class TestModels:
     def test_factions(self):
+        """Проверка фракций"""
         # Тест метода __str__ у модели, он должен показать то, как бы она print()
-        faction = Faction.objects.first()
+        faction = Faction.objects.all()
         expected_result = '1 - Neutral'
-        assert expected_result in faction.__str__()
-        faction_all = Faction.objects.all()
-        assert len(faction_all) == 4
+        assert expected_result[0] in faction.__str__()
+        assert len(faction) == 4
 
     def test_color(self):
         """Проверка цвета карт"""
-        color_all = Color.objects.all()
+        colors = Color.objects.all()
         expected_result = ['Bronze', 'Silver', 'Gold']
-        for color in expected_result:
-            assert color in color_all.__str__()
-        first_color = Color.objects.first()
         data_color = '1 - Bronze'
-        assert data_color == first_color.__str__()
+        for color in expected_result:
+            assert color in colors.__str__()
+        assert data_color == colors[0].__str__()
 
     def test_type(self):
         """Проверка типов карт"""
@@ -36,6 +44,14 @@ class TestModels:
         ability = Ability.objects.first()
         expected_result = '1 - damage-one'
         assert expected_result == ability.__str__()
+
+    def test_passive_ability(self):
+        """Проверка passive_ability"""
+        passive_ability = PassiveAbility.objects.all()
+        expected_result = '1 - add-charges-to-leader-if-play-special'
+        print(passive_ability[0])
+        assert expected_result == passive_ability[0].__str__()
+        assert len(passive_ability) == 9
 
     def test_move(self):
         """Проверка способностей врагов ходить: down, stand, random"""
