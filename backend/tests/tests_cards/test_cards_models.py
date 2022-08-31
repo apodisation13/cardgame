@@ -7,7 +7,6 @@ from apps.cards.models import Card, Deck, Leader
 class TestCardsModels:
     def test_leader(self):
         """Проверка на наличие карты Лидера"""
-        # Тест метода __str__ у модели, он должен показать то, как бы она print()
         leader = Leader.objects.first()
         expected_result = 'Foltest, ability 1 - damage-one, damage 2 charges 2'
         assert expected_result == leader.__str__()
@@ -19,9 +18,7 @@ class TestCardsModels:
         assert expected_result in card.__str__()
 
     def test_deck(self):
-        """Проверка на наличие полей 'Bronze', 'Silver', 'Gold' и на длину строки"""
-        deck = Deck.objects.first()
-        expected_result = ['Bronze', 'Silver', 'Gold']
-        for color in expected_result:
-            assert color in deck.__str__()
-        assert len(deck) == 2
+        """Проверка на наличие поля"""
+        decks = Deck.objects.all()
+        assert decks[0].__str__() == '1, name base-deck, health 70, Foltest, ability 1 - damage-one, damage 2 charges 2'
+        assert len(decks) == 1
