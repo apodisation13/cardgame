@@ -50,9 +50,17 @@ class EnemyLeaderSerializer(serializers.ModelSerializer):
         )
 
 
+class RelatedLevelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Level
+        fields = ("id", "name")
+
+
 class LevelSerializer(serializers.ModelSerializer):
     enemies = EnemySerializer(many=True, read_only=True)
     enemy_leader = EnemyLeaderSerializer(many=False, read_only=True)
+    related_levels = RelatedLevelSerializer(many=True)
+
 
     class Meta:
         model = Level
@@ -63,6 +71,7 @@ class LevelSerializer(serializers.ModelSerializer):
             "difficulty",
             "enemies",
             "enemy_leader",
+            "related_levels"
         )
 
 

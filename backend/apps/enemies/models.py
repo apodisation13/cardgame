@@ -79,6 +79,9 @@ class Level(models.Model):
         """для админки, чтобы показать это количество"""
         return len(self.l.all())
 
+    def get_related_levels(self):
+        return [(l.id, l.name) for l in self.related_levels.all()]
+
     class Meta:
         ordering = ('id',)
 
