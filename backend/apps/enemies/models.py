@@ -57,8 +57,10 @@ class EnemyLeader(models.Model):
 
 class Level(models.Model):
     name = models.CharField(max_length=64, blank=False, null=False, unique=True)
-    starting_enemies_number = models.IntegerField(default=3, blank=False, null=False)  # сколько в начале появляется
-    difficulty = models.CharField(choices=LEVEL_DIFFICULTY_CHOICES, blank=False, null=False, max_length=20)
+    starting_enemies_number = models.IntegerField(default=3,
+                                                  blank=False, null=False)  # сколько в начале появляется
+    difficulty = models.CharField(choices=LEVEL_DIFFICULTY_CHOICES,
+                                  blank=False, null=False, max_length=20)
     enemies = models.ManyToManyField(Enemy,
                                      related_name='levels',
                                      through='LevelEnemy')
@@ -66,6 +68,8 @@ class Level(models.Model):
                                      on_delete=models.PROTECT,
                                      blank=True, null=True, default=None)
     unlocked = models.BooleanField(default=False)
+    related_levels = models.ManyToManyField('self', symmetrical=False,
+                                            blank=True, null=True)  # уровни которые откроются после завершения текущего
 
     def __str__(self):
         return f'{self.id}:{self.name}, появление: {self.starting_enemies_number}, ' \
