@@ -1,6 +1,5 @@
 import pytest
 from django.conf import settings
-from django.contrib.auth.hashers import make_password
 from django.core.management import call_command
 from model_bakery import baker
 
@@ -16,7 +15,7 @@ def test_password():
 @pytest.fixture
 def create_admin(db, django_user_model, test_password):
     def make_admin(**kwargs):
-        kwargs['password'] = make_password(test_password)
+        kwargs['password'] = test_password
         if 'username' not in kwargs:
             kwargs['username'] = 'Some UserName'
             kwargs['email'] = 'some_test_email@mail.ru'
