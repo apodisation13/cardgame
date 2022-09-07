@@ -47,11 +47,9 @@ class TestModels:
 
     def test_passive_ability(self):
         """Проверка passive_ability"""
-        passive_ability = PassiveAbility.objects.all()
+        passive_ability = PassiveAbility.objects.first()
         expected_result = '1 - add-charges-to-leader-if-play-special'
-        print(passive_ability[0])
-        assert expected_result == passive_ability[0].__str__()
-        assert len(passive_ability) == 9
+        assert expected_result == passive_ability.__str__()
 
     def test_move(self):
         """Проверка способностей врагов ходить: down, stand, random"""

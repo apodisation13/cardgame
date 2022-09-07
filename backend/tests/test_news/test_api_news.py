@@ -1,13 +1,7 @@
 import pytest
 from model_bakery import baker
-from rest_framework.test import APIClient
 
 from apps.news.models import News
-
-
-@pytest.fixture
-def api_client():
-    return APIClient()
 
 
 @pytest.fixture
