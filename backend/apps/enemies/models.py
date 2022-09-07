@@ -69,7 +69,7 @@ class Level(models.Model):
                                      blank=True, null=True, default=None)
     unlocked = models.BooleanField(default=False)
     related_levels = models.ManyToManyField('self', symmetrical=False,
-                                            blank=True, null=True)  # уровни которые откроются после завершения текущего
+                                            blank=True)  # уровни которые откроются после завершения текущего
 
     def __str__(self):
         return f'{self.id}:{self.name}, появление: {self.starting_enemies_number}, ' \
@@ -80,6 +80,7 @@ class Level(models.Model):
         return len(self.l.all())
 
     def get_related_levels(self):
+        """для админки, чтобы показать краткую информацию"""
         return [(l.id, l.name) for l in self.related_levels.all()]
 
     class Meta:
@@ -98,3 +99,4 @@ class UserLevel(models.Model):
     user = models.ForeignKey(CustomUser, related_name="u_level",
                              on_delete=models.CASCADE,
                              blank=False, null=False)
+    finished = models.BooleanField(default=False)
