@@ -44,7 +44,5 @@ class TestModels:
         self.api_client.force_authenticate(admin)
         expected_result = 'Neutral'
         response = self.api_client.get("/api/v1/factions/")
-        response_data = response.data
-        data = response_data[0]
-        assert dict(data)['name'] == expected_result
-        assert len(response_data) == 4
+        assert response.data[0]['name'] == expected_result
+        assert len(response.data) == 4
