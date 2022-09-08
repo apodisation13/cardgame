@@ -9,7 +9,6 @@ from apps.enemies.models import Enemy, EnemyLeader, Level, UserLevel, CustomUser
 from apps.enemies.serializers import EnemyLeaderSerializer, EnemySerializer, LevelSerializer, IdNameLevelSerializer
 
 
-
 class EnemyViewSet(GenericViewSet, mixins.ListModelMixin):
     queryset = Enemy.objects.select_related("faction", "color", "move", "passive_ability").all()
     serializer_class = EnemySerializer
@@ -59,17 +58,18 @@ class LevelViewSet(GenericViewSet, mixins.ListModelMixin):
         Удаление всех открытых уровней пользователя кроме Уровня 1
         В body должен придоходить {'user': user_id}
         """
-        request_data_user_id = request.data.get('user')
-        if not request_data_user_id:
-            return Response(status=status.HTTP_404_NOT_FOUND,
-                            data='empty request body')
+        with transaction.atomic():
+            request_data_user_id = request.data.get('user')
+            if not request_data_user_id:
+                return Response(status=status.HTTP_404_NOT_FOUND,
+                                data='empty request body')
 
-        user = CustomUser.objects.filter(id=request_data_user_id).first()
-        if not user:
-            return Response(status=status.HTTP_404_NOT_FOUND,
-                            data='no such user in game')
-        deleted_levels = UserLevel.objects.filter(user=user.id).exclude(level=1).delete()
-        UserLevel.objects.filter(user=user.id, level=1).update(finished=False)
+            user = CustomUser.objects.filter(id=request_data_user_id).first()
+            if not user:
+                return Response(status=status.HTTP_404_NOT_FOUND,
+                                data='no such user in game')
+            deleted_levels = UserLevel.objects.filter(user=user.id).exclude(level=1).delete()
+            UserLevel.objects.filter(user=user.id, level=1).update(finished=False)
         return Response(f'{deleted_levels[0]} levels deleted')
 
 
