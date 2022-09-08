@@ -1,6 +1,6 @@
 import pytest
 
-from apps.enemies.models import Enemy, EnemyLeader
+from apps.enemies.models import Enemy, EnemyLeader, Level
 
 
 @pytest.mark.django_db
@@ -16,3 +16,11 @@ class TestModels:
         expected_result = ['First Enemy Leader', 'Second Enemy Leader']
         for data in expected_result:
             assert data in enemyleader.__str__()
+
+    def test_level(self):
+        children_levels = Level.objects.filter(id__range=(2, 4))
+        children_levels_info = [(level.id, level.name) for level in children_levels]
+        test_level = Level.objects.get(id=1)
+        test_level.related_levels.add(*children_levels)
+        assert len(test_level.related_levels.all()) == 3
+        assert test_level.get_related_levels() == children_levels_info
