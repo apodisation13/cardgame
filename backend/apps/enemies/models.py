@@ -81,7 +81,7 @@ class Level(models.Model):
 
     def get_related_levels(self):
         """для админки, чтобы показать краткую информацию"""
-        return [(l.id, l.name) for l in self.related_levels.all()]
+        return [(level.id, level.name) for level in self.related_levels.all()]
 
     class Meta:
         ordering = ('id',)

@@ -1,8 +1,5 @@
 import pytest
 
-from apps.enemies.models import UserLevel, Level
-from apps.accounts.models import CustomUser
-
 
 @pytest.mark.parametrize('user_is_admin', [True, False])
 @pytest.mark.django_db
