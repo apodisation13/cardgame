@@ -59,7 +59,7 @@ class IdNameLevelSerializer(serializers.ModelSerializer):
 class LevelSerializer(serializers.ModelSerializer):
     enemies = EnemySerializer(many=True, read_only=True)
     enemy_leader = EnemyLeaderSerializer(many=False, read_only=True)
-    related_levels = IdNameLevelSerializer(many=True)
+    # related_levels = IdNameLevelSerializer(many=True)
 
     class Meta:
         model = Level
@@ -70,7 +70,7 @@ class LevelSerializer(serializers.ModelSerializer):
             "difficulty",
             "enemies",
             "enemy_leader",
-            "related_levels"
+            "related_levels",
         )
 
 
@@ -80,3 +80,35 @@ class UserLevelsThroughSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserLevel
         fields = ("level", "id")
+
+
+class UnlockLevelsSerializer(serializers.ModelSerializer):
+    """
+    POST: юзер прошел уровень, ему ставим finished, открываем всех его детей - related_levels
+    PATCH: тестовый запрос, удаление всех пройденных уровней, кроме первого
+    """
+    related_levels = serializers.ListField()
+    finished_level = serializers.IntegerField()
+
+    class Meta:
+        model = UserLevel
+        fields = ("id", "related_levels", "finished_level")
+
+    def create(self, validated_data):
+        user = self.context.get('request').user
+        to_be_unlocked, to_set_finished = validated_data["related_levels"], validated_data["finished_level"]
+        for level_id in to_be_unlocked:
+            UserLevel.objects.get_or_create(user=user, level_id=level_id)
+        UserLevel.objects.filter(user=user, level_id=to_set_finished).update(finished=True)
+        return {"status": 201}
+
+    def update(self, instance, validated_data):
+        user = self.context.get('request').user
+        UserLevel.objects.filter(user=user).exclude(level_id=1).delete()
+        UserLevel.objects.filter(user=user, level_id=1).update(finished=False)
+        print(instance.finished)
+        return {"deleted levels": 200}
+
+    def to_representation(self, instance):
+        print(instance, 'из to-repr')
+        return instance
