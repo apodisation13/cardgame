@@ -68,3 +68,8 @@ class EnemyLeaderAbility(models.Model):
 
     def __str__(self):
         return f'{self.id} - {self.name}'
+
+
+class UserActionsJson(models.Model):
+    """игровые данные"""
+    data_json = models.JSONField()

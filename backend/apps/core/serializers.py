@@ -1,9 +1,18 @@
 from rest_framework import serializers
 
-from apps.core.models import Ability, EnemyLeaderAbility, EnemyPassiveAbility, Faction, Move, PassiveAbility
+from apps.core.models import (
+    Ability,
+    EnemyLeaderAbility,
+    EnemyPassiveAbility,
+    Faction,
+    Move,
+    PassiveAbility,
+    UserActionsJson,
+)
 
 
 class FactionSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Faction
         fields = ("name", )
@@ -17,6 +26,7 @@ class AbilitySerializer(serializers.ModelSerializer):
 
 
 class PassiveAbilitySerializer(serializers.ModelSerializer):
+
     class Meta:
         model = PassiveAbility
         fields = ("name", "description")
@@ -41,3 +51,13 @@ class EnemyLeaderAbilitySerializer(serializers.ModelSerializer):
     class Meta:
         model = EnemyLeaderAbility
         fields = ("name", "description")
+
+
+class UserActionsJsonSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = UserActionsJson
+        fields = ('data_json',)
+
+    def to_representation(self, instance):
+        return instance.data_json
