@@ -27,10 +27,6 @@ class UserActionsJsonAdmin(admin.ModelAdmin):
     def has_delete_permission(self, request, obj=None):
         return False
 
-    # """Запрет на изменение"""
-    # def has_change_permission(self, request, obj=None):
-    #     return False
-
 
 admin.site.register(Faction)
 admin.site.register(Color)
@@ -40,4 +36,4 @@ admin.site.register(PassiveAbility)
 admin.site.register(Move)
 admin.site.register(EnemyLeaderAbility)
 admin.site.register(EnemyPassiveAbility)
-# admin.site.register(UserActionsJson)
+
