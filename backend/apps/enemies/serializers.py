@@ -50,16 +50,9 @@ class EnemyLeaderSerializer(serializers.ModelSerializer):
         )
 
 
-class IdNameLevelSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Level
-        fields = ("id", "name")
-
-
 class LevelSerializer(serializers.ModelSerializer):
     enemies = EnemySerializer(many=True, read_only=True)
     enemy_leader = EnemyLeaderSerializer(many=False, read_only=True)
-    # related_levels = IdNameLevelSerializer(many=True)
 
     class Meta:
         model = Level
@@ -74,18 +67,9 @@ class LevelSerializer(serializers.ModelSerializer):
         )
 
 
-class UserLevelsThroughSerializer(serializers.ModelSerializer):
-    level = LevelSerializer(many=False)
-
-    class Meta:
-        model = UserLevel
-        fields = ("level", "id")
-
-
 class UnlockLevelsSerializer(serializers.ModelSerializer):
     """
-    POST: юзер прошел уровень, ему ставим finished, открываем всех его детей - related_levels
-    PATCH: тестовый запрос, удаление всех пройденных уровней, кроме первого
+    PATCH запрос и пришел finished_level - значит мы открываем уровни, не пришел - тестовый запрос на обнуление
     """
     related_levels = serializers.ListField()
     finished_level = serializers.IntegerField()
@@ -94,16 +78,7 @@ class UnlockLevelsSerializer(serializers.ModelSerializer):
         model = UserLevel
         fields = ("id", "related_levels", "finished_level")
 
-    # def create(self, validated_data):
-    #     user = self.context.get('request').user
-    #     to_be_unlocked, to_set_finished = validated_data["related_levels"], validated_data["finished_level"]
-    #     for level_id in to_be_unlocked:
-    #         UserLevel.objects.get_or_create(user=user, level_id=level_id)
-    #     UserLevel.objects.filter(user=user, level_id=to_set_finished).update(finished=True)
-    #     return {"status": 201}
-
     def update(self, instance, validated_data):
-        print(instance.id)  # запись UserLevel, которая пришла в запросе
         user = self.context.get('request').user
         related_levels = validated_data.pop("related_levels", None)
         finished_level = validated_data.pop("finished_level", None)
