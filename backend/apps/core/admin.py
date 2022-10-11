@@ -36,4 +36,3 @@ admin.site.register(PassiveAbility)
 admin.site.register(Move)
 admin.site.register(EnemyLeaderAbility)
 admin.site.register(EnemyPassiveAbility)
-
