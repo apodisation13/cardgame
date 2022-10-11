@@ -28,6 +28,7 @@ class UserActionsJsonAdmin(admin.ModelAdmin):
         return False
 
 
+
 admin.site.register(Faction)
 admin.site.register(Color)
 admin.site.register(Type)
