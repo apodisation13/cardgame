@@ -94,20 +94,30 @@ class UnlockLevelsSerializer(serializers.ModelSerializer):
         model = UserLevel
         fields = ("id", "related_levels", "finished_level")
 
-    def create(self, validated_data):
-        user = self.context.get('request').user
-        to_be_unlocked, to_set_finished = validated_data["related_levels"], validated_data["finished_level"]
-        for level_id in to_be_unlocked:
-            UserLevel.objects.get_or_create(user=user, level_id=level_id)
-        UserLevel.objects.filter(user=user, level_id=to_set_finished).update(finished=True)
-        return {"status": 201}
+    # def create(self, validated_data):
+    #     user = self.context.get('request').user
+    #     to_be_unlocked, to_set_finished = validated_data["related_levels"], validated_data["finished_level"]
+    #     for level_id in to_be_unlocked:
+    #         UserLevel.objects.get_or_create(user=user, level_id=level_id)
+    #     UserLevel.objects.filter(user=user, level_id=to_set_finished).update(finished=True)
+    #     return {"status": 201}
 
     def update(self, instance, validated_data):
+        print(instance.id)  # запись UserLevel, которая пришла в запросе
         user = self.context.get('request').user
+        related_levels = validated_data.pop("related_levels", None)
+        finished_level = validated_data.pop("finished_level", None)
+        if finished_level:
+            for level_id in related_levels:
+                UserLevel.objects.get_or_create(user=user, level_id=level_id)
+            instance.finished = True
+            instance.save()
+            return {"opened": 201}
+
         UserLevel.objects.filter(user=user).exclude(level_id=1).delete()
-        UserLevel.objects.filter(user=user, level_id=1).update(finished=False)
-        print(instance.finished)
-        return {"deleted levels": 200}
+        instance.finished = False
+        instance.save()
+        return {"deleted": 204}
 
     def to_representation(self, instance):
         print(instance, 'из to-repr')
