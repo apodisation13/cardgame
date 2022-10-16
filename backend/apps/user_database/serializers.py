@@ -3,26 +3,8 @@ from rest_framework import serializers
 from apps.accounts.models import CustomUser
 from apps.cards.models import Card, Leader, UserCard, UserDeck, UserLeader
 from apps.cards.serializers import CardSerializer, DeckSerializer, LeaderSerializer
-from apps.enemies.models import Level, UserLevel
 from apps.enemies.serializers import LevelSerializer
-
-
-class UserCardsThroughSerializer(serializers.ModelSerializer):
-    card = CardSerializer(many=False)  # если это не указать,то будет просто card_id, count
-
-    class Meta:
-        model = UserCard
-        fields = ("card", "count", "id")
-
-
-#
-#
-# class UserLeadersThroughSerializer(serializers.ModelSerializer):
-#     card = LeaderSerializer(many=False, source='leader')
-#
-#     class Meta:
-#         model = UserLeader
-#         fields = ("card", "count", "id")
+from apps.enemies.utils import get_opened_user_levels
 
 
 class UserDecksThroughSerializer(serializers.ModelSerializer):
@@ -35,11 +17,11 @@ class UserDecksThroughSerializer(serializers.ModelSerializer):
 
 
 class UserDatabaseSerializer(serializers.ModelSerializer):
-    # cards = serializers.SerializerMethodField()
-    # leaders = serializers.SerializerMethodField()
+    cards = serializers.SerializerMethodField()
+    leaders = serializers.SerializerMethodField()
     levels = serializers.SerializerMethodField()
 
-    # u_d = UserDecksThroughSerializer(many=True)
+    u_d = UserDecksThroughSerializer(many=True)
 
     class Meta:
         model = CustomUser
@@ -47,10 +29,10 @@ class UserDatabaseSerializer(serializers.ModelSerializer):
             "id",
             "email",
             "username",
-            # "cards",
-            # "leaders",
+            "cards",
+            "leaders",
             "levels",
-            # "u_d",
+            "u_d",
         )
 
     def get_cards(self, user):
@@ -98,37 +80,7 @@ class UserDatabaseSerializer(serializers.ModelSerializer):
         return leaders
 
     def get_levels(self, user):
-        user_id = user.id
-        all_levels = Level.objects. \
-            select_related("enemy_leader__ability", "enemy_leader__faction"). \
-            prefetch_related(
-                "enemies__faction",
-                "enemies__color",
-                "enemies__move",
-                "enemies__passive_ability",
-                "related_levels",
-            ). \
-            all()
-        user_levels = UserLevel.objects.filter(user_id=user_id).values("level__pk", "pk", "finished").all()
-        levels = []
-        for level in all_levels:
-            for user_level in user_levels:
-                if level.pk == user_level["level__pk"]:
-                    levels.append({
-                        "level": LevelSerializer(level, context={"request": self.context.get("request")}).data,
-                        # передаем id записи UserLevel, по ней делается запрос на открытие связанных уровней
-                        "id": user_level["pk"],
-                        "unlocked": True,  # уровень считается открытым, если есть запись в связанной таблице UserLevel
-                        "finished": user_level["finished"],  # открытый уровень может быть пройден, а может нет
-                    })
-                    break
-            # если уровень не нашелся в открытых, значит идем сюда и добавляем его с флажком закрыт (False)
-            else:
-                levels.append({
-                    "level": LevelSerializer(level, context={"request": self.context.get("request")}).data,
-                    "unlocked": False,
-                })
-        print(len(levels), "УРОВНИ")
+        levels = get_opened_user_levels(self=self, user_id=user.id, level_serializer=LevelSerializer)
         return levels
 
 
@@ -136,3 +88,8 @@ class UserResourceSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ("scraps", "wood", "kegs", "big_kegs", "chests")
+
+
+class DatabaseSerializer(serializers.Serializer):
+    user_database = UserDatabaseSerializer()
+    resources = UserResourceSerializer()
