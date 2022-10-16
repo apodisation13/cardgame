@@ -88,6 +88,9 @@ class UserCard(models.Model):
                              blank=False, null=False)
     count = models.IntegerField(default=1, blank=False, null=False)
 
+    class Meta:
+        unique_together = ("card", "user")
+
 
 class UserLeader(models.Model):
     """связь Юзеров и лидеров, которые есть у них"""
@@ -99,6 +102,9 @@ class UserLeader(models.Model):
                              blank=False, null=False)
     count = models.IntegerField(default=1, blank=False, null=False)
 
+    class Meta:
+        unique_together = ("leader", "user")
+
 
 class UserDeck(models.Model):
     """связь Юзеров и КОЛОД, которые есть у них"""
@@ -108,3 +114,6 @@ class UserDeck(models.Model):
     user = models.ForeignKey(CustomUser, related_name="u_d",
                              on_delete=models.CASCADE,
                              blank=False, null=False)
+
+    class Meta:
+        unique_together = ("deck", "user")
