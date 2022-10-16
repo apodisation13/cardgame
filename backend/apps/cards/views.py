@@ -69,13 +69,6 @@ class CraftUserCardViewSet(CardBaseMixin,
     authentication_classes = [TokenAuthentication]
     http_method_names = ["get", "post", "patch"]  # убрать метод PUT, который не нужен
 
-    # @action(methods=["get", "patch"], detail=True)
-    # def usercards(self, request, pk=None):
-    # from rest_framework.views import Response
-    #     usercards = self.queryset.filter(user_id=pk).all()
-    #     serializer = self.serializer_class(usercards, many=True)
-    #     return Response(serializer.data)
-
 
 class MillUserCardViewSet(CardBaseMixin,
                           GenericViewSet,
@@ -116,6 +109,5 @@ class UserDeckViewSet(DeckBaseMixin,
                       mixins.DestroyModelMixin
                       ):
     queryset = UserDeck.objects.all()
-    # serializer_class = UserDecksThroughSerializer
     serializer_class = UserDeckSerializer
     authentication_classes = [TokenAuthentication]

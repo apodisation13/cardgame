@@ -21,11 +21,18 @@ class EnemyAdmin(admin.ModelAdmin):
 
 class LevelEnemyInLine(admin.TabularInline):
     model = LevelEnemy
+#
+#
+# class LevelInline(admin.TabularInline):
+#     model = Level
 
 
 @admin.register(Level)
 class LevelAdmin(admin.ModelAdmin):
     inlines = [LevelEnemyInLine, ]
     list_filter = ("difficulty", "enemy_leader_id")
-    list_display = ("id", "name", "starting_enemies_number", "difficulty", "number_of_enemies", "enemy_leader")
-    list_display_links = ("id", "name", "starting_enemies_number", "difficulty", "number_of_enemies", "enemy_leader")
+    list_display = ("id", "name", "starting_enemies_number", "difficulty",
+                    "number_of_enemies", "enemy_leader", "get_related_levels")
+    list_display_links = ("id", "name", "starting_enemies_number",
+                          "difficulty", "number_of_enemies",
+                          "enemy_leader", "get_related_levels")

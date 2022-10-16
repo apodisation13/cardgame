@@ -3,14 +3,19 @@ from django.contrib.auth.admin import UserAdmin
 
 from apps.accounts.models import CustomUser
 from apps.cards.models import UserCard
+from apps.enemies.models import UserLevel
 
 
 class UserCardInLine(admin.TabularInline):
     model = UserCard
 
 
+class LevelInline(admin.TabularInline):
+    model = UserLevel
+
+
 class CustomUserAdmin(UserAdmin):
-    inlines = [UserCardInLine, ]
+    inlines = [UserCardInLine, LevelInline, ]
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
