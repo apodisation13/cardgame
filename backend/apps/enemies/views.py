@@ -4,20 +4,13 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import GenericViewSet
 
 from apps.enemies.models import Enemy, EnemyLeader, Level, UserLevel
-from apps.enemies.serializers import EnemyLeaderSerializer, EnemySerializer, LevelSerializer, \
-    UnlockLevelsSerializer
+from apps.enemies.serializers import EnemyLeaderSerializer, EnemySerializer, LevelSerializer, UnlockLevelsSerializer
 
 
 class EnemyViewSet(GenericViewSet, mixins.ListModelMixin):
     queryset = Enemy.objects.select_related("faction", "color", "move", "passive_ability").all()
     serializer_class = EnemySerializer
     permission_classes = [IsAuthenticated]
-
-
-class UnlockLevelsViewSet(GenericViewSet, mixins.CreateModelMixin, mixins.UpdateModelMixin):
-    queryset = UserLevel.objects.all()
-    serializer_class = UnlockLevelsSerializer
-    authentication_classes = [TokenAuthentication]
 
 
 class LevelViewSet(GenericViewSet, mixins.ListModelMixin):
@@ -32,3 +25,9 @@ class EnemyLeaderViewSet(GenericViewSet, mixins.ListModelMixin):
     queryset = EnemyLeader.objects.select_related("faction", "ability").all()
     serializer_class = EnemyLeaderSerializer
     permission_classes = [IsAuthenticated]
+
+
+class UnlockLevelsViewSet(GenericViewSet, mixins.CreateModelMixin, mixins.UpdateModelMixin):
+    queryset = UserLevel.objects.all()
+    serializer_class = UnlockLevelsSerializer
+    authentication_classes = [TokenAuthentication]
