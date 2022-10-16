@@ -13,18 +13,18 @@ class EnemyViewSet(GenericViewSet, mixins.ListModelMixin):
     permission_classes = [IsAuthenticated]
 
 
+class EnemyLeaderViewSet(GenericViewSet, mixins.ListModelMixin):
+    queryset = EnemyLeader.objects.select_related("faction", "ability").all()
+    serializer_class = EnemyLeaderSerializer
+    permission_classes = [IsAuthenticated]
+
+
 class LevelViewSet(GenericViewSet, mixins.ListModelMixin):
     queryset = Level.objects.\
         select_related("enemy_leader__ability", "enemy_leader__faction").\
         prefetch_related("enemies__faction", "enemies__color", "enemies__move", "enemies__passive_ability").\
         all()
     serializer_class = LevelSerializer
-
-
-class EnemyLeaderViewSet(GenericViewSet, mixins.ListModelMixin):
-    queryset = EnemyLeader.objects.select_related("faction", "ability").all()
-    serializer_class = EnemyLeaderSerializer
-    permission_classes = [IsAuthenticated]
 
 
 class UnlockLevelsViewSet(GenericViewSet, mixins.CreateModelMixin, mixins.UpdateModelMixin):
