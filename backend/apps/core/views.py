@@ -14,7 +14,7 @@ class FactionViewSet(GenericViewSet, mixins.ListModelMixin):
     serializer_class = FactionSerializer
 
 
-class UserActionsViewSet(APIView):  # Работает!
+class UserActionsApiView(APIView):
     data_json = UserActionsJson.objects.first()
     serializer = UserActionsJsonSerializer(data_json)
     permission_classes = [IsAdminOrReadOnly, ]

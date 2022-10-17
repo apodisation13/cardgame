@@ -1,13 +1,11 @@
 from django.urls import path
 from rest_framework.routers import DefaultRouter
 
-from apps.core.views import FactionViewSet
-
-from . import views
+from apps.core.views import FactionViewSet, UserActionsApiView
 
 router = DefaultRouter()
 router.register("factions", FactionViewSet, basename="factions")
 
 urlpatterns = [
-    path("game_prices/", views.UserActionsViewSet.as_view())
+    path("game_prices/", UserActionsApiView.as_view())
 ] + router.urls
