@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from apps.core.serializers import EnemyLeaderAbilitySerializer, EnemyPassiveAbilitySerializer, MoveSerializer
 from apps.enemies.models import Enemy, EnemyLeader, Level, UserLevel
+from apps.enemies.utils import get_opened_user_levels
 
 
 class EnemySerializer(serializers.ModelSerializer):
@@ -63,12 +64,41 @@ class LevelSerializer(serializers.ModelSerializer):
             "difficulty",
             "enemies",
             "enemy_leader",
+            "related_levels",
         )
 
 
-class UserLevelsThroughSerializer(serializers.ModelSerializer):
-    level = LevelSerializer(many=False)
+class UnlockLevelsSerializer(serializers.ModelSerializer):
+    """
+    PATCH запрос и пришел finished_level - значит мы открываем уровни, не пришел - тестовый запрос на обнуление
+    """
+    related_levels = serializers.ListField()
+    finished_level = serializers.IntegerField()
 
     class Meta:
         model = UserLevel
-        fields = ("level", "id")
+        fields = ("id", "related_levels", "finished_level")
+
+    def update(self, instance, validated_data):
+        user = self.context.get('request').user
+        related_levels = validated_data.pop("related_levels", [])
+        finished_level = validated_data.pop("finished_level", None)
+
+        # если finished_level пришло, значит мы открываем юзеру все related_levels
+        if finished_level:
+            for level_id in related_levels:
+                UserLevel.objects.get_or_create(user=user, level_id=level_id)
+            instance.finished = True  # открыли все уровни и проставили что этот уровень завершён
+            instance.save()
+            levels = get_opened_user_levels(self=self, user_id=user.id, level_serializer=LevelSerializer)
+            return {"levels": levels}
+
+        # а здесь просто удалили все открытые уровни, кроме самого первого, а ему поставили что он не пройден
+        UserLevel.objects.filter(user=user).exclude(level_id=1).delete()
+        instance.finished = False
+        instance.save()
+        return {"deleted": 204}
+
+    def to_representation(self, instance):
+        # print(instance, 'из to-repr')
+        return instance
