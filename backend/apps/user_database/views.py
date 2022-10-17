@@ -9,7 +9,6 @@ from apps.user_database.permissions import IsOwner
 from apps.user_database.serializers import DatabaseSerializer, UserResourceSerializer
 
 
-
 class UserDatabaseViewSet(GenericViewSet):
     """user_database, id: user_id"""
     authentication_classes = [TokenAuthentication]
