@@ -1,7 +1,16 @@
-from apps.core.models import (Ability, Color, EnemyLeaderAbility,
-                              EnemyPassiveAbility, Faction, Move,
-                              PassiveAbility, Type, UserActionsJson)
 from django.contrib import admin
+
+from apps.core.models import (
+    Ability,
+    Color,
+    EnemyLeaderAbility,
+    EnemyPassiveAbility,
+    Faction,
+    Move,
+    PassiveAbility,
+    Type,
+    UserActionsJson,
+)
 
 
 @admin.register(UserActionsJson)

@@ -1,6 +1,7 @@
-from apps.accounts.utils import set_unlocked_cards
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+
+from apps.accounts.utils import set_unlocked_cards
 
 
 class CustomUser(AbstractUser):

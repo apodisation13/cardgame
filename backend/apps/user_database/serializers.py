@@ -1,10 +1,10 @@
+from rest_framework import serializers
+
 from apps.accounts.models import CustomUser
 from apps.cards.models import Card, Leader, UserCard, UserDeck, UserLeader
-from apps.cards.serializers import (CardSerializer, DeckSerializer,
-                                    LeaderSerializer)
+from apps.cards.serializers import CardSerializer, DeckSerializer, LeaderSerializer
 from apps.enemies.serializers import LevelSerializer
 from apps.enemies.utils import get_opened_user_levels
-from rest_framework import serializers
 
 
 class UserDecksThroughSerializer(serializers.ModelSerializer):

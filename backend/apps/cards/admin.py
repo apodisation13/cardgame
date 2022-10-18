@@ -1,5 +1,6 @@
-from apps.cards.models import Card, CardDeck, Deck, Leader
 from django.contrib import admin
+
+from apps.cards.models import Card, CardDeck, Deck, Leader
 
 
 @admin.register(Leader)

@@ -1,6 +1,5 @@
 import pytest
-from rest_framework.status import (HTTP_200_OK, HTTP_401_UNAUTHORIZED,
-                                   HTTP_403_FORBIDDEN)
+from rest_framework.status import HTTP_200_OK, HTTP_401_UNAUTHORIZED, HTTP_403_FORBIDDEN
 from rest_framework.test import APIClient
 
 

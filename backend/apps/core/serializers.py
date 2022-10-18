@@ -1,7 +1,7 @@
-from apps.core.models import Ability  # , UserActionsJson)
-from apps.core.models import (EnemyLeaderAbility, EnemyPassiveAbility, Faction,
-                              Move, PassiveAbility)
 from rest_framework import serializers
+
+from apps.core.models import Ability  # , UserActionsJson)
+from apps.core.models import EnemyLeaderAbility, EnemyPassiveAbility, Faction, Move, PassiveAbility
 
 
 class FactionSerializer(serializers.ModelSerializer):

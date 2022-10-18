@@ -1,6 +1,7 @@
-from apps.enemies.models import Enemy, EnemyLeader, Level, LevelEnemy
 from django.core.management.base import BaseCommand
 from pyexcel_odsr import get_data
+
+from apps.enemies.models import Enemy, EnemyLeader, Level, LevelEnemy
 
 
 class Command(BaseCommand):

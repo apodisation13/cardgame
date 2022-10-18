@@ -1,9 +1,8 @@
-from apps.core.serializers import (EnemyLeaderAbilitySerializer,
-                                   EnemyPassiveAbilitySerializer,
-                                   MoveSerializer)
+from rest_framework import serializers
+
+from apps.core.serializers import EnemyLeaderAbilitySerializer, EnemyPassiveAbilitySerializer, MoveSerializer
 from apps.enemies.models import Enemy, EnemyLeader, Level, UserLevel
 from apps.enemies.utils import get_opened_user_levels
-from rest_framework import serializers
 
 
 class EnemySerializer(serializers.ModelSerializer):

@@ -1,5 +1,6 @@
-from apps.cards.models import UserCard, UserDeck, UserLeader
 from rest_framework.permissions import BasePermission
+
+from apps.cards.models import UserCard, UserDeck, UserLeader
 
 
 class IsOwner(BasePermission):

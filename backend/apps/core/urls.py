@@ -1,6 +1,7 @@
 # from django.urls import path
-from apps.core.views import FactionViewSet  # , UserActionsApiView
 from rest_framework.routers import DefaultRouter
+
+from apps.core.views import FactionViewSet  # , UserActionsApiView
 
 router = DefaultRouter()
 router.register("factions", FactionViewSet, basename="factions")
