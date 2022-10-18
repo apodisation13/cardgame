@@ -1,13 +1,12 @@
 from rest_framework import serializers
 
-from apps.core.models import (
+from apps.core.models import (  # UserActionsJson,
     Ability,
     EnemyLeaderAbility,
     EnemyPassiveAbility,
     Faction,
     Move,
     PassiveAbility,
-    # UserActionsJson,
 )
 
 

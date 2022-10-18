@@ -1,12 +1,13 @@
 from rest_framework import mixins
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.response import Response
-from rest_framework.views import APIView
+# from rest_framework.authentication import TokenAuthentication
+# from rest_framework.response import Response
+# from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 
-from apps.core.models import Faction, UserActionsJson
+from apps.core.models import Faction  # , UserActionsJson
 from apps.core.serializers import FactionSerializer  # , UserActionsJsonSerializer
-from apps.news.permissions import IsAdminOrReadOnly
+
+# from apps.news.permissions import IsAdminOrReadOnly
 
 
 class FactionViewSet(GenericViewSet, mixins.ListModelMixin):
