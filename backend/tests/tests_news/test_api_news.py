@@ -1,7 +1,6 @@
 import pytest
-from model_bakery import baker
-
 from apps.news.models import News
+from model_bakery import baker
 
 
 @pytest.fixture

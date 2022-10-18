@@ -1,7 +1,7 @@
-from rest_framework import serializers
-
-from apps.cards.models import Card, CardDeck, Deck, Leader, UserCard, UserDeck, UserLeader
+from apps.cards.models import (Card, CardDeck, Deck, Leader, UserCard,
+                               UserDeck, UserLeader)
 from apps.core.serializers import AbilitySerializer, PassiveAbilitySerializer
+from rest_framework import serializers
 
 
 class CardSerializer(serializers.ModelSerializer):

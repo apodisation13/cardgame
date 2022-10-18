@@ -1,8 +1,7 @@
-from django.core.management.base import BaseCommand
-from pyexcel_odsr import get_data
-
 from apps.cards.models import Card, Leader
 from apps.enemies.models import Enemy
+from django.core.management.base import BaseCommand
+from pyexcel_odsr import get_data
 
 
 class Command(BaseCommand):

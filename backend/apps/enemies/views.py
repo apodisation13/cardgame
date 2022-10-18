@@ -1,10 +1,10 @@
+from apps.enemies.models import Enemy, EnemyLeader, Level, UserLevel
+from apps.enemies.serializers import (EnemyLeaderSerializer, EnemySerializer,
+                                      LevelSerializer, UnlockLevelsSerializer)
 from rest_framework import mixins
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import GenericViewSet
-
-from apps.enemies.models import Enemy, EnemyLeader, Level, UserLevel
-from apps.enemies.serializers import EnemyLeaderSerializer, EnemySerializer, LevelSerializer, UnlockLevelsSerializer
 
 
 class EnemyViewSet(GenericViewSet, mixins.ListModelMixin):

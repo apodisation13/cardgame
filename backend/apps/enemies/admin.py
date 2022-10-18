@@ -1,6 +1,5 @@
-from django.contrib import admin
-
 from apps.enemies.models import Enemy, EnemyLeader, Level, LevelEnemy
+from django.contrib import admin
 
 
 @admin.register(EnemyLeader)

@@ -1,16 +1,8 @@
+from apps.core.models import (Ability, Color, EnemyLeaderAbility,
+                              EnemyPassiveAbility, Faction, Move,
+                              PassiveAbility, Type)
 from django.core.management.base import BaseCommand
 from pyexcel_odsr import get_data
-
-from apps.core.models import (
-    Ability,
-    Color,
-    EnemyLeaderAbility,
-    EnemyPassiveAbility,
-    Faction,
-    Move,
-    PassiveAbility,
-    Type,
-)
 
 
 class Command(BaseCommand):
