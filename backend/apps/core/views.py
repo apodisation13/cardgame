@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 
 from apps.core.models import Faction, UserActionsJson
-from apps.core.serializers import FactionSerializer, UserActionsJsonSerializer
+from apps.core.serializers import FactionSerializer  # , UserActionsJsonSerializer
 from apps.news.permissions import IsAdminOrReadOnly
 
 
@@ -14,11 +14,11 @@ class FactionViewSet(GenericViewSet, mixins.ListModelMixin):
     serializer_class = FactionSerializer
 
 
-class UserActionsApiView(APIView):
-    data_json = UserActionsJson.objects.first()
-    serializer = UserActionsJsonSerializer(data_json)
-    permission_classes = [IsAdminOrReadOnly, ]
-    authentication_classes = [TokenAuthentication]
-
-    def get(self, request):
-        return Response(self.serializer.data)
+# class UserActionsApiView(APIView):
+#     data_json = UserActionsJson.objects.first()
+#     serializer = UserActionsJsonSerializer(data_json)
+#     permission_classes = [IsAdminOrReadOnly, ]
+#     authentication_classes = [TokenAuthentication]
+#
+#     def get(self, request):
+#         return Response(self.serializer.data)

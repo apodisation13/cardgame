@@ -7,7 +7,7 @@ from apps.core.models import (
     Faction,
     Move,
     PassiveAbility,
-    UserActionsJson,
+    # UserActionsJson,
 )
 
 
@@ -53,11 +53,11 @@ class EnemyLeaderAbilitySerializer(serializers.ModelSerializer):
         fields = ("name", "description")
 
 
-class UserActionsJsonSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = UserActionsJson
-        fields = ('data_json',)
-
-    def to_representation(self, instance):
-        return instance.data_json
+# class UserActionsJsonSerializer(serializers.ModelSerializer):
+#
+#     class Meta:
+#         model = UserActionsJson
+#         fields = ('data_json',)
+#
+#     def to_representation(self, instance):
+#         return instance.data_json
