@@ -68,3 +68,11 @@ class EnemyLeaderAbility(models.Model):
 
     def __str__(self):
         return f'{self.id} - {self.name}'
+
+
+class GameConst(models.Model):
+    """Различные игровые данные"""
+    data = models.JSONField()
+
+    def __str__(self):
+        return f'{self.data.keys()}'
