@@ -1,5 +1,5 @@
 import pytest
-from rest_framework.status import HTTP_200_OK, HTTP_401_UNAUTHORIZED, HTTP_403_FORBIDDEN
+from rest_framework.status import HTTP_200_OK, HTTP_401_UNAUTHORIZED, HTTP_403_FORBIDDEN, HTTP_405_METHOD_NOT_ALLOWED
 from rest_framework.test import APIClient
 
 
@@ -46,3 +46,26 @@ class TestModels:
         response = self.api_client.get("/api/v1/factions/")
         assert response.data[0]['name'] == expected_result
         assert len(response.data) == 4
+
+    def test_get_game_const_admin(self, create_admin):
+        """Проверка эндпоинта для админа"""
+        admin = create_admin()
+        self.api_client.force_authenticate(admin)
+        response_admin = self.api_client.get("/api/v1/game_const/")
+        assert response_admin.status_code == HTTP_200_OK
+
+    def test_get_game_const_user(self, create_user):
+        """Проверка эндпоинта для юсера"""
+        user = create_user()
+        self.api_client.force_authenticate(user)
+        response_user = self.api_client.get("/api/v1/game_const/")
+        assert response_user.status_code == HTTP_200_OK
+
+    def test_game_const_other_methods(self, create_admin):
+        """Проверка запрета на методы POST, DELETE"""
+        admin = create_admin()
+        self.api_client.force_authenticate(admin)
+        response_post = self.api_client.post("/api/v1/game_const/")
+        response_del = self.api_client.delete("/api/v1/game_const/")
+        assert response_post.status_code == HTTP_405_METHOD_NOT_ALLOWED
+        assert response_del.status_code == HTTP_405_METHOD_NOT_ALLOWED
