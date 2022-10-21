@@ -1,9 +1,8 @@
-from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
-
 from apps.accounts.models import CustomUser
 from apps.cards.models import UserCard
 from apps.enemies.models import UserLevel
+from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
 
 
 class UserCardInLine(admin.TabularInline):

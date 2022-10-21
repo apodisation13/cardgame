@@ -1,10 +1,9 @@
 import pytest
+from apps.accounts.models import CustomUser
 from django.conf import settings
 from django.core.management import call_command
 from model_bakery import baker
 from rest_framework.test import APIClient
-
-from apps.accounts.models import CustomUser
 
 
 @pytest.fixture

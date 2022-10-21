@@ -1,19 +1,14 @@
+from apps.cards.mixins import CardBaseMixin, DeckBaseMixin, LeaderBaseMixin
+from apps.cards.models import (Card, Deck, Leader, UserCard, UserDeck,
+                               UserLeader)
+from apps.cards.serializers import (CardSerializer, CraftUserCardSerializer,
+                                    CraftUserLeaderSerializer, DeckSerializer,
+                                    LeaderSerializer, MillUserCardSerializer,
+                                    MillUserLeaderSerializer,
+                                    UserDeckSerializer)
 from rest_framework import mixins
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.viewsets import GenericViewSet
-
-from apps.cards.mixins import CardBaseMixin, DeckBaseMixin, LeaderBaseMixin
-from apps.cards.models import Card, Deck, Leader, UserCard, UserDeck, UserLeader
-from apps.cards.serializers import (
-    CardSerializer,
-    CraftUserCardSerializer,
-    CraftUserLeaderSerializer,
-    DeckSerializer,
-    LeaderSerializer,
-    MillUserCardSerializer,
-    MillUserLeaderSerializer,
-    UserDeckSerializer,
-)
 
 
 class CardViewSet(GenericViewSet,

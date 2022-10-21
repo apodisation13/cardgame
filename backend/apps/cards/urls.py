@@ -1,15 +1,8 @@
+from apps.cards.views import (CardViewSet, CraftUserCardViewSet,
+                              CraftUserLeaderViewSet, DeckViewSet,
+                              LeaderViewSet, MillUserCardViewSet,
+                              MillUserLeaderViewSet, UserDeckViewSet)
 from rest_framework.routers import DefaultRouter
-
-from apps.cards.views import (
-    CardViewSet,
-    CraftUserCardViewSet,
-    CraftUserLeaderViewSet,
-    DeckViewSet,
-    LeaderViewSet,
-    MillUserCardViewSet,
-    MillUserLeaderViewSet,
-    UserDeckViewSet,
-)
 
 router = DefaultRouter()
 router.register("cards", CardViewSet, basename="cards")

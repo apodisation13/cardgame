@@ -1,7 +1,6 @@
+from apps.core.views import FactionViewSet
 from django.urls import path
 from rest_framework.routers import DefaultRouter
-
-from apps.core.views import FactionViewSet
 
 from . import views
 

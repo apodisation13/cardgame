@@ -1,12 +1,12 @@
+from apps.accounts.models import CustomUser
+from apps.enemies.models import Enemy, EnemyLeader
+from apps.user_database.permissions import IsOwner
+from apps.user_database.serializers import (DatabaseSerializer,
+                                            UserResourceSerializer)
 from rest_framework import mixins
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
-
-from apps.accounts.models import CustomUser
-from apps.enemies.models import Enemy, EnemyLeader
-from apps.user_database.permissions import IsOwner
-from apps.user_database.serializers import DatabaseSerializer, UserResourceSerializer
 
 
 class UserDatabaseViewSet(GenericViewSet):

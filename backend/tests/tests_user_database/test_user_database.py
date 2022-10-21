@@ -17,7 +17,7 @@ class TestUserDatabase:
         assert response.status_code == HTTP_200_OK
         for i in param:
             if i in response.data:
-                # Проверяем на наличе словарей, может тут надо проверять на ключи?
+                # Проверяем на наличе словарей
                 assert response.data["user_database"]
                 assert response.data["resources"]
                 assert response.data["enemies"]

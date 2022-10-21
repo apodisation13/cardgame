@@ -1,7 +1,7 @@
-from django.db import models
-
 from apps.accounts.models import CustomUser
-from apps.core.models import Color, EnemyLeaderAbility, EnemyPassiveAbility, Faction, Move
+from apps.core.models import (Color, EnemyLeaderAbility, EnemyPassiveAbility,
+                              Faction, Move)
+from django.db import models
 
 LEVEL_DIFFICULTY_CHOICES = (
     ('easy', 'easy'),
