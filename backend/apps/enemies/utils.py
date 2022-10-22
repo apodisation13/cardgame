@@ -7,7 +7,7 @@ def get_opened_user_levels(self, user_id, level_serializer):
     Возвращает всего уровни юзера
     """
     all_levels = Level.objects.\
-        select_related("enemy_leader__ability", "enemy_leader__faction").\
+        select_related("enemy_leader__ability", "enemy_leader__faction", "season").\
         prefetch_related(
             "enemies__faction",
             "enemies__color",
