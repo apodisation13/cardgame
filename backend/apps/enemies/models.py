@@ -9,6 +9,13 @@ LEVEL_DIFFICULTY_CHOICES = (
     ('hard', 'hard'),
 )
 
+LINE_CHOICES = (
+    ("down", "down"),
+    ("up", "up"),
+    ("right", "right"),
+    ("left", "left"),
+)
+
 
 class Enemy(models.Model):
     name = models.CharField(max_length=64, blank=False, null=False, unique=True)
@@ -68,8 +75,13 @@ class Level(models.Model):
                                      on_delete=models.PROTECT,
                                      blank=True, null=True, default=None)
     unlocked = models.BooleanField(default=False)
-    related_levels = models.ManyToManyField('self', symmetrical=False,
-                                            blank=True)  # уровни которые откроются после завершения текущего
+    related_levels = models.ManyToManyField("Level", through="LevelRelatedLevels", related_name="rel_levels")
+    season = models.ForeignKey("Season",
+                               on_delete=models.CASCADE,
+                               related_name="levels",
+                               blank=True, null=True)
+    x = models.IntegerField(default=0)  # координаты уровня в дереве на экране
+    y = models.IntegerField(default=0)  # координаты уровня в дереве на экране
 
     def __str__(self):
         return f'{self.id}:{self.name}, появление: {self.starting_enemies_number}, ' \
@@ -87,6 +99,20 @@ class Level(models.Model):
         ordering = ('id',)
 
 
+class LevelRelatedLevels(models.Model):
+    level = models.ForeignKey(Level, related_name="children", on_delete=models.CASCADE)
+    related_level = models.ForeignKey(Level, related_name="l2", on_delete=models.CASCADE)
+    line = models.CharField(choices=LINE_CHOICES, blank=False, null=False, max_length=16)
+    connection = models.CharField(max_length=16, blank=False, null=False)
+
+    def save(self, *args, **kwargs):
+        self.connection = f"{self.level_id}-{self.related_level_id}"
+        return super(LevelRelatedLevels, self).save(*args, **kwargs)
+
+    class Meta:
+        unique_together = ("level", "related_level")
+
+
 class LevelEnemy(models.Model):
     level = models.ForeignKey(Level, related_name='l', on_delete=models.CASCADE)
     enemy = models.ForeignKey(Enemy, related_name='l', on_delete=models.CASCADE)
@@ -100,3 +126,11 @@ class UserLevel(models.Model):
                              on_delete=models.CASCADE,
                              blank=False, null=False)
     finished = models.BooleanField(default=False)
+
+
+class Season(models.Model):
+    name = models.CharField(max_length=64, blank=False, null=False)
+    description = models.TextField(blank=False, null=False)
+
+    def __str__(self):
+        return f"{self.name}, {self.description[:30]}"

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from apps.core.serializers import EnemyLeaderAbilitySerializer, EnemyPassiveAbilitySerializer, MoveSerializer
-from apps.enemies.models import Enemy, EnemyLeader, Level, UserLevel
+from apps.enemies.models import Enemy, EnemyLeader, Level, LevelRelatedLevels, UserLevel
 from apps.enemies.utils import get_opened_user_levels
 
 
@@ -51,20 +51,30 @@ class EnemyLeaderSerializer(serializers.ModelSerializer):
         )
 
 
+class RelatedLevelThroughSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = LevelRelatedLevels
+        fields = ("line", "connection", "related_level_id")
+
+
 class LevelSerializer(serializers.ModelSerializer):
     enemies = EnemySerializer(many=True, read_only=True)
     enemy_leader = EnemyLeaderSerializer(many=False, read_only=True)
+    children = RelatedLevelThroughSerializer(many=True)
 
     class Meta:
         model = Level
         fields = (
             "id",
             "name",
+            "children",
+            "x",
+            "y",
             "starting_enemies_number",
             "difficulty",
             "enemies",
             "enemy_leader",
-            "related_levels",
         )
 
 

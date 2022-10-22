@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from apps.enemies.models import Enemy, EnemyLeader, Level, LevelEnemy
+from apps.enemies.models import Enemy, EnemyLeader, Level, LevelEnemy, LevelRelatedLevels, Season
 
 
 @admin.register(EnemyLeader)
@@ -21,18 +21,23 @@ class EnemyAdmin(admin.ModelAdmin):
 
 class LevelEnemyInLine(admin.TabularInline):
     model = LevelEnemy
-#
-#
-# class LevelInline(admin.TabularInline):
-#     model = Level
+
+
+class LevelInline(admin.TabularInline):
+    model = LevelRelatedLevels
+    fk_name = "level"
+    fields = ("line", "related_level")
 
 
 @admin.register(Level)
 class LevelAdmin(admin.ModelAdmin):
-    inlines = [LevelEnemyInLine, ]
+    inlines = [LevelEnemyInLine, LevelInline, ]
     list_filter = ("difficulty", "enemy_leader_id")
     list_display = ("id", "name", "starting_enemies_number", "difficulty",
-                    "number_of_enemies", "enemy_leader", "get_related_levels")
+                    "number_of_enemies", "enemy_leader", "get_related_levels", "x", "y")
     list_display_links = ("id", "name", "starting_enemies_number",
                           "difficulty", "number_of_enemies",
                           "enemy_leader", "get_related_levels")
+
+
+admin.site.register(Season)
