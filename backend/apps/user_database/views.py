@@ -13,7 +13,7 @@ class UserDatabaseViewSet(GenericViewSet):
     """user_database, id: user_id"""
     authentication_classes = [TokenAuthentication]
 
-    def retrieve(self, request, pk=None):  # как это работает?
+    def retrieve(self, request, pk=None):
         queryset = CustomUser.objects.filter(pk=pk).first()
         queryset_enemy = Enemy.objects.select_related("faction", "color", "move", "passive_ability").all()
         queryset_enemy_leader = EnemyLeader.objects.select_related("faction", "ability").all()
