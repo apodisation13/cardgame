@@ -31,3 +31,4 @@ class UnlockLevelsViewSet(GenericViewSet, mixins.CreateModelMixin, mixins.Update
     queryset = UserLevel.objects.all()
     serializer_class = UnlockLevelsSerializer
     authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]  # TODO: здесь должно быть isObjectOwner, ну типа только себе может открывать
