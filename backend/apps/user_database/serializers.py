@@ -3,7 +3,8 @@ from rest_framework import serializers
 from apps.accounts.models import CustomUser
 from apps.cards.models import Card, Leader, UserCard, UserDeck, UserLeader
 from apps.cards.serializers import CardSerializer, DeckSerializer, LeaderSerializer
-from apps.enemies.serializers import LevelSerializer
+from apps.core.serializers import GameConstSerializer
+from apps.enemies.serializers import EnemyLeaderSerializer, EnemySerializer, LevelSerializer
 from apps.enemies.utils import get_opened_user_levels
 
 
@@ -93,3 +94,6 @@ class UserResourceSerializer(serializers.ModelSerializer):
 class DatabaseSerializer(serializers.Serializer):
     user_database = UserDatabaseSerializer()
     resources = UserResourceSerializer()
+    enemies = EnemySerializer(many=True)
+    enemy_leaders = EnemyLeaderSerializer(many=True)
+    game_const = GameConstSerializer(many=False)
