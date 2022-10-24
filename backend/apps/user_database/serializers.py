@@ -3,7 +3,7 @@ from rest_framework import serializers
 from apps.accounts.models import CustomUser
 from apps.cards.models import Card, Leader, UserCard, UserDeck, UserLeader
 from apps.cards.serializers import CardSerializer, DeckSerializer, LeaderSerializer
-from apps.enemies.serializers import LevelSerializer, EnemySerializer, EnemyLeaderSerializer
+from apps.enemies.serializers import EnemyLeaderSerializer, EnemySerializer, LevelSerializer
 from apps.enemies.utils import get_opened_user_levels
 
 
