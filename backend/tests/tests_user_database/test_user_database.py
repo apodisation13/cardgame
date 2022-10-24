@@ -18,8 +18,12 @@ class TestUserDatabase:
         for i in param:
             if i in response.data:
                 # Проверяем на наличе словарей
+                response = self.api_client.get("/api/v1/user_database/1/")
                 assert response.data["user_database"]
+                response = self.api_client.get("/api/v1/user_database/1/")
                 assert response.data["resources"]
+                response = self.api_client.get("/api/v1/user_database/1/")
                 assert response.data["enemies"]
+                response = self.api_client.get("/api/v1/user_database/1/")
                 assert response.data["enemy_leaders"]
                 break
