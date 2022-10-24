@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
 from apps.accounts.models import CustomUser
+from apps.core.models import GameConst
 from apps.enemies.models import Enemy, EnemyLeader
 from apps.user_database.permissions import IsOwner
 from apps.user_database.serializers import DatabaseSerializer, UserResourceSerializer
@@ -17,11 +18,13 @@ class UserDatabaseViewSet(GenericViewSet):
         queryset = CustomUser.objects.filter(pk=pk).first()
         queryset_enemy = Enemy.objects.select_related("faction", "color", "move", "passive_ability").all()
         queryset_enemy_leader = EnemyLeader.objects.select_related("faction", "ability").all()
+        game_const = GameConst.objects.first()
         serializer = DatabaseSerializer(dict(
             user_database=queryset,
             resources=queryset,
             enemies=queryset_enemy,
             enemy_leaders=queryset_enemy_leader,
+            game_const=game_const,
         ),
             context=self.get_serializer_context()
         )

@@ -8,14 +8,12 @@ class TestUserDatabase:
     def setup(self):
         self.api_client = APIClient()
 
-    def test_aggregation_of_queries(self, create_admin):
+    def test_aggregation_of_queries(self, create_user):
         """Проверяем эндпоинт /api/v1/user_database/1/ на объединения GET запросов"""
-        param = ["user_database", "resources", "enemies", "enemy_leaders"]
-        admin = create_admin()
-        self.api_client.force_authenticate(admin)
+        key_user_database = ["user_database", "resources", "enemies", "enemy_leaders", "game_const"]
+        user = create_user()
+        self.api_client.force_authenticate(user)
         response = self.api_client.get("/api/v1/user_database/1/")
         assert response.status_code == HTTP_200_OK
-        assert param[0] in response.data
-        assert param[1] in response.data
-        assert param[2] in response.data
-        assert param[3] in response.data
+        for key in key_user_database:
+            assert key in response.data
