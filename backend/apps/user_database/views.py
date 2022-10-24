@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
 from apps.accounts.models import CustomUser
+from apps.enemies.models import Enemy, EnemyLeader
 from apps.user_database.permissions import IsOwner
 from apps.user_database.serializers import DatabaseSerializer, UserResourceSerializer
 
@@ -12,11 +13,15 @@ class UserDatabaseViewSet(GenericViewSet):
     """user_database, id: user_id"""
     authentication_classes = [TokenAuthentication]
 
-    def retrieve(self, request, pk=None):
+    def retrieve(self, request, pk=None):  # как это работает?
         queryset = CustomUser.objects.filter(pk=pk).first()
+        queryset_enemy = Enemy.objects.select_related("faction", "color", "move", "passive_ability").all()
+        queryset_enemy_leader = EnemyLeader.objects.select_related("faction", "ability").all()
         serializer = DatabaseSerializer(dict(
             user_database=queryset,
             resources=queryset,
+            enemies=queryset_enemy,
+            enemy_leaders=queryset_enemy_leader,
         ),
             context=self.get_serializer_context()
         )
