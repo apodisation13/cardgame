@@ -14,6 +14,7 @@ LINE_CHOICES = (
     ("up", "up"),
     ("right", "right"),
     ("left", "left"),
+    (None, None),
 )
 
 
@@ -102,7 +103,7 @@ class Level(models.Model):
 class LevelRelatedLevels(models.Model):
     level = models.ForeignKey(Level, related_name="children", on_delete=models.CASCADE)
     related_level = models.ForeignKey(Level, related_name="l2", on_delete=models.CASCADE)
-    line = models.CharField(choices=LINE_CHOICES, blank=False, null=False, max_length=16)
+    line = models.CharField(choices=LINE_CHOICES, blank=True, null=True, max_length=16)
     connection = models.CharField(max_length=16, blank=False, null=False)
 
     def save(self, *args, **kwargs):

@@ -69,6 +69,7 @@ class LevelSerializer(serializers.ModelSerializer):
             "id",
             "name",
             "children",
+            "related_levels",
             "x",
             "y",
             "starting_enemies_number",
