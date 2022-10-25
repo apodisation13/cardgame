@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from apps.core.serializers import EnemyLeaderAbilitySerializer, EnemyPassiveAbilitySerializer, MoveSerializer
-from apps.enemies.models import Enemy, EnemyLeader, Level, LevelRelatedLevels, UserLevel
+from apps.enemies.models import Enemy, EnemyLeader, Level, LevelRelatedLevels, UserLevel, Season
 from apps.enemies.utils import get_opened_user_levels
 
 
@@ -113,3 +113,36 @@ class UnlockLevelsSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         # print(instance, 'из to-repr')
         return instance
+
+
+class SeasonSerializer(serializers.ModelSerializer):
+    # levels = LevelSerializer(many=True, read_only=True)  # при этом способе 100500 запросов
+    levels = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Season
+        fields = ("id", "name", "description", "levels")
+
+    def get_levels(self, season):
+        print(self.context["request"].user)
+        print(season)
+        levels = season.levels.\
+            select_related(
+                "enemy_leader__faction",
+                "enemy_leader__ability",
+            ).\
+            prefetch_related(
+                "enemies__faction",
+                "enemies__color",
+                "enemies__move",
+                "enemies__passive_ability",
+                "children",
+                "related_levels",
+            ).\
+            all()
+        levels = get_opened_user_levels(
+            self=self,
+            user_id=user.id,
+            level_serializer=LevelSerializer
+        )
+        return LevelSerializer(levels, many=True).data
