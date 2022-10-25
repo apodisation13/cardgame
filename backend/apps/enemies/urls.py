@@ -1,6 +1,6 @@
 from rest_framework.routers import DefaultRouter
 
-from apps.enemies.views import EnemyLeaderViewSet, EnemyViewSet, LevelViewSet, UnlockLevelsViewSet, SeasonViewSet
+from apps.enemies.views import EnemyLeaderViewSet, EnemyViewSet, LevelViewSet, SeasonViewSet, UnlockLevelsViewSet
 
 router = DefaultRouter()
 router.register("enemies", EnemyViewSet, basename="enemies")

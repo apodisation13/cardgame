@@ -3,9 +3,14 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import GenericViewSet
 
-from apps.enemies.models import Enemy, EnemyLeader, Level, UserLevel, Season
-from apps.enemies.serializers import EnemyLeaderSerializer, EnemySerializer, LevelSerializer, UnlockLevelsSerializer, \
-    SeasonSerializer
+from apps.enemies.models import Enemy, EnemyLeader, Level, Season, UserLevel
+from apps.enemies.serializers import (
+    EnemyLeaderSerializer,
+    EnemySerializer,
+    LevelSerializer,
+    SeasonSerializer,
+    UnlockLevelsSerializer,
+)
 
 
 class EnemyViewSet(GenericViewSet, mixins.ListModelMixin):
