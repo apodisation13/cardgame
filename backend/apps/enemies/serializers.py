@@ -82,18 +82,21 @@ class LevelSerializer(serializers.ModelSerializer):
 class UnlockLevelsSerializer(serializers.ModelSerializer):
     """
     PATCH запрос и пришел finished_level - значит мы открываем уровни, не пришел - тестовый запрос на обнуление
+    ВОЗВРАЩАЕТ ВСЕ УРОВНИ ТЕКУЩЕГО СЕЗОНА! То есть, переписать надо все уровни по индексу сезона
     """
     related_levels = serializers.ListField()
     finished_level = serializers.IntegerField()
+    season_id = serializers.IntegerField()
 
     class Meta:
         model = UserLevel
-        fields = ("id", "related_levels", "finished_level")
+        fields = ("id", "related_levels", "finished_level", "season_id")
 
     def update(self, instance, validated_data):
         user = self.context.get('request').user
         related_levels = validated_data.pop("related_levels", [])
         finished_level = validated_data.pop("finished_level", None)
+        season_id = validated_data.pop("season_id", None)
 
         # если finished_level пришло, значит мы открываем юзеру все related_levels
         if finished_level:
@@ -101,7 +104,12 @@ class UnlockLevelsSerializer(serializers.ModelSerializer):
                 UserLevel.objects.get_or_create(user=user, level_id=level_id)
             instance.finished = True  # открыли все уровни и проставили что этот уровень завершён
             instance.save()
-            levels = get_opened_user_levels(self=self, user_id=user.id, level_serializer=LevelSerializer)
+            levels = get_opened_user_levels(
+                self=self,
+                user_id=user.id,
+                level_serializer=LevelSerializer,
+                season_id=season_id,
+            )
             return {"levels": levels}
 
         # а здесь просто удалили все открытые уровни, кроме самого первого, а ему поставили что он не пройден
@@ -116,7 +124,9 @@ class UnlockLevelsSerializer(serializers.ModelSerializer):
 
 
 class SeasonSerializer(serializers.ModelSerializer):
-    # levels = LevelSerializer(many=True, read_only=True)  # при этом способе 100500 запросов
+    """
+    Сериализатор сезонов и уровней в них, включая открытые для юзера
+    """
     levels = serializers.SerializerMethodField()
 
     class Meta:
@@ -124,25 +134,11 @@ class SeasonSerializer(serializers.ModelSerializer):
         fields = ("id", "name", "description", "levels")
 
     def get_levels(self, season):
-        print(self.context["request"].user)
-        print(season)
-        levels = season.levels.\
-            select_related(
-                "enemy_leader__faction",
-                "enemy_leader__ability",
-            ).\
-            prefetch_related(
-                "enemies__faction",
-                "enemies__color",
-                "enemies__move",
-                "enemies__passive_ability",
-                "children",
-                "related_levels",
-            ).\
-            all()
+        user = self.context["request"].user
         levels = get_opened_user_levels(
             self=self,
             user_id=user.id,
-            level_serializer=LevelSerializer
+            level_serializer=LevelSerializer,
+            season_id=season.id,
         )
-        return LevelSerializer(levels, many=True).data
+        return levels
