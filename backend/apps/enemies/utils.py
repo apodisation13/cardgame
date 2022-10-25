@@ -1,10 +1,11 @@
 from apps.enemies.models import Level, UserLevel
 
 
-def get_opened_user_levels(self, user_id, level_serializer):
+def get_opened_user_levels(self, user_id, level_serializer, season_id):
     """
     Принимает на вход self из сериализатора, user_id, сериализатор уровней (иначе circular import)
-    Возвращает всего уровни юзера
+    Возвращает все уровни юзера по сезону!
+    Если мы приходим из вызова всей базы данных, то сюда заходим с каждым сезоном
     """
     all_levels = Level.objects.\
         select_related("enemy_leader__ability", "enemy_leader__faction", "season").\
@@ -14,7 +15,9 @@ def get_opened_user_levels(self, user_id, level_serializer):
             "enemies__move",
             "enemies__passive_ability",
             "related_levels",
-        ).all()
+            "children",
+        ).filter(season_id=season_id).\
+        all()
     user_levels = UserLevel.objects.filter(user_id=user_id).values("level__pk", "pk", "finished").all()
     levels = []
     for level in all_levels:

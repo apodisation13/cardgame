@@ -32,12 +32,24 @@ class LevelInline(admin.TabularInline):
 @admin.register(Level)
 class LevelAdmin(admin.ModelAdmin):
     inlines = [LevelEnemyInLine, LevelInline, ]
-    list_filter = ("difficulty", "enemy_leader_id")
-    list_display = ("id", "name", "starting_enemies_number", "difficulty",
-                    "number_of_enemies", "enemy_leader", "get_related_levels", "x", "y")
-    list_display_links = ("id", "name", "starting_enemies_number",
-                          "difficulty", "number_of_enemies",
-                          "enemy_leader", "get_related_levels")
+    list_filter = ("difficulty", "enemy_leader_id", "season")
+    list_display = ("id", "name", "starting_enemies_number_admin", "difficulty", "enemy_leader_admin",
+                    "number_of_enemies_admin", "get_related_levels", "x", "y", "season")
+    list_display_links = ("id", "name", "starting_enemies_number_admin", "enemy_leader_admin",
+                          "difficulty", "number_of_enemies_admin",
+                          "get_related_levels", "season")
+
+    @admin.display(description="enemy_leader")
+    def enemy_leader_admin(self, obj):
+        return f"{obj.enemy_leader.name} - {obj.enemy_leader.ability}"
+
+    @admin.display(description="st_en_№")
+    def starting_enemies_number_admin(self, obj):
+        return obj.starting_enemies_number
+
+    @admin.display(description="en_№")
+    def number_of_enemies_admin(self, obj):
+        return obj.number_of_enemies()
 
 
 admin.site.register(Season)

@@ -4,8 +4,7 @@ from apps.accounts.models import CustomUser
 from apps.cards.models import Card, Leader, UserCard, UserDeck, UserLeader
 from apps.cards.serializers import CardSerializer, DeckSerializer, LeaderSerializer
 from apps.core.serializers import GameConstSerializer
-from apps.enemies.serializers import EnemyLeaderSerializer, EnemySerializer, LevelSerializer
-from apps.enemies.utils import get_opened_user_levels
+from apps.enemies.serializers import EnemyLeaderSerializer, EnemySerializer, SeasonSerializer
 
 
 class UserDecksThroughSerializer(serializers.ModelSerializer):
@@ -20,7 +19,7 @@ class UserDecksThroughSerializer(serializers.ModelSerializer):
 class UserDatabaseSerializer(serializers.ModelSerializer):
     cards = serializers.SerializerMethodField()
     leaders = serializers.SerializerMethodField()
-    levels = serializers.SerializerMethodField()
+    # levels = serializers.SerializerMethodField()
 
     u_d = UserDecksThroughSerializer(many=True)
 
@@ -32,7 +31,7 @@ class UserDatabaseSerializer(serializers.ModelSerializer):
             "username",
             "cards",
             "leaders",
-            "levels",
+            # "levels",
             "u_d",
         )
 
@@ -80,9 +79,9 @@ class UserDatabaseSerializer(serializers.ModelSerializer):
         print(len(leaders), "ЛИДЕРЫ")
         return leaders
 
-    def get_levels(self, user):
-        levels = get_opened_user_levels(self=self, user_id=user.id, level_serializer=LevelSerializer)
-        return levels
+    # def get_levels(self, user):
+    #     levels = get_opened_user_levels(self=self, user_id=user.id, level_serializer=LevelSerializer)
+    #     return levels
 
 
 class UserResourceSerializer(serializers.ModelSerializer):
@@ -92,8 +91,9 @@ class UserResourceSerializer(serializers.ModelSerializer):
 
 
 class DatabaseSerializer(serializers.Serializer):
-    user_database = UserDatabaseSerializer()
-    resources = UserResourceSerializer()
+    user_database = UserDatabaseSerializer(many=False)
+    seasons = SeasonSerializer(many=True)
+    resources = UserResourceSerializer(many=False)
     enemies = EnemySerializer(many=True)
     enemy_leaders = EnemyLeaderSerializer(many=True)
     game_const = GameConstSerializer(many=False)
