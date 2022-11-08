@@ -87,7 +87,7 @@ class UserDatabaseSerializer(serializers.ModelSerializer):
 class UserResourceSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ("scraps", "wood", "kegs", "big_kegs", "chests")
+        fields = ("scraps", "wood", "kegs", "big_kegs", "chests", "keys")
 
 
 class DatabaseSerializer(serializers.Serializer):
