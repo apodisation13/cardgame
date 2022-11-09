@@ -23,6 +23,7 @@ class CustomUser(AbstractUser):
     kegs = models.IntegerField(default=3, blank=False, null=False)
     big_kegs = models.IntegerField(default=1, blank=False, null=False)
     chests = models.IntegerField(default=0, blank=False, null=False)
+    keys = models.IntegerField(default=3, blank=False, null=False)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["password", "username"]
