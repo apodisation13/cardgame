@@ -3,6 +3,7 @@ from django.contrib import admin
 from apps.core.models import (
     Ability,
     Color,
+    Deathwish,
     EnemyLeaderAbility,
     EnemyPassiveAbility,
     Faction,
@@ -35,3 +36,4 @@ admin.site.register(PassiveAbility)
 admin.site.register(Move)
 admin.site.register(EnemyLeaderAbility)
 admin.site.register(EnemyPassiveAbility)
+admin.site.register(Deathwish)
