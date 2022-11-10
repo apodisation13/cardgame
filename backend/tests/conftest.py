@@ -38,6 +38,7 @@ def django_db_setup(django_db_setup, django_db_blocker):
         call_command('core', path=f'{settings.BASE_DIR}')
         call_command('cards', path=f'{settings.BASE_DIR}')
         call_command('enemies', path=f'{settings.BASE_DIR}')
+        call_command('levels', path=f'{settings.BASE_DIR}')
 
 
 @pytest.fixture
