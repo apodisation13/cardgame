@@ -1,7 +1,7 @@
 from django.db import models
 
 from apps.accounts.models import CustomUser
-from apps.core.models import Color, EnemyLeaderAbility, EnemyPassiveAbility, Faction, Move
+from apps.core.models import Color, Deathwish, EnemyLeaderAbility, EnemyPassiveAbility, Faction, Move
 
 LEVEL_DIFFICULTY_CHOICES = (
     ('easy', 'easy'),
@@ -37,6 +37,10 @@ class Enemy(models.Model):
     passive_increase_damage = models.IntegerField(default=0, blank=False, null=False)
     passive_heal = models.IntegerField(default=0, blank=False, null=False)
     passive_heal_leader = models.IntegerField(default=0, blank=False, null=False)
+    has_deathwish = models.BooleanField(default=False)
+    deathwish = models.ForeignKey(Deathwish, related_name='enemies',
+                                  on_delete=models.PROTECT,
+                                  blank=True, null=True)
 
     def __str__(self):
         return f'{self.id}:{self.name}, {self.faction}, {self.color}, ' \

@@ -1,6 +1,15 @@
 from rest_framework import serializers
 
-from apps.core.models import Ability, EnemyLeaderAbility, EnemyPassiveAbility, Faction, GameConst, Move, PassiveAbility
+from apps.core.models import (
+    Ability,
+    Deathwish,
+    EnemyLeaderAbility,
+    EnemyPassiveAbility,
+    Faction,
+    GameConst,
+    Move,
+    PassiveAbility,
+)
 
 
 class FactionSerializer(serializers.ModelSerializer):
@@ -51,3 +60,10 @@ class GameConstSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         return instance.data
+
+
+class DeathwishSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Deathwish
+        fields = ("name", "description")

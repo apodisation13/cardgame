@@ -1,6 +1,11 @@
 from rest_framework import serializers
 
-from apps.core.serializers import EnemyLeaderAbilitySerializer, EnemyPassiveAbilitySerializer, MoveSerializer
+from apps.core.serializers import (
+    DeathwishSerializer,
+    EnemyLeaderAbilitySerializer,
+    EnemyPassiveAbilitySerializer,
+    MoveSerializer,
+)
 from apps.enemies.models import Enemy, EnemyLeader, Level, LevelRelatedLevels, Season, UserLevel
 from apps.enemies.utils import get_opened_user_levels
 
@@ -10,6 +15,7 @@ class EnemySerializer(serializers.ModelSerializer):
     color = serializers.CharField(source="color.name")
     move = MoveSerializer(many=False, read_only=True)
     passive_ability = EnemyPassiveAbilitySerializer(many=False, read_only=True)
+    deathwish = DeathwishSerializer(many=False, read_only=True)
 
     class Meta:
         model = Enemy
@@ -28,6 +34,8 @@ class EnemySerializer(serializers.ModelSerializer):
             "passive_increase_damage",
             "passive_heal",
             "passive_heal_leader",
+            "has_deathwish",
+            "deathwish",
         )
 
 
