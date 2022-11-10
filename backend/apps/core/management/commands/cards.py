@@ -1,34 +1,23 @@
 from django.core.management.base import BaseCommand
+from django.db import transaction
 from pyexcel_odsr import get_data
 
 from apps.cards.models import Card, CardDeck, Deck, Leader
 
 
-class Command(BaseCommand):
-    help = 'cards: Leaders, Cards, Decks(base-deck)+CardDeck'
+# ЗАГРУЗКА cards.Leader
+def cards_leaders(self, data):
+    leaders = data["Cards.Leader"]
+    # print(cards_leaders)
 
-    def add_arguments(self, parser):
-        parser.add_argument(
-            "--path",
-            dest="path",
-        )
-
-    def handle(self, *args, **options):
-        path = options.get("path")
-
-        if path:
-            data = get_data(f"{path}/database.ods")
-        else:
-            data = get_data("database.ods")
-
-        # ЗАГРУЗКА cards.Leader
-        cards_leaders = data["Cards.Leader"]
-        # print(cards_leaders)
-
+    with transaction.atomic():
         success = 0
         failed = 0
         self.stdout.write(self.style.SUCCESS(f'Загружаем cards.Leader'))
-        for line in cards_leaders[1:]:
+
+        last = Leader.objects.all().count()
+
+        for line in leaders[last + 1:]:
             if line:
                 try:
                     p_l_a_id = line[9]
@@ -63,16 +52,21 @@ class Command(BaseCommand):
 
         self.stdout.write(self.style.SUCCESS(f'Успешно, {success}'))
         self.stdout.write(self.style.ERROR(f'Провалено, {failed}'))
-        # -----------------------------------------------------------
 
-        # ЗАГРУЗКА cards.Card
-        cards_cards = data["Cards.Card"]
-        # print(cards_cards)
 
+# ЗАГРУЗКА cards.Card
+def cards_cards(self, data):
+    cards = data["Cards.Card"]
+    # print(cards)
+
+    with transaction.atomic():
         success = 0
         failed = 0
         self.stdout.write(self.style.SUCCESS(f'Загружаем cards.Card'))
-        for line in cards_cards[1:]:
+
+        last = Card.objects.all().count()
+
+        for line in cards[last + 1:]:
             if line:
                 try:
                     passive_card_ability_id = line[14]
@@ -119,16 +113,23 @@ class Command(BaseCommand):
 
         self.stdout.write(self.style.SUCCESS(f'Успешно, {success}'))
         self.stdout.write(self.style.ERROR(f'Провалено, {failed}'))
-        # -----------------------------------------------------------
 
-        # ЗАГРУЗКА cards.Deck (base-deck)
-        cards_deck = data["Cards.Deck"]
-        # print(cards_deck)
 
+# ЗАГРУЗКА cards.Deck (base-deck)
+def cards_base_deck(self, data):
+    deck = data["Cards.Deck"]
+    # print(deck)
+
+    with transaction.atomic():
         success = 0
         failed = 0
         self.stdout.write(self.style.SUCCESS(f'Загружаем cards.Deck'))
-        for line in cards_deck[1:]:
+
+        last = Deck.objects.last()
+        if last:
+            return
+
+        for line in deck[1:]:
             if line:
                 try:
                     Deck.objects.create(
@@ -143,15 +144,22 @@ class Command(BaseCommand):
 
         self.stdout.write(self.style.SUCCESS(f'Успешно, {success}'))
         self.stdout.write(self.style.ERROR(f'Провалено, {failed}'))
-        # -----------------------------------------------------------
 
-        # ЗАГРУЗКА cards.CardDeck (for base-deck)
-        cards_carddeck = data["Cards.CardDeck"]
-        # print(cards_carddeck)
 
+# ЗАГРУЗКА cards.CardDeck (for base-deck)
+def cards_carddeck_base(self, data):
+    cards_carddeck = data["Cards.CardDeck"]
+    # print(cards_carddeck)
+
+    with transaction.atomic():
         success = 0
         failed = 0
         self.stdout.write(self.style.SUCCESS(f'Загружаем cards.CardDeck'))
+
+        last = CardDeck.objects.last()
+        if last:
+            return
+
         for line in cards_carddeck[1:]:
             if line:
                 try:
@@ -166,4 +174,26 @@ class Command(BaseCommand):
 
         self.stdout.write(self.style.SUCCESS(f'Успешно, {success}'))
         self.stdout.write(self.style.ERROR(f'Провалено, {failed}'))
-        # -----------------------------------------------------------
+
+
+class Command(BaseCommand):
+    help = 'cards: Leaders, Cards, Decks(base-deck)+CardDeck'
+
+    def add_arguments(self, parser):
+        parser.add_argument(
+            "--path",
+            dest="path",
+        )
+
+    def handle(self, *args, **options):
+        path = options.get("path")
+
+        if path:
+            data = get_data(f"{path}/database.ods")
+        else:
+            data = get_data("database.ods")
+
+        cards_leaders(self, data)
+        cards_cards(self, data)
+        cards_base_deck(self, data)
+        cards_carddeck_base(self, data)
