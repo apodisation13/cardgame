@@ -8,7 +8,6 @@ from apps.cards.models import Card, CardDeck, Deck, Leader
 # ЗАГРУЗКА cards.Leader
 def cards_leaders(self, data):
     leaders = data["Cards.Leader"]
-    # print(cards_leaders)
 
     with transaction.atomic():
         success = 0
@@ -20,32 +19,18 @@ def cards_leaders(self, data):
         for line in leaders[last + 1:]:
             if line:
                 try:
-                    p_l_a_id = line[9]
-                    if p_l_a_id != "NULL":
-                        Leader.objects.create(
-                            name=line[1],
-                            unlocked=line[2],
-                            faction_id=line[3],
-                            ability_id=line[4],
-                            damage=line[5],
-                            charges=line[6],
-                            image=line[7],
-                            has_passive=line[8],
-                            passive_ability_id=p_l_a_id,
-                        )
-                        success += 1
-                    else:
-                        Leader.objects.create(
-                            name=line[1],
-                            unlocked=line[2],
-                            faction_id=line[3],
-                            ability_id=line[4],
-                            damage=line[5],
-                            charges=line[6],
-                            image=line[7],
-                            has_passive=line[8],
-                        )
-                        success += 1
+                    Leader.objects.create(
+                        name=line[1],
+                        unlocked=line[2],
+                        faction_id=line[3],
+                        ability_id=line[4],
+                        damage=line[5],
+                        charges=line[6],
+                        image=line[7],
+                        has_passive=line[8],
+                        passive_ability_id=line[9] if line[9] != "NULL" else None,
+                    )
+                    success += 1
                 except Exception as e:
                     self.stdout.write(self.style.ERROR(e))
                     failed += 1
@@ -57,7 +42,6 @@ def cards_leaders(self, data):
 # ЗАГРУЗКА cards.Card
 def cards_cards(self, data):
     cards = data["Cards.Card"]
-    # print(cards)
 
     with transaction.atomic():
         success = 0
@@ -69,44 +53,24 @@ def cards_cards(self, data):
         for line in cards[last + 1:]:
             if line:
                 try:
-                    passive_card_ability_id = line[14]
-                    if passive_card_ability_id != "NULL":
-                        Card.objects.create(
-                            name=line[1],
-                            unlocked=line[2],
-                            faction_id=line[3],
-                            color_id=line[4],
-                            type_id=line[5],
-                            ability_id=line[6],
-                            damage=line[7],
-                            charges=line[8],
-                            hp=line[9],
-                            heal=line[10],
-                            image=line[11],
-                            has_passive=line[12],
-                            has_passive_in_hand=line[13],
-                            passive_ability_id=passive_card_ability_id,
-                            timer=line[15],
-                        )
-                        success += 1
-                    else:
-                        Card.objects.create(
-                            name=line[1],
-                            unlocked=line[2],
-                            faction_id=line[3],
-                            color_id=line[4],
-                            type_id=line[5],
-                            ability_id=line[6],
-                            damage=line[7],
-                            charges=line[8],
-                            hp=line[9],
-                            heal=line[10],
-                            image=line[11],
-                            has_passive=line[12],
-                            has_passive_in_hand=line[13],
-                            timer=line[15],
-                        )
-                        success += 1
+                    Card.objects.create(
+                        name=line[1],
+                        unlocked=line[2],
+                        faction_id=line[3],
+                        color_id=line[4],
+                        type_id=line[5],
+                        ability_id=line[6],
+                        damage=line[7],
+                        charges=line[8],
+                        hp=line[9],
+                        heal=line[10],
+                        image=line[11],
+                        has_passive=line[12],
+                        has_passive_in_hand=line[13],
+                        passive_ability_id=line[14] if line[14] != "NULL" else None,
+                        timer=line[15],
+                    )
+                    success += 1
                 except Exception as e:
                     self.stdout.write(self.style.ERROR(e))
                     failed += 1

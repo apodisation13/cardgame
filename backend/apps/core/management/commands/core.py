@@ -18,20 +18,15 @@ from apps.core.models import (
 # ЗАГРУЗКА core.Faction
 def core_factions(self, data):
     factions = data["Faction"]
-    # print(factions)
 
     with transaction.atomic():
         success = 0
         failed = 0
         self.stdout.write(self.style.SUCCESS(f'Загружаем CardFaction'))
 
-        last_faction = Faction.objects.last()
-        if last_faction:
-            start = last_faction.pk
-        else:
-            start = 0
+        last = Faction.objects.all().count()
 
-        for line in factions[start + 1:]:
+        for line in factions[last + 1:]:
             if line:
                 try:
                     Faction.objects.create(
@@ -49,20 +44,15 @@ def core_factions(self, data):
 # Загрузка core.Color
 def core_colors(self, data):
     colors = data["Color"]
-    # print(colors)
 
     with transaction.atomic():
         success = 0
         failed = 0
         self.stdout.write(self.style.SUCCESS(f'Загружаем CardColor'))
 
-        last_color = Color.objects.last()
-        if last_color:
-            start = last_color.pk
-        else:
-            start = 0
+        last = Color.objects.all().count()
 
-        for line in colors[start + 1:]:
+        for line in colors[last + 1:]:
             if line:
                 try:
                     Color.objects.create(
@@ -80,20 +70,15 @@ def core_colors(self, data):
 # Загрузка cards.Type
 def core_types(self, data):
     card_types = data["Type"]
-    # print(card_types)
 
     with transaction.atomic():
         success = 0
         failed = 0
         self.stdout.write(self.style.SUCCESS(f'Загружаем CardType'))
 
-        last_type = Type.objects.last()
-        if last_type:
-            start = last_type.pk
-        else:
-            start = 0
+        last = Type.objects.all().count()
 
-        for line in card_types[start + 1:]:
+        for line in card_types[last + 1:]:
             if line:
                 try:
                     Type.objects.create(
@@ -111,20 +96,15 @@ def core_types(self, data):
 # ЗАГРУЗКА cards.Ability
 def core_abilities(self, data):
     cards_ability = data["Ability"]
-    # print(cards_ability)
 
     with transaction.atomic():
         success = 0
         failed = 0
         self.stdout.write(self.style.SUCCESS(f'Загружаем CardAbility'))
 
-        last_ability = Ability.objects.last()
-        if last_ability:
-            start = last_ability.pk
-        else:
-            start = 0
+        last = Ability.objects.all().count()
 
-        for line in cards_ability[start + 1:]:
+        for line in cards_ability[last + 1:]:
             if line:
                 try:
                     Ability.objects.create(
@@ -143,20 +123,15 @@ def core_abilities(self, data):
 # ЗАГРУЗКА CardPassiveAbility
 def core_passive_abilities(self, data):
     cards_passive_ability = data["CardPassiveAbility"]
-    # print(cards_ability)
 
     with transaction.atomic():
         success = 0
         failed = 0
         self.stdout.write(self.style.SUCCESS(f'Загружаем CardPassiveAbility'))
 
-        last_pa = PassiveAbility.objects.last()
-        if last_pa:
-            start = last_pa.pk
-        else:
-            start = 0
+        last = PassiveAbility.objects.all().count()
 
-        for line in cards_passive_ability[start + 1:]:
+        for line in cards_passive_ability[last + 1:]:
             if line:
                 try:
                     PassiveAbility.objects.create(
@@ -175,20 +150,15 @@ def core_passive_abilities(self, data):
 # Загрузка enemies.Move
 def core_enemies_move(self, data):
     enemies_moves = data["Move"]
-    # print(enemies_moves)
 
     with transaction.atomic():
         success = 0
         failed = 0
         self.stdout.write(self.style.SUCCESS(f'Загружаем EnemyMove'))
 
-        last_move = Move.objects.last()
-        if last_move:
-            start = last_move.pk
-        else:
-            start = 0
+        last = Move.objects.all().count()
 
-        for line in enemies_moves[start + 1:]:
+        for line in enemies_moves[last + 1:]:
             if line:
                 try:
                     Move.objects.create(
@@ -207,20 +177,15 @@ def core_enemies_move(self, data):
 # Загрузка enemies.EnemyPassiveAbility
 def core_enemy_passive_ability(self, data):
     enemies_enemy_passive_abilities = data["EnemyPassiveAbility"]
-    # print(enemies_enemy_passive_abilities)
 
     with transaction.atomic():
         success = 0
         failed = 0
         self.stdout.write(self.style.SUCCESS(f'Загружаем EnemyPassiveAbility'))
 
-        last = EnemyPassiveAbility.objects.last()
-        if last:
-            start = last.pk
-        else:
-            start = 0
+        last = EnemyPassiveAbility.objects.all().count()
 
-        for line in enemies_enemy_passive_abilities[start + 1:]:
+        for line in enemies_enemy_passive_abilities[last + 1:]:
             if line:
                 try:
                     EnemyPassiveAbility.objects.create(
@@ -239,20 +204,15 @@ def core_enemy_passive_ability(self, data):
 # Загрузка enemies.EnemyLeaderAbility
 def core_enemy_leader_ability(self, data):
     enemies_enemy_leader_abilities = data["EnemyLeaderAbility"]
-    # print(enemies_enemy_leader_abilities)
 
     with transaction.atomic():
         success = 0
         failed = 0
         self.stdout.write(self.style.SUCCESS(f'Загружаем EnemyLeaderAbility'))
 
-        last = EnemyLeaderAbility.objects.last()
-        if last:
-            start = last.pk
-        else:
-            start = 0
+        last = EnemyLeaderAbility.objects.all().count()
 
-        for line in enemies_enemy_leader_abilities[start + 1:]:
+        for line in enemies_enemy_leader_abilities[last + 1:]:
             if line:
                 try:
                     EnemyLeaderAbility.objects.create(
@@ -271,20 +231,15 @@ def core_enemy_leader_ability(self, data):
 # Загрузка enemies.Deathwish
 def core_deathwish(self, data):
     deathwishes = data["Deathwish"]
-    # print(deathwishes)
 
     with transaction.atomic():
         success = 0
         failed = 0
         self.stdout.write(self.style.SUCCESS(f'Загружаем EnemyDeathwish'))
 
-        last = Deathwish.objects.last()
-        if last:
-            start = last.pk
-        else:
-            start = 0
+        last = Deathwish.objects.all().count()
 
-        for line in deathwishes[start + 1:]:
+        for line in deathwishes[last + 1:]:
             if line:
                 try:
                     Deathwish.objects.create(
