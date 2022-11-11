@@ -1,3 +1,5 @@
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework import mixins
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
@@ -14,6 +16,12 @@ class UserDatabaseViewSet(GenericViewSet, mixins.RetrieveModelMixin):
     """user_database, id: user_id"""
     authentication_classes = [TokenAuthentication]
 
+    @extend_schema(
+        parameters=[
+          OpenApiParameter("id", OpenApiTypes.INT, OpenApiParameter.PATH), # path variable type was overridden
+        ],
+        responses=DatabaseSerializer,
+    )
     def retrieve(self, request, *args, **kwargs):
         user_database = CustomUser.objects.filter(pk=kwargs["pk"]).first()
         self.check_object_permissions(request, user_database)  # проверка разрешений!
