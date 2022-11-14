@@ -14,7 +14,8 @@ class EnemyLeaderAdmin(admin.ModelAdmin):
 @admin.register(Enemy)
 class EnemyAdmin(admin.ModelAdmin):
     model = Enemy
-    list_filter = ("faction_id", "color_id", "move_id", "has_passive", "passive_ability_id")
+    list_filter = ("faction_id", "color_id", "move_id", "has_passive", "passive_ability_id",
+                   "has_deathwish", "deathwish")
     list_display = [field.name for field in Enemy._meta.fields]
     list_display_links = [field.name for field in Enemy._meta.fields]
 
