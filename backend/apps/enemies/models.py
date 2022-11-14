@@ -46,6 +46,9 @@ class Enemy(models.Model):
         return f'{self.id}:{self.name}, {self.faction}, {self.color}, ' \
                f'damage {self.damage}, hp {self.hp}, move {self.move.name}, shield {self.shield}'
 
+    class Meta:
+        verbose_name_plural = 'enemies'
+
 
 class EnemyLeader(models.Model):
     name = models.CharField(max_length=64, blank=False, null=False, unique=True)
