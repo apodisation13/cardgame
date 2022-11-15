@@ -1,7 +1,7 @@
 from apps.cards.models import Leader, UserLeader, Card, UserCard
 
 
-def get_user_cards(self, user_id, card_serializer):
+def get_cards_for_user(self, user_id, card_serializer):
     """
     Принимает на вход self из сериализатора, user_id и сериализатор карт.
     Возвращает все карты!
@@ -34,7 +34,7 @@ def get_user_cards(self, user_id, card_serializer):
     return cards
 
 
-def get_user_leaders(self, user_id, leader_serializer):
+def get_leaders_for_user(self, user_id, leader_serializer):
     """
     Принимает на вход self из сериализатора, user_id и сериализатор лидеров.
     Возвращает все карты лидеров!

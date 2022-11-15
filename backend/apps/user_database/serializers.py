@@ -6,7 +6,7 @@ from apps.cards.serializers import CardSerializer, DeckSerializer, LeaderSeriali
 from apps.core.serializers import GameConstSerializer
 from apps.enemies.serializers import EnemyLeaderSerializer, EnemySerializer, SeasonSerializer
 
-from .utils import get_user_cards, get_user_leaders
+from .utils import get_cards_for_user, get_leaders_for_user
 
 
 class UserDecksThroughSerializer(serializers.ModelSerializer):
@@ -38,10 +38,10 @@ class UserDatabaseSerializer(serializers.ModelSerializer):
         )
 
     def get_cards(self, user):
-        return get_user_cards(self=self, user_id=user.id, card_serializer=CardSerializer)
+        return get_cards_for_user(self=self, user_id=user.id, card_serializer=CardSerializer)
 
     def get_leaders(self, user):
-        return get_user_leaders(self=self, user_id=user.id, leader_serializer=LeaderSerializer)
+        return get_leaders_for_user(self=self, user_id=user.id, leader_serializer=LeaderSerializer)
 
     # def get_levels(self, user):
     #     levels = get_opened_user_levels(self=self, user_id=user.id, level_serializer=LevelSerializer)

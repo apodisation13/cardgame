@@ -1,7 +1,10 @@
+from collections import OrderedDict
 from rest_framework import serializers
 
 from apps.cards.models import Card, CardDeck, Deck, Leader, UserCard, UserDeck, UserLeader
 from apps.core.serializers import AbilitySerializer, PassiveAbilitySerializer
+
+from apps.user_database.utils import get_leaders_for_user, get_cards_for_user
 
 
 class CardSerializer(serializers.ModelSerializer):
@@ -38,7 +41,6 @@ class CardSerializer(serializers.ModelSerializer):
 
 
 class CardDeckSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = CardDeck
         fields = ("card", )
@@ -131,7 +133,6 @@ class DeckSerializer(serializers.ModelSerializer):
 
 
 class CraftUserCardSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = UserCard
         fields = ("id", "user", "card", "count")
@@ -142,7 +143,6 @@ class CraftUserCardSerializer(serializers.ModelSerializer):
 
 
 class MillUserCardSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = UserCard
         fields = ("id", "user", "card", "count")
@@ -158,7 +158,6 @@ class MillUserCardSerializer(serializers.ModelSerializer):
 
 
 class CraftUserLeaderSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = UserLeader
         fields = ("id", "user", "leader", "count")
@@ -167,9 +166,14 @@ class CraftUserLeaderSerializer(serializers.ModelSerializer):
         validated_data['count'] += 1  # ВОТ ЭТО САМОЕ ГЛАВНОЕ! Увеличиваем на 1 запас ЭТОЙ КАРТЫ у юзера
         return super().update(instance, validated_data)
 
+    def to_representation(self, instance):
+        return OrderedDict(leaders=get_leaders_for_user(
+            self=self, user_id=instance.user_id,
+            leader_serializer=LeaderSerializer
+        ))
+
 
 class MillUserLeaderSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = UserLeader
         fields = ("id", "user", "leader", "count")
@@ -182,6 +186,12 @@ class MillUserLeaderSerializer(serializers.ModelSerializer):
 
         instance.delete()
         return instance
+
+    def to_representation(self, instance):
+        return OrderedDict(leaders=get_leaders_for_user(
+            self=self, user_id=instance.user_id,
+            leader_serializer=LeaderSerializer
+        ))
 
 
 class UserDeckSerializer(serializers.ModelSerializer):
