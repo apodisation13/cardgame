@@ -1,4 +1,7 @@
 from collections import OrderedDict
+
+# from drf_spectacular.utils import F
+from django.db.models import F
 from rest_framework import serializers
 
 from apps.cards.models import Card, CardDeck, Deck, Leader, UserCard, UserDeck, UserLeader
@@ -163,14 +166,16 @@ class CraftUserLeaderSerializer(serializers.ModelSerializer):
         fields = ("id", "user", "leader", "count")
 
     def update(self, instance, validated_data):
-        validated_data['count'] += 1  # ВОТ ЭТО САМОЕ ГЛАВНОЕ! Увеличиваем на 1 запас ЭТОЙ КАРТЫ у юзера
-        return super().update(instance, validated_data)
+        instance.count = F('count') + 1  # ВОТ ЭТО САМОЕ ГЛАВНОЕ! Увеличиваем на 1 запас ЭТОЙ КАРТЫ у юзера
+        instance.save()
+        instance.refresh_from_db()
+        return instance
 
     def to_representation(self, instance):
-        return OrderedDict(leaders=get_leaders_for_user(
+        return {"leaders": get_leaders_for_user(
             self=self, user_id=instance.user_id,
             leader_serializer=LeaderSerializer
-        ))
+        )}
 
 
 class MillUserLeaderSerializer(serializers.ModelSerializer):
@@ -179,19 +184,20 @@ class MillUserLeaderSerializer(serializers.ModelSerializer):
         fields = ("id", "user", "leader", "count")
 
     def update(self, instance, validated_data):
-        validated_data['count'] -= 1
+        instance.count = F('count') - 1
+        instance.save()
+        instance.refresh_from_db()
 
-        if validated_data['count'] != 0:
-            return super().update(instance, validated_data)
+        if not instance.count:
+            instance.delete()
 
-        instance.delete()
         return instance
 
     def to_representation(self, instance):
-        return OrderedDict(leaders=get_leaders_for_user(
+        return {"leaders": get_leaders_for_user(
             self=self, user_id=instance.user_id,
             leader_serializer=LeaderSerializer
-        ))
+        )}
 
 
 class UserDeckSerializer(serializers.ModelSerializer):
