@@ -11,18 +11,18 @@ class UserCardInLine(admin.TabularInline):
     extra = 0
 
 
-class LevelInline(admin.TabularInline):
+class UserLevelInline(admin.TabularInline):
     model = UserLevel
     extra = 0
 
 
-class LeaderInline(admin.TabularInline):
+class UserLeaderInline(admin.TabularInline):
     model = UserLeader
     extra = 0
 
 
 class CustomUserAdmin(UserAdmin):
-    inlines = [UserCardInLine, LeaderInline, LevelInline, ]
+    inlines = [UserCardInLine, UserLeaderInline, UserLevelInline, ]
     fieldsets = UserAdmin.fieldsets + (
         ('Resources', {'fields': ('scraps', 'wood', 'kegs', 'big_kegs', 'chests', 'keys')}),
     )

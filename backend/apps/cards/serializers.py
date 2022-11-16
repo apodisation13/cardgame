@@ -154,6 +154,11 @@ class MillUserCardSerializer(serializers.ModelSerializer):
         model = UserCard
         fields = ("id", "user", "card", "count")
 
+    def validate(self, attrs):
+        if self.instance.card.unlocked and self.instance.count == 1:
+            raise serializers.ValidationError("Нельзя уничтожить карту из стартового набора")
+        return attrs
+
     def update(self, instance, validated_data):
         instance.count = F('count') - 1
         instance.save()
@@ -193,6 +198,11 @@ class MillUserLeaderSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserLeader
         fields = ("id", "user", "leader", "count")
+
+    def validate(self, attrs):
+        if self.instance.leader.unlocked and self.instance.count == 1:
+            raise serializers.ValidationError("Нельзя уничтожить карту лидера из стартового набора")
+        return attrs
 
     def update(self, instance, validated_data):
         instance.count = F('count') - 1

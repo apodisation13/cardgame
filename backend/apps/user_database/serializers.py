@@ -5,8 +5,7 @@ from apps.cards.models import UserDeck
 from apps.cards.serializers import CardSerializer, DeckSerializer, LeaderSerializer
 from apps.core.serializers import GameConstSerializer
 from apps.enemies.serializers import EnemyLeaderSerializer, EnemySerializer, SeasonSerializer
-
-from .utils import get_cards_for_user, get_leaders_for_user
+from apps.user_database.utils import get_cards_for_user, get_leaders_for_user
 
 
 class UserDecksThroughSerializer(serializers.ModelSerializer):
