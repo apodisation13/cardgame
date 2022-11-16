@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from apps.accounts.models import CustomUser
-from apps.cards.models import Card, Leader, UserCard, UserDeck, UserLeader
+from apps.cards.models import UserDeck
 from apps.cards.serializers import CardSerializer, DeckSerializer, LeaderSerializer
 from apps.core.serializers import GameConstSerializer
 from apps.enemies.serializers import EnemyLeaderSerializer, EnemySerializer, SeasonSerializer

@@ -1,4 +1,4 @@
-from apps.cards.models import Leader, UserLeader, Card, UserCard
+from apps.cards.models import Card, Leader, UserCard, UserLeader
 
 
 def get_cards_for_user(self, user_id, card_serializer):

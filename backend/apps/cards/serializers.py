@@ -1,13 +1,9 @@
-from collections import OrderedDict
-
-# from drf_spectacular.utils import F
 from django.db.models import F
 from rest_framework import serializers
 
 from apps.cards.models import Card, CardDeck, Deck, Leader, UserCard, UserDeck, UserLeader
 from apps.core.serializers import AbilitySerializer, PassiveAbilitySerializer
-
-from apps.user_database.utils import get_leaders_for_user, get_cards_for_user
+from apps.user_database.utils import get_cards_for_user, get_leaders_for_user
 
 
 class CardSerializer(serializers.ModelSerializer):
