@@ -141,8 +141,16 @@ class CraftUserCardSerializer(serializers.ModelSerializer):
         fields = ("id", "user", "card", "count")
 
     def update(self, instance, validated_data):
-        validated_data['count'] += 1  # ВОТ ЭТО САМОЕ ГЛАВНОЕ! Увеличиваем на 1 запас ЭТОЙ КАРТЫ у юзера
-        return super().update(instance, validated_data)
+        instance.count = F('count') + 1  # ВОТ ЭТО САМОЕ ГЛАВНОЕ! Увеличиваем на 1 запас ЭТОЙ КАРТЫ у юзера
+        instance.save()
+        instance.refresh_from_db()
+        return instance
+
+    def to_representation(self, instance):
+        return {"cards": get_cards_for_user(
+            self=self, user_id=instance.user_id,
+            card_serializer=CardSerializer
+        )}
 
 
 class MillUserCardSerializer(serializers.ModelSerializer):
@@ -151,13 +159,20 @@ class MillUserCardSerializer(serializers.ModelSerializer):
         fields = ("id", "user", "card", "count")
 
     def update(self, instance, validated_data):
-        validated_data['count'] -= 1
+        instance.count = F('count') - 1
+        instance.save()
+        instance.refresh_from_db()
 
-        if validated_data['count'] != 0:
-            return super().update(instance, validated_data)
+        if not instance.count:
+            instance.delete()
 
-        instance.delete()
         return instance
+
+    def to_representation(self, instance):
+        return {"cards": get_cards_for_user(
+            self=self, user_id=instance.user_id,
+            card_serializer=CardSerializer
+        )}
 
 
 class CraftUserLeaderSerializer(serializers.ModelSerializer):
