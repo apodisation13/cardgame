@@ -33,6 +33,9 @@ class Ability(models.Model):
     def __str__(self):
         return f'{self.id} - {self.name}'
 
+    class Meta:
+        verbose_name_plural = 'abilities'
+
 
 class PassiveAbility(models.Model):
     """пассивные способности карт и лидеров"""
@@ -41,6 +44,9 @@ class PassiveAbility(models.Model):
 
     def __str__(self):
         return f'{self.id} - {self.name}'
+
+    class Meta:
+        verbose_name_plural = 'passive abilities'
 
 
 class Move(models.Model):
@@ -60,6 +66,9 @@ class EnemyPassiveAbility(models.Model):
     def __str__(self):
         return f'{self.id} - {self.name}'
 
+    class Meta:
+        verbose_name_plural = 'enemy passive abilities'
+
 
 class EnemyLeaderAbility(models.Model):
     """способности лидеров врагов"""
@@ -68,6 +77,9 @@ class EnemyLeaderAbility(models.Model):
 
     def __str__(self):
         return f'{self.id} - {self.name}'
+
+    class Meta:
+        verbose_name_plural = 'enemy leader abilities'
 
 
 class GameConst(models.Model):
