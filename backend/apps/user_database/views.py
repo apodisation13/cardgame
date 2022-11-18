@@ -18,7 +18,7 @@ class UserDatabaseViewSet(GenericViewSet, mixins.RetrieveModelMixin):
 
     @extend_schema(
         parameters=[
-          OpenApiParameter("id", OpenApiTypes.INT, OpenApiParameter.PATH),
+            OpenApiParameter("id", OpenApiTypes.INT, OpenApiParameter.PATH),
         ],
         responses=DatabaseSerializer,
     )
