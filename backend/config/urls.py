@@ -2,10 +2,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
 from apps.accounts.views import CustomAuthToken
 from config.api_docs import urlpatterns as api_docs_urlpatterns
-from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
 urlpatterns = api_docs_urlpatterns + [
     path('admin/', admin.site.urls),
