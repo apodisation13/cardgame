@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from apps.accounts.models import CustomUser
@@ -35,6 +36,7 @@ class UserDatabaseSerializer(serializers.ModelSerializer):
             "u_d",
         )
 
+    @extend_schema_field(CardSerializer(many=True))
     def get_cards(self, user):
         user_id = user.id
         all_cards = Card.objects.select_related("faction", "color", "type", "ability", "passive_ability").all()
@@ -57,6 +59,7 @@ class UserDatabaseSerializer(serializers.ModelSerializer):
         print(len(cards), "КАРТЫ")
         return cards
 
+    @extend_schema_field(LeaderSerializer(many=True))
     def get_leaders(self, user):
         user_id = user.id
         all_leaders = Leader.objects.select_related("faction", "ability", "passive_ability").all()
