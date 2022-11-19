@@ -38,6 +38,7 @@ SERVICE_APPS = [
     "drf_yasg",
     'corsheaders',  # для headers - см.ниже переменную CORS_ALLOWED_ORIGINS + Middleware
     'rest_framework.authtoken',
+    'drf_spectacular',
 ]
 
 APPS = [
@@ -184,7 +185,10 @@ REST_FRAMEWORK = {
     ],
     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     # 'PAGE_SIZE': 20,  # количество элементов на одной странице для пагинации
+
     'TEST_REQUEST_DEFAULT_FORMAT': 'json',
+
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 USE_X_FORWARDED_HOST = True
@@ -194,4 +198,16 @@ SWAGGER_SETTINGS = {
     'LOGIN_URL': '/admin/login/',
     'LOGOUT_URL': '/admin/logout/',
     'DEFAULT_INFO': 'config.api_docs.openapi_info',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Cardgame API',
+    'DESCRIPTION': 'Cardgame API',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    'SCHEMA_PATH_PREFIX': '/api/v[0-9]',
+    'SWAGGER_UI_SETTINGS': {
+        'persistAuthorization': True,
+    },
+
 }

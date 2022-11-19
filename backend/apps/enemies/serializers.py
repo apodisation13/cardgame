@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from apps.core.serializers import (
@@ -141,6 +142,7 @@ class SeasonSerializer(serializers.ModelSerializer):
         model = Season
         fields = ("id", "name", "description", "levels")
 
+    @extend_schema_field(LevelSerializer(many=True))
     def get_levels(self, season):
         user = self.context["request"].user
         levels = get_opened_user_levels(

@@ -1,4 +1,6 @@
 from django.db.models import F
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from apps.cards.models import Card, CardDeck, Deck, Leader, UserCard, UserDeck, UserLeader
@@ -35,6 +37,7 @@ class CardSerializer(serializers.ModelSerializer):
             "timer",
         )
 
+    @extend_schema_field(OpenApiTypes.URI)
     def get_image(self, obj):
         return self.context['request'].build_absolute_uri(obj.image.url)
 
@@ -66,6 +69,7 @@ class LeaderSerializer(serializers.ModelSerializer):
             "passive_ability"
         )
 
+    @extend_schema_field(OpenApiTypes.URI)
     def get_image(self, obj):
         return self.context['request'].build_absolute_uri(obj.image.url)
 
@@ -122,6 +126,7 @@ class DeckSerializer(serializers.ModelSerializer):
 
         return deck
 
+    @extend_schema_field(CardSerializer(many=True))
     def get_cards(self, obj):
         # print(CardSerializer(obj.cards, many=True, context={"request": self.context["request"]}).data)
         c = []
