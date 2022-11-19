@@ -33,7 +33,7 @@ class LevelViewSet(GenericViewSet, mixins.ListModelMixin):
     serializer_class = LevelSerializer
 
 
-class UnlockLevelsViewSet(GenericViewSet, mixins.CreateModelMixin, mixins.UpdateModelMixin):
+class UnlockLevelsViewSet(GenericViewSet, mixins.UpdateModelMixin):
     queryset = UserLevel.objects.all()
     serializer_class = UnlockLevelsSerializer
     authentication_classes = [TokenAuthentication]

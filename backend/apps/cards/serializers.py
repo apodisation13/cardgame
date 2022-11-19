@@ -130,7 +130,7 @@ class DeckSerializer(serializers.ModelSerializer):
     def get_cards(self, obj):
         # print(CardSerializer(obj.cards, many=True, context={"request": self.context["request"]}).data)
         c = []
-        for u in obj.cards.all():
+        for u in obj.cards.select_related("faction", "color", "type", "ability", "passive_ability").all():
             s = {'card': CardSerializer(u, context={'request': self.context.get('request')}).data, "count": 1}
             c.append(s)
         return c

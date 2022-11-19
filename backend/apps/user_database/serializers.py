@@ -21,7 +21,6 @@ class UserDecksThroughSerializer(serializers.ModelSerializer):
 class UserDatabaseSerializer(serializers.ModelSerializer):
     cards = serializers.SerializerMethodField()
     leaders = serializers.SerializerMethodField()
-    # levels = serializers.SerializerMethodField()
 
     u_d = UserDecksThroughSerializer(many=True)
 
@@ -44,10 +43,6 @@ class UserDatabaseSerializer(serializers.ModelSerializer):
     @extend_schema_field(LeaderSerializer(many=True))
     def get_leaders(self, user):
         return get_leaders_for_user(self=self, user_id=user.id, leader_serializer=LeaderSerializer)
-
-    # def get_levels(self, user):
-    #     levels = get_opened_user_levels(self=self, user_id=user.id, level_serializer=LevelSerializer)
-    #     return levels
 
 
 class UserResourceSerializer(serializers.ModelSerializer):
