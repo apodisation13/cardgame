@@ -50,7 +50,7 @@ def get_leaders_for_user(self, user_id, leader_serializer):
         for user_leader in user_leaders:
             if leader.pk == user_leader["leader__pk"]:
                 leaders.append({
-                    "card": leader_serializer(leader, context={
+                    "leader": leader_serializer(leader, context={
                         "request": self.context["request"]}).data,
                     "count": user_leader["count"],
                     "id": user_leader["pk"],
@@ -59,7 +59,7 @@ def get_leaders_for_user(self, user_id, leader_serializer):
                 break
         else:
             leaders.append({
-                "card": leader_serializer(leader, context={
+                "leader": leader_serializer(leader, context={
                     "request": self.context["request"]}).data,
                 "count": 0,
             })
