@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 from apps.accounts.models import CustomUser
-from apps.cards.models import UserCard, UserLeader
+from apps.cards.models import UserCard, UserDeck, UserLeader
 from apps.enemies.models import UserLevel
 
 
@@ -21,8 +21,13 @@ class UserLeaderInline(admin.TabularInline):
     extra = 0
 
 
+class UserDeckInline(admin.TabularInline):
+    model = UserDeck
+    extra = 0
+
+
 class CustomUserAdmin(UserAdmin):
-    inlines = [UserCardInLine, UserLeaderInline, UserLevelInline, ]
+    inlines = [UserCardInLine, UserLeaderInline, UserLevelInline, UserDeckInline]
     fieldsets = UserAdmin.fieldsets + (
         ('Resources', {'fields': ('scraps', 'wood', 'kegs', 'big_kegs', 'chests', 'keys')}),
     )
