@@ -1,4 +1,4 @@
-from rest_framework import mixins
+from rest_framework import mixins, status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
@@ -60,20 +60,21 @@ class DeckViewSet(DeckBaseMixin,
     def get_serializer_context(self):
         return {'request': self.request}
 
+    def return_all_decks(self, status_code=status.HTTP_200_OK):
+        serializer = self.get_serializer(self.get_queryset(), many=True)
+        return Response(serializer.data, status=status_code)
+
     def create(self, request, *args, **kwargs):
         super().create(request, *args, **kwargs)
-        serializer = self.get_serializer(self.get_queryset(), many=True)
-        return Response(serializer.data)
+        return self.return_all_decks(status_code=status.HTTP_201_CREATED)
 
     def destroy(self, request, *args, **kwargs):
         super().destroy(request, *args, **kwargs)
-        serializer = self.get_serializer(self.get_queryset(), many=True)
-        return Response(serializer.data)
+        return self.return_all_decks()
 
     def update(self, request, *args, **kwargs):
         super().update(request, *args, **kwargs)
-        serializer = self.get_serializer(self.get_queryset(), many=True)
-        return Response(serializer.data)
+        return self.return_all_decks()
 
 
 class CraftUserCardViewSet(CardBaseMixin,
