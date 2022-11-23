@@ -64,15 +64,22 @@ class DeckViewSet(DeckBaseMixin,
         serializer = self.get_serializer(self.get_queryset(), many=True)
         return Response(serializer.data, status=status_code)
 
+    def is_base_deck(self):
+        return self.kwargs.get('pk') == 1
+
     def create(self, request, *args, **kwargs):
         super().create(request, *args, **kwargs)
         return self.return_all_decks(status_code=status.HTTP_201_CREATED)
 
     def destroy(self, request, *args, **kwargs):
+        if self.is_base_deck():
+            return Response({'error': 'Cannot delete base deck'}, status=status.HTTP_403_FORBIDDEN)
         super().destroy(request, *args, **kwargs)
         return self.return_all_decks()
 
     def update(self, request, *args, **kwargs):
+        if self.is_base_deck():
+            return Response({'error': 'Cannot change base deck'}, status=status.HTTP_403_FORBIDDEN)
         super().update(request, *args, **kwargs)
         return self.return_all_decks()
 

@@ -1,12 +1,15 @@
 import pytest
-from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST
+from model_bakery import baker
+from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_403_FORBIDDEN
 
-from apps.cards.models import Card, Leader, UserCard, UserLeader
+from apps.cards.models import Card, Leader, UserCard, UserLeader, Deck, UserDeck, CardDeck
 
 LOCKED_CARD = 1
 UNLOCKED_CARD = 2
 LOCKED_LEADER = 2
 UNLOCKED_LEADER = 1
+INITIAL_DECKS_COUNT = 1
+# INITIAL_DECK_LENGTH = 12
 
 
 @pytest.mark.django_db
@@ -149,3 +152,63 @@ class TestCardsAPI:
                 count = item['count']
                 break
         assert count is None, 'запись удалена'
+
+    @pytest.fixture
+    def deck_factory(self):
+        def factory(*args, **kwargs):
+            return baker.make(Deck, *args, **kwargs)
+        return factory
+
+    def test_create_deck(self, api_client, authenticated_user):
+        user = authenticated_user
+        decks_count = UserDeck.objects.filter(user__id=user.id).count()
+        url = f"/api/v1/decks/"
+        data = {'name': 'test deck', 'd': [{'card': UNLOCKED_CARD}],
+                'leader_id': UNLOCKED_LEADER}
+
+        response = api_client.post(url, data)
+        print(response.data)
+
+        assert response.status_code == HTTP_201_CREATED, 'создание колоды'
+        assert len(response.data) == INITIAL_DECKS_COUNT + 1, 'количество колод юзера увеличилось'
+
+    def test_update_deck(self, api_client, authenticated_user, create_user, deck_factory):
+        user = authenticated_user
+        deck = deck_factory()
+        u_d = UserDeck.objects.filter(user__id=user.id).first()
+        deck_id = u_d.deck.id
+        print(f"deck_id = {deck_id}")
+        deck_length = CardDeck.objects.filter(deck__id=deck_id).count()
+        url = f"/api/v1/decks/{deck_id}/"
+        data = {'name': 'test deck',
+                'd': [{'card': i} for i in range(1, deck_length + 1)],
+                'leader_id': UNLOCKED_LEADER}
+
+        response = api_client.patch(url, data)
+
+        assert response.status_code == HTTP_200_OK, 'изменение своей колоды'
+
+        other_user = create_user()
+        api_client.force_authenticate(other_user)
+        # other_u_d = UserDeck.objects.filter(user__id=other_user.id).first()
+
+        response = api_client.patch(url, data)
+
+        assert response.status_code == HTTP_403_FORBIDDEN, 'изменение чужой колоды'
+
+    def test_delete_deck(self, api_client, authenticated_user, create_user):
+        user = authenticated_user
+        u_d = UserDeck.objects.filter(user__id=user.id).first()
+        deck_id = u_d.deck.id
+        url = f"/api/v1/decks/"
+
+        response = api_client.delete(f"{url}{deck_id}/")
+
+        assert response.status_code == HTTP_200_OK, 'удаление своей колоды'
+
+        other_user = create_user()
+        other_u_d = UserDeck.objects.filter(user__id=other_user.id).first()
+        other_user_deck_id = other_u_d.deck.id
+        response = api_client.patch(f"{url}{other_user_deck_id}/")
+
+        assert response.status_code == HTTP_403_FORBIDDEN, 'удаление чужой колоды'
