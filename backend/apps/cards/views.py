@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema
 from rest_framework import mixins, status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
@@ -7,6 +8,8 @@ from apps.cards.mixins import CardBaseMixin, DeckBaseMixin, LeaderBaseMixin
 from apps.cards.models import Card, Deck, Leader, UserCard, UserDeck, UserLeader
 from apps.cards.serializers import (
     CardSerializer,
+    CraftMillUserCardSerializer,
+    CraftMillUserLeaderSerializer,
     CraftUserCardSerializer,
     CraftUserLeaderSerializer,
     DeckSerializer,
@@ -37,6 +40,7 @@ class LeaderViewSet(GenericViewSet,
         return {'request': self.request}
 
 
+@extend_schema(responses=DeckSerializer(many=True))
 class DeckViewSet(DeckBaseMixin,
                   GenericViewSet,
                   mixins.ListModelMixin,
@@ -65,12 +69,13 @@ class DeckViewSet(DeckBaseMixin,
         return Response(serializer.data, status=status_code)
 
     def is_base_deck(self):
-        return self.kwargs.get('pk') == 1
+        return int(self.kwargs.get('pk')) == 1
 
     def create(self, request, *args, **kwargs):
         super().create(request, *args, **kwargs)
         return self.return_all_decks(status_code=status.HTTP_201_CREATED)
 
+    @extend_schema(responses={200: DeckSerializer(many=True)})
     def destroy(self, request, *args, **kwargs):
         if self.is_base_deck():
             return Response({'error': 'Cannot delete base deck'}, status=status.HTTP_403_FORBIDDEN)
@@ -84,6 +89,7 @@ class DeckViewSet(DeckBaseMixin,
         return self.return_all_decks()
 
 
+@extend_schema(responses=CraftMillUserCardSerializer)
 class CraftUserCardViewSet(CardBaseMixin,
                            GenericViewSet,
                            mixins.ListModelMixin,
@@ -96,6 +102,7 @@ class CraftUserCardViewSet(CardBaseMixin,
     http_method_names = ["get", "post", "patch"]  # убрать метод PUT, который не нужен
 
 
+@extend_schema(responses=CraftMillUserCardSerializer)
 class MillUserCardViewSet(CardBaseMixin,
                           GenericViewSet,
                           mixins.UpdateModelMixin
@@ -106,6 +113,7 @@ class MillUserCardViewSet(CardBaseMixin,
     http_method_names = ["patch"]
 
 
+@extend_schema(responses=CraftMillUserLeaderSerializer)
 class CraftUserLeaderViewSet(LeaderBaseMixin,
                              GenericViewSet,
                              mixins.ListModelMixin,
@@ -118,6 +126,7 @@ class CraftUserLeaderViewSet(LeaderBaseMixin,
     http_method_names = ["get", "post", "patch"]  # убрать метод PUT, который не нужен
 
 
+@extend_schema(responses=CraftMillUserLeaderSerializer)
 class MillUserLeaderViewSet(LeaderBaseMixin,
                             GenericViewSet,
                             mixins.UpdateModelMixin

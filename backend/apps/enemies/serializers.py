@@ -132,6 +132,14 @@ class UnlockLevelsSerializer(serializers.ModelSerializer):
         return instance
 
 
+class SeasonLevelSerializer(serializers.Serializer):
+    """Only for @extend_schema_field"""
+    level = LevelSerializer()
+    id = serializers.IntegerField()
+    unlocked = serializers.BooleanField()
+    finished = serializers.BooleanField()
+
+
 class SeasonSerializer(serializers.ModelSerializer):
     """
     Сериализатор сезонов и уровней в них, включая открытые для юзера
@@ -142,7 +150,7 @@ class SeasonSerializer(serializers.ModelSerializer):
         model = Season
         fields = ("id", "name", "description", "levels")
 
-    @extend_schema_field(LevelSerializer(many=True))
+    @extend_schema_field(SeasonLevelSerializer(many=True))
     def get_levels(self, season):
         user = self.context["request"].user
         levels = get_opened_user_levels(

@@ -3,7 +3,13 @@ from rest_framework import serializers
 
 from apps.accounts.models import CustomUser
 from apps.cards.models import UserDeck
-from apps.cards.serializers import CardSerializer, DeckSerializer, LeaderSerializer
+from apps.cards.serializers import (
+    CardSerializer,
+    DeckSerializer,
+    LeaderSerializer,
+    UserDatabaseCardSerializer,
+    UserDatabaseLeaderSerializer,
+)
 from apps.core.serializers import GameConstSerializer
 from apps.enemies.serializers import EnemyLeaderSerializer, EnemySerializer, SeasonSerializer
 from apps.user_database.utils import get_cards_for_user, get_leaders_for_user
@@ -36,11 +42,11 @@ class UserDatabaseSerializer(serializers.ModelSerializer):
             "u_d",
         )
 
-    @extend_schema_field(CardSerializer(many=True))
+    @extend_schema_field(UserDatabaseCardSerializer(many=True))
     def get_cards(self, user):
         return get_cards_for_user(self=self, user_id=user.id, card_serializer=CardSerializer)
 
-    @extend_schema_field(LeaderSerializer(many=True))
+    @extend_schema_field(UserDatabaseLeaderSerializer(many=True))
     def get_leaders(self, user):
         return get_leaders_for_user(self=self, user_id=user.id, leader_serializer=LeaderSerializer)
 

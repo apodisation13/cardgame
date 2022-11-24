@@ -74,6 +74,12 @@ class LeaderSerializer(serializers.ModelSerializer):
         return self.context['request'].build_absolute_uri(obj.image.url)
 
 
+class DeckCardSerializer(serializers.Serializer):
+    """Only for @extend_schema_field"""
+    card = CardSerializer()
+    count = serializers.IntegerField()
+
+
 class DeckSerializer(serializers.ModelSerializer):
     """здесь мы сохраняем колоду, добавляем CardDeck на неё, добавляем UserDeck через context[request]"""
     d = CardDeckSerializer(many=True, )
@@ -126,7 +132,7 @@ class DeckSerializer(serializers.ModelSerializer):
 
         return deck
 
-    @extend_schema_field(CardSerializer(many=True))
+    @extend_schema_field(DeckCardSerializer(many=True))
     def get_cards(self, obj):
         # print(CardSerializer(obj.cards, many=True, context={"request": self.context["request"]}).data)
         c = []
@@ -232,3 +238,27 @@ class UserDeckSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserDeck
         fields = ("id", "deck", "user")
+
+
+class UserDatabaseCardSerializer(serializers.Serializer):
+    """Only for @extend_schema_field"""
+    card = CardSerializer()
+    count = serializers.IntegerField()
+    id = serializers.IntegerField()
+
+
+class CraftMillUserCardSerializer(serializers.Serializer):
+    """Only for @extend_schema"""
+    cards = UserDatabaseCardSerializer(many=True)
+
+
+class UserDatabaseLeaderSerializer(serializers.Serializer):
+    """Only for @extend_schema_field"""
+    leader = LeaderSerializer()
+    count = serializers.IntegerField()
+    id = serializers.IntegerField()
+
+
+class CraftMillUserLeaderSerializer(serializers.Serializer):
+    """Only for @extend_schema"""
+    leaders = UserDatabaseLeaderSerializer(many=True)
