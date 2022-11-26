@@ -57,11 +57,9 @@ jobs:
       - name: download_db
         script: |
           cd backend
-          
           echo "GOOGLE_DRIVE_FILE_ID=${{ secrets.GOOGLE_DRIVE_FILE_ID }}" > .env
           echo "SERVICE_ACCOUNT_FILE=${{ secrets.SERVICE_ACCOUNT_FILE }}" >> .env
-          
-          python manage.py database
+        run: python manage.py database
 
       - name: test with Pytest
         run: cd backend && pytest
