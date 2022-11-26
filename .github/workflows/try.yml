@@ -56,8 +56,8 @@ jobs:
 
       - name: download_db
         env:
-          GOOGLE_DRIVE_FILE_ID=${{ secrets.GOOGLE_DRIVE_FILE_ID }}
-          SERVICE_ACCOUNT_FILE=${{ secrets.SERVICE_ACCOUNT_FILE }}
+          GOOGLE_DRIVE_FILE_ID: ${{ secrets.GOOGLE_DRIVE_FILE_ID }}
+          SERVICE_ACCOUNT_FILE: ${{ secrets.SERVICE_ACCOUNT_FILE }}
         run: cd backend && python manage.py database
 
       - name: test with Pytest
