@@ -10,7 +10,7 @@ COPY . .
 
 # принимаем аргумент из экшена билда, из секретов и записываем его в этот файл
 ARG GOOGLE_SECRET
-RUN echo "$GOOGLE_SECRET" > google.json
+RUN printf '%s\n' "$GOOGLE_SECRET" > google.json
 
 # Запустить команду внутри образа, установка зависимостей.
 RUN pip install --upgrade pip && pip install -r requirements.txt
