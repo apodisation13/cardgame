@@ -53,13 +53,17 @@ jobs:
         with:
           name: "google.json"
           json: ${{ secrets.GOOGLE_SECRET_JSON }}
+          dir: "backend/"
 
       - name: download_db
         env:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
           GOOGLE_DRIVE_FILE_ID: ${{ secrets.GOOGLE_DRIVE_FILE_ID }}
           SERVICE_ACCOUNT_FILE: ${{ secrets.SERVICE_ACCOUNT_FILE }}
-        run: cd backend && python manage.py database
+        run: | 
+          cd backend 
+          ls -a
+          python manage.py database
 
       - name: test with Pytest
         run: cd backend && pytest
