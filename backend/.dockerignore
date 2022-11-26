@@ -8,6 +8,7 @@
 !requirements.txt
 !run.sh
 !wait.sh
+!google.json
 
 # Override allowed
 .idea/

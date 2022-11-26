@@ -61,9 +61,7 @@ jobs:
           GOOGLE_DRIVE_FILE_ID: ${{ secrets.GOOGLE_DRIVE_FILE_ID }}
           SERVICE_ACCOUNT_FILE: ${{ secrets.SERVICE_ACCOUNT_FILE }}
         run: | 
-          cd backend 
-          ls -a
-          cat google.json
+          cd backend
           python manage.py database
 
       - name: test with Pytest
@@ -102,6 +100,7 @@ jobs:
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.MODE }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: GOOGLE_SECRET=${{ secrets.GOOGLE_SECRET_JSON }}
 
   deploy:
     needs: build
