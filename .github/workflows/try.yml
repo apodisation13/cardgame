@@ -142,6 +142,8 @@ jobs:
             echo "DEBUG=True" >> .env
             echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
             echo "ALLOWED_HOSTS=${{ secrets.DOMAIN_NAME }}" >> .env
+            echo "GOOGLE_DRIVE_FILE_ID=${{ secrets.GOOGLE_DRIVE_FILE_ID }}" >> .env
+            echo "SERVICE_ACCOUNT_FILE=${{ secrets.SERVICE_ACCOUNT_FILE }}" >> .env
 
             declare -a arr=(".env" "docker-compose.yml" "nginx.conf")
             for f in "${arr[@]}"; do chown :developer $f && chmod 660 $f; done
