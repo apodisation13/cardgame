@@ -55,12 +55,10 @@ jobs:
           json: ${{ secrets.GOOGLE_SECRET_JSON }}
 
       - name: download_db
-        run: python manage.py database
-        with:
-          script: |
-            cd backend
-            echo "GOOGLE_DRIVE_FILE_ID=${{ secrets.GOOGLE_DRIVE_FILE_ID }}" > .env
-            echo "SERVICE_ACCOUNT_FILE=${{ secrets.SERVICE_ACCOUNT_FILE }}" >> .env
+        env:
+          GOOGLE_DRIVE_FILE_ID=${{ secrets.GOOGLE_DRIVE_FILE_ID }}
+          SERVICE_ACCOUNT_FILE=${{ secrets.SERVICE_ACCOUNT_FILE }}
+        run: cd backend && python manage.py database
 
       - name: test with Pytest
         run: cd backend && pytest
