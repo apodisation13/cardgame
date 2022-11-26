@@ -47,11 +47,30 @@ jobs:
       - name: Check imports ordering with isort
         run: cd backend && isort -c .
 
+      - name: create-json
+        id: create-json
+        uses: jsdaniell/create-json@v1.2.1
+        with:
+          name: "google.json"
+          json: ${{ secrets.GOOGLE_SECRET_JSON }}
+          dir: "backend/"
+
+      - name: download_db
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          GOOGLE_DRIVE_FILE_ID: ${{ secrets.GOOGLE_DRIVE_FILE_ID }}
+          SERVICE_ACCOUNT_FILE: ${{ secrets.SERVICE_ACCOUNT_FILE }}
+        run: | 
+          cd backend
+          python manage.py database
+
       - name: test with Pytest
-        run: cd backend && pytest
+        run: cd backend && pytest -s
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: secret
+          GOOGLE_DRIVE_FILE_ID: ${{ secrets.GOOGLE_DRIVE_FILE_ID }}
+          SERVICE_ACCOUNT_FILE: ${{ secrets.SERVICE_ACCOUNT_FILE }}
 
   build:
     if: github.event_name == 'push'
@@ -81,6 +100,7 @@ jobs:
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.MODE }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: GOOGLE_SECRET=${{ secrets.GOOGLE_SECRET_JSON }}
 
   deploy:
     needs: build
