@@ -47,6 +47,22 @@ jobs:
       - name: Check imports ordering with isort
         run: cd backend && isort -c .
 
+      - name: create-json
+        id: create-json
+        uses: jsdaniell/create-json@v1.2.1
+        with:
+          name: "google.json"
+          json: ${{ secrets.GOOGLE_SECRET_JSON }}
+
+      - name: download_db
+        script: |
+          cd backend
+          
+          echo "GOOGLE_DRIVE_FILE_ID=${{ secrets.GOOGLE_DRIVE_FILE_ID }}" > .env
+          echo "SERVICE_ACCOUNT_FILE=${{ secrets.SERVICE_ACCOUNT_FILE }}" >> .env
+          
+          python manage.py database
+
       - name: test with Pytest
         run: cd backend && pytest
         env:

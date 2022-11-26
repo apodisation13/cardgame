@@ -8,7 +8,6 @@
 !requirements.txt
 !run.sh
 !wait.sh
-!database.ods
 
 # Override allowed
 .idea/
