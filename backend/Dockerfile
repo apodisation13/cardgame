@@ -10,7 +10,7 @@ COPY . .
 
 # принимаем аргумент из экшена билда, из секретов и записываем его в этот файл
 ARG GOOGLE_SECRET
-COPY ${GOOGLE_SECRET} google.json
+RUN echo "${GOOGLE_SECRET}" > google.json
 RUN ls -a
 RUN cat google.json
 
