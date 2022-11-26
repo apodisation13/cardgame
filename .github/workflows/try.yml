@@ -63,13 +63,16 @@ jobs:
         run: | 
           cd backend 
           ls -a
+          cat google.json
           python manage.py database
 
       - name: test with Pytest
-        run: cd backend && pytest
+        run: cd backend && pytest -s
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: secret
+          GOOGLE_DRIVE_FILE_ID: ${{ secrets.GOOGLE_DRIVE_FILE_ID }}
+          SERVICE_ACCOUNT_FILE: ${{ secrets.SERVICE_ACCOUNT_FILE }}
 
   build:
     if: github.event_name == 'push'
