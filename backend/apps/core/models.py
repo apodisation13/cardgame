@@ -27,7 +27,7 @@ class Type(models.Model):
 
 class Ability(models.Model):
     """способность карты"""
-    name = models.CharField(max_length=32, blank=False, null=False, unique=True)
+    name = models.CharField(max_length=64, blank=False, null=False, unique=True)
     description = models.TextField(blank=True, null=True)
 
     def __str__(self):
