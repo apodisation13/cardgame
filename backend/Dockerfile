@@ -7,6 +7,11 @@ WORKDIR /cardgame
 # Скопировать все файлы с локальной машины внутрь файловой системы виртуального образа.
 COPY . .
 
+
+# принимаем аргумент из экшена билда, из секретов и записываем его в этот файл
+ARG GOOGLE_SECRET
+RUN printf '%s\n' "$GOOGLE_SECRET" > google.json
+
 # Запустить команду внутри образа, установка зависимостей.
 RUN pip install --upgrade pip && pip install -r requirements.txt
 #RUN chmod +x run.sh
