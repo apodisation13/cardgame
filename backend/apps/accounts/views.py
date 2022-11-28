@@ -1,7 +1,5 @@
 from django.contrib.auth.hashers import make_password
 from django.http import HttpResponse
-from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import extend_schema
 from rest_framework import mixins
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
@@ -10,7 +8,7 @@ from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_401_UN
 from rest_framework.viewsets import GenericViewSet
 
 from apps.accounts.models import CustomUser
-from apps.accounts.serializers import AuthTokenResponseSerializer, LoginSerializer, UserSerializer
+from apps.accounts.serializers import LoginSerializer, UserSerializer
 
 
 class CreateUserViewSet(GenericViewSet, mixins.CreateModelMixin):
@@ -38,7 +36,6 @@ class LoginViewSet(GenericViewSet, mixins.CreateModelMixin):
     serializer_class = LoginSerializer
     permission_classes = []
 
-    @extend_schema(responses=OpenApiTypes.NONE)
     def create(self, request, *args, **kwargs):
         data = request.data
 
@@ -54,8 +51,6 @@ class LoginViewSet(GenericViewSet, mixins.CreateModelMixin):
 
 class CustomAuthToken(ObtainAuthToken):
 
-    @extend_schema(request={'application/json': ObtainAuthToken.serializer_class},
-                   responses=AuthTokenResponseSerializer)
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data,
                                            context={'request': request})
