@@ -1,7 +1,7 @@
 from django.db import models
-from django.db.models import F
 
 from apps.accounts.models import CustomUser
+from apps.cards.utils import change_decks_health
 from apps.core.models import Ability, Color, Faction, PassiveAbility, Type
 
 
@@ -60,24 +60,15 @@ class Card(models.Model):
     @classmethod
     def from_db(cls, db, field_names, values):
         instance = super().from_db(db, field_names, values)
-        # customization to store the original field values on the instance
+        # здесь мы запоминаем значения, которые были
         instance._loaded_values = dict(zip(field_names, values))
         return instance
 
     def save(self, *args, **kwargs):
+        # если мы ИЗМЕНЯЕМ карту и мы изменили её ЖИЗНИ, то пересчитываем жизни всех колод с этой картой!
         if not self._state.adding and (self.hp - self._loaded_values['hp']):
-            self.change_decks_health(self.hp - self._loaded_values['hp'])
+            change_decks_health(card_id=self.id, diff=self.hp - self._loaded_values['hp'])
         super().save(*args, **kwargs)
-
-    def change_decks_health(self, diff):
-        """Изменяет параметр health на diff пунктов у всех колод, содержащих
-            текущую карту
-        """
-        decks = Deck.objects.filter(d__card_id=self.id).prefetch_related('d__deck')
-        for deck in decks:
-            deck.health = F('health') + diff
-            deck.save()
-        print(f"Deck health changed for {len(decks)} decks")
 
 
 class Deck(models.Model):
