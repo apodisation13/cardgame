@@ -19,6 +19,10 @@ class Leader(models.Model):
     passive_ability = models.ForeignKey(PassiveAbility, related_name='leaders',
                                         on_delete=models.PROTECT,
                                         blank=True, null=True, default=None)
+    value = models.IntegerField(default=0, blank=False, null=False)
+    timer = models.IntegerField(default=0, blank=False, null=False)
+    default_timer = models.IntegerField(default=0, blank=False, null=False)
+    reset_timer = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.name}, ability {self.ability}, damage {self.damage} charges {self.charges}'
@@ -38,8 +42,8 @@ class Card(models.Model):
                              on_delete=models.PROTECT)
     ability = models.ForeignKey(Ability, related_name='cards',
                                 on_delete=models.PROTECT)
-    charges = models.IntegerField(default=1, blank=False, null=False)
     damage = models.IntegerField(default=0, blank=False, null=False)
+    charges = models.IntegerField(default=1, blank=False, null=False)
     hp = models.IntegerField(default=0, blank=False, null=False)
     heal = models.IntegerField(default=0, blank=False, null=False)
     image = models.ImageField(upload_to='cards/', blank=True, null=True)
@@ -48,7 +52,10 @@ class Card(models.Model):
     passive_ability = models.ForeignKey(PassiveAbility, related_name='cards',
                                         on_delete=models.PROTECT,
                                         blank=True, null=True, default=None)
+    value = models.IntegerField(default=0, blank=False, null=False)
     timer = models.IntegerField(default=0, blank=False, null=False)
+    default_timer = models.IntegerField(default=0, blank=False, null=False)
+    reset_timer = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.id} {self.name}, hp {self.hp}, ' \
