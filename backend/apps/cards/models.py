@@ -14,6 +14,7 @@ class Leader(models.Model):
                                 on_delete=models.PROTECT)
     damage = models.IntegerField(default=0, blank=False, null=False)
     charges = models.IntegerField(default=1, blank=False, null=False)
+    heal = models.IntegerField(default=0, blank=False, null=False)
     image = models.ImageField(upload_to='leaders/', blank=True, null=True)
     has_passive = models.BooleanField(default=False)
     passive_ability = models.ForeignKey(PassiveAbility, related_name='leaders',
