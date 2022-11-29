@@ -26,6 +26,7 @@ class Enemy(models.Model):
                               on_delete=models.PROTECT)
     damage = models.IntegerField(default=0, blank=False, null=False)
     hp = models.IntegerField(default=0, blank=False, null=False)
+    base_hp = models.IntegerField(default=0, blank=False, null=False)
     image = models.ImageField(upload_to='enemies/', blank=True, null=True)
     move = models.ForeignKey(Move, related_name='enemies',
                              on_delete=models.PROTECT)
@@ -34,13 +35,15 @@ class Enemy(models.Model):
     passive_ability = models.ForeignKey(EnemyPassiveAbility, related_name="enemies",
                                         on_delete=models.PROTECT,
                                         blank=True, null=True)
-    passive_increase_damage = models.IntegerField(default=0, blank=False, null=False)
-    passive_heal = models.IntegerField(default=0, blank=False, null=False)
-    passive_heal_leader = models.IntegerField(default=0, blank=False, null=False)
+    value = models.IntegerField(default=0, blank=False, null=False)
+    timer = models.IntegerField(default=0, blank=False, null=False)
+    default_timer = models.IntegerField(default=0, blank=False, null=False)
+    reset_timer = models.BooleanField(default=False)
     has_deathwish = models.BooleanField(default=False)
     deathwish = models.ForeignKey(Deathwish, related_name='enemies',
                                   on_delete=models.PROTECT,
                                   blank=True, null=True)
+    deathwish_value = models.IntegerField(default=0, blank=False, null=False)
 
     def __str__(self):
         return f'{self.id}:{self.name}, {self.faction}, {self.color}, ' \

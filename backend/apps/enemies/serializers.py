@@ -28,15 +28,18 @@ class EnemySerializer(serializers.ModelSerializer):
             "move",
             "damage",
             "hp",
+            "base_hp",
             "image",
             "shield",
             "has_passive",
             "passive_ability",
-            "passive_increase_damage",
-            "passive_heal",
-            "passive_heal_leader",
+            "value",
+            "timer",
+            "default_timer",
+            "reset_timer",
             "has_deathwish",
             "deathwish",
+            "deathwish_value",
         )
 
 

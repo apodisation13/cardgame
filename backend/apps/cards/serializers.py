@@ -26,15 +26,18 @@ class CardSerializer(serializers.ModelSerializer):
             "color",
             "type",
             "ability",
-            "charges",
             "damage",
+            "charges",
             "hp",
             "heal",
             "image",
             "has_passive",
             "has_passive_in_hand",
             "passive_ability",
+            "value",
             "timer",
+            "default_timer",
+            "reset_timer",
         )
 
     @extend_schema_field(OpenApiTypes.URI)
@@ -64,9 +67,14 @@ class LeaderSerializer(serializers.ModelSerializer):
             "ability",
             "damage",
             "charges",
+            "heal",
             "image",
             "has_passive",
-            "passive_ability"
+            "passive_ability",
+            "value",
+            "timer",
+            "default_timer",
+            "reset_timer",
         )
 
     @extend_schema_field(OpenApiTypes.URI)
