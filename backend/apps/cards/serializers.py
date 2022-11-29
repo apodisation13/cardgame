@@ -1,9 +1,11 @@
+from django.db.models import F
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from apps.cards.models import Card, CardDeck, Deck, Leader, UserCard, UserDeck, UserLeader
 from apps.core.serializers import AbilitySerializer, PassiveAbilitySerializer
+from apps.user_database.utils import get_cards_for_user, get_leaders_for_user
 
 
 class CardSerializer(serializers.ModelSerializer):
@@ -41,7 +43,6 @@ class CardSerializer(serializers.ModelSerializer):
 
 
 class CardDeckSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = CardDeck
         fields = ("card", )
@@ -129,64 +130,100 @@ class DeckSerializer(serializers.ModelSerializer):
     def get_cards(self, obj):
         # print(CardSerializer(obj.cards, many=True, context={"request": self.context["request"]}).data)
         c = []
-        for u in obj.cards.all():
+        for u in obj.cards.select_related("faction", "color", "type", "ability", "passive_ability").all():
             s = {'card': CardSerializer(u, context={'request': self.context.get('request')}).data, "count": 1}
             c.append(s)
         return c
 
 
 class CraftUserCardSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = UserCard
         fields = ("id", "user", "card", "count")
 
     def update(self, instance, validated_data):
-        validated_data['count'] += 1  # ВОТ ЭТО САМОЕ ГЛАВНОЕ! Увеличиваем на 1 запас ЭТОЙ КАРТЫ у юзера
-        return super().update(instance, validated_data)
+        instance.count = F('count') + 1  # ВОТ ЭТО САМОЕ ГЛАВНОЕ! Увеличиваем на 1 запас ЭТОЙ КАРТЫ у юзера
+        instance.save()
+        instance.refresh_from_db()
+        return instance
+
+    def to_representation(self, instance):
+        return {"cards": get_cards_for_user(
+            self=self, user_id=instance.user_id,
+            card_serializer=CardSerializer
+        )}
 
 
 class MillUserCardSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = UserCard
         fields = ("id", "user", "card", "count")
 
+    def validate(self, attrs):
+        if self.instance.card.unlocked and self.instance.count == 1:
+            raise serializers.ValidationError("Нельзя уничтожить карту из стартового набора")
+        return attrs
+
     def update(self, instance, validated_data):
-        validated_data['count'] -= 1
+        instance.count = F('count') - 1
+        instance.save()
+        instance.refresh_from_db()
 
-        if validated_data['count'] != 0:
-            return super().update(instance, validated_data)
+        if not instance.count:
+            instance.delete()
 
-        instance.delete()
         return instance
+
+    def to_representation(self, instance):
+        return {"cards": get_cards_for_user(
+            self=self, user_id=instance.user_id,
+            card_serializer=CardSerializer
+        )}
 
 
 class CraftUserLeaderSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = UserLeader
         fields = ("id", "user", "leader", "count")
 
     def update(self, instance, validated_data):
-        validated_data['count'] += 1  # ВОТ ЭТО САМОЕ ГЛАВНОЕ! Увеличиваем на 1 запас ЭТОЙ КАРТЫ у юзера
-        return super().update(instance, validated_data)
+        instance.count = F('count') + 1  # ВОТ ЭТО САМОЕ ГЛАВНОЕ! Увеличиваем на 1 запас ЭТОЙ КАРТЫ у юзера
+        instance.save()
+        instance.refresh_from_db()
+        return instance
+
+    def to_representation(self, instance):
+        return {"leaders": get_leaders_for_user(
+            self=self, user_id=instance.user_id,
+            leader_serializer=LeaderSerializer
+        )}
 
 
 class MillUserLeaderSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = UserLeader
         fields = ("id", "user", "leader", "count")
 
+    def validate(self, attrs):
+        if self.instance.leader.unlocked and self.instance.count == 1:
+            raise serializers.ValidationError("Нельзя уничтожить карту лидера из стартового набора")
+        return attrs
+
     def update(self, instance, validated_data):
-        validated_data['count'] -= 1
+        instance.count = F('count') - 1
+        instance.save()
+        instance.refresh_from_db()
 
-        if validated_data['count'] != 0:
-            return super().update(instance, validated_data)
+        if not instance.count:
+            instance.delete()
 
-        instance.delete()
         return instance
+
+    def to_representation(self, instance):
+        return {"leaders": get_leaders_for_user(
+            self=self, user_id=instance.user_id,
+            leader_serializer=LeaderSerializer
+        )}
 
 
 class UserDeckSerializer(serializers.ModelSerializer):

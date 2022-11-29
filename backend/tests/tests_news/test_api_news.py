@@ -1,5 +1,6 @@
 import pytest
 from model_bakery import baker
+from rest_framework import status
 
 from apps.news.models import News
 
@@ -25,20 +26,20 @@ def test_get_news(user, create_user, create_news, api_client):
     assert len(response.data) == len(news)
 
 
-@pytest.mark.parametrize(
-    'is_admin, resp_status_code', [(True, 201), (False, 403)]
-)
 @pytest.mark.django_db
-def test_post_news(
-        create_admin, create_user, is_admin, resp_status_code, api_client):
-    news = {'title': 'test', 'description': 'test'}
-    if is_admin:
-        test_user = create_admin()
-    else:
-        test_user = create_user()
+def test_other_news_methods(create_admin, api_client, create_news):
+    data = {'title': 'test', 'description': 'test'}
+    test_user = create_admin()
     api_client.force_authenticate(test_user)
-    response = api_client.post('/api/v1/news/', data=news, format='json')
-    data_news_title = response.data.get('title')
-    assert response.status_code == resp_status_code
-    if data_news_title:
-        assert data_news_title == news['title']
+
+    response = api_client.post('/api/v1/news/', data)
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED, 'создание новости'
+
+    test_news = create_news()
+    url = f"/api/v1/news/{test_news.id}/"
+
+    response = api_client.patch(url, data)
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED, 'редактирование новости'
+
+    response = api_client.delete(url)
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED, 'удаление новости'

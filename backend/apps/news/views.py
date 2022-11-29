@@ -9,3 +9,4 @@ class NewsViewSet(ModelViewSet):
     queryset = News.objects.all()
     serializer_class = NewsSerializer
     permission_classes = [IsAdminOrReadOnly, ]
+    http_method_names = ['get']
