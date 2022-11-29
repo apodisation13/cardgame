@@ -184,7 +184,10 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAdminUser',
     ],
     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    # 'PAGE_SIZE': 20,  # количество элементов на одной странице для пагинации,
+    # 'PAGE_SIZE': 20,  # количество элементов на одной странице для пагинации
+
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
+
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 

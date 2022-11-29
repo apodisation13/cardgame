@@ -8,7 +8,7 @@ from apps.core.serializers import (
     MoveSerializer,
 )
 from apps.enemies.models import Enemy, EnemyLeader, Level, LevelRelatedLevels, Season, UserLevel
-from apps.enemies.utils import get_opened_user_levels
+from apps.user_database.utils import get_opened_user_levels
 
 
 class EnemySerializer(serializers.ModelSerializer):

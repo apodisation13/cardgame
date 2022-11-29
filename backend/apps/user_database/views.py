@@ -26,7 +26,7 @@ class UserDatabaseViewSet(GenericViewSet, mixins.RetrieveModelMixin):
         user_database = CustomUser.objects.filter(pk=kwargs["pk"]).first()
         self.check_object_permissions(request, user_database)  # проверка разрешений!
         enemies = Enemy.objects.select_related("faction", "color", "move",
-                                               "passive_ability").all()
+                                               "passive_ability", "deathwish").all()
         enemy_leaders = EnemyLeader.objects.select_related("faction", "ability").all()
         game_const = GameConst.objects.first()
         seasons = Season.objects.all()
