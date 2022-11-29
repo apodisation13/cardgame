@@ -29,6 +29,10 @@ def cards_leaders(self, data):
                         image=line[7],
                         has_passive=line[8],
                         passive_ability_id=line[9] if line[9] != "NULL" else None,
+                        value=line[10],
+                        timer=line[11],
+                        default_timer=line[12],
+                        reset_timer=line[13],
                     )
                     success += 1
                 except Exception as e:
@@ -68,7 +72,10 @@ def cards_cards(self, data):
                         has_passive=line[12],
                         has_passive_in_hand=line[13],
                         passive_ability_id=line[14] if line[14] != "NULL" else None,
-                        timer=line[15],
+                        value=line[15],
+                        timer=line[16],
+                        default_timer=line[17],
+                        reset_timer=line[18],
                     )
                     success += 1
                 except Exception as e:
