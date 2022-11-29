@@ -62,15 +62,19 @@ def enemies_enemies(self, data):
                         move_id=line[4],
                         damage=line[5],
                         hp=line[6],
-                        shield=line[7],
-                        image=line[8],
-                        has_passive=line[9],
-                        passive_ability_id=line[10] if line[10] != "NULL" else None,
-                        passive_increase_damage=line[11],
-                        passive_heal=line[12],
-                        passive_heal_leader=line[13],
-                        has_deathwish=line[14],
-                        deathwish_id=line[15] if line[15] != "NULL" else None,
+                        base_hp=line[7],
+                        shield=line[8],
+                        image=line[9],
+                        has_passive=line[10],
+                        passive_ability_id=line[11] if line[11] != "NULL" else None,
+                        value=line[12],
+                        timer=line[13],
+                        default_timer=line[14],
+                        reset_timer=line[15],
+                        has_deathwish=line[16],
+                        deathwish_id=line[17] if line[17] != "NULL" else None,
+                        deathwish_value=line[18],
+
                     )
                     success += 1
                 except Exception as e:
