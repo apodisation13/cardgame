@@ -65,9 +65,8 @@ class Card(models.Model):
         return instance
 
     def save(self, *args, **kwargs):
-        diff = self.hp - self._loaded_values['hp']
-        if not self._state.adding and diff:
-            self.change_decks_health(diff)
+        if not self._state.adding and (self.hp - self._loaded_values['hp']):
+            self.change_decks_health(self.hp - self._loaded_values['hp'])
         super().save(*args, **kwargs)
 
     def change_decks_health(self, diff):
