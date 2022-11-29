@@ -76,12 +76,12 @@ class TestCardsAPI:
         user_leaders = response.data.get('leaders')
         u_l_id = None
         for item in user_leaders:
-            if item['leader']['id'] == data['leader']:
+            if item['card']['id'] == data['leader']:
                 u_l_id = item['id']
                 break
         assert u_l_id is not None, 'есть id записи в таблице UserLeader'
         record = {'user': authenticated_user.id,
-                  'leader': item['leader']['id'],
+                  'leader': item['card']['id'],
                   'count': item['count']}
         assert record == data, 'данные записаны правильно'
 
