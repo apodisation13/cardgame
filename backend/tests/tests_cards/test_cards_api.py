@@ -2,7 +2,7 @@ import pytest
 import rest_framework.status as status
 from model_bakery import baker
 
-from apps.cards.models import Card, CardDeck, Deck, Leader, UserCard, UserDeck, UserLeader
+from apps.cards.models import Card, Deck, Leader, UserCard, UserDeck, UserLeader
 
 LOCKED_CARD = 1  # id карты НЕ из стартового набора
 UNLOCKED_CARD = 2  # id карты из стартового набора
@@ -184,7 +184,6 @@ class TestCardsAPI:
         response = api_client.patch(f"{url}/{record_id}/")
 
         assert response.status_code == status.HTTP_404_NOT_FOUND, description
-
 
     @pytest.fixture
     def deck_factory(self):
