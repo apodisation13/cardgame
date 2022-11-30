@@ -56,10 +56,15 @@ class EnemyLeaderSerializer(serializers.ModelSerializer):
             "image",
             "has_passive",
             "hp",
+            "base_hp",
             "ability",
             "damage_once",
             "damage_per_turn",
             "heal_self_per_turn",
+            "value",
+            "timer",
+            "default_timer",
+            "reset_timer",
         )
 
 
