@@ -25,11 +25,16 @@ def enemies_enemy_leader(self, data):
                         faction_id=line[2],
                         ability_id=line[3],
                         hp=line[4],
-                        damage_once=line[5],
-                        damage_per_turn=line[6],
-                        heal_self_per_turn=line[7],
-                        has_passive=line[8],
-                        image=line[9],
+                        base_hp=line[5],
+                        damage_once=line[6],
+                        damage_per_turn=line[7],
+                        heal_self_per_turn=line[8],
+                        has_passive=line[9],
+                        image=line[10],
+                        value=line[11],
+                        timer=line[12],
+                        default_timer=line[13],
+                        reset_timer=line[14],
                     )
                     success += 1
                 except Exception as e:

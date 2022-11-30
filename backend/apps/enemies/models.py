@@ -60,12 +60,17 @@ class EnemyLeader(models.Model):
     image = models.ImageField(upload_to='enemy_leaders/', blank=True, null=True)
     has_passive = models.BooleanField(default=False)
     hp = models.IntegerField(default=0, blank=False, null=False)  # его жизни, должен быть у всех
+    base_hp = models.IntegerField(default=0, blank=False, null=False)
     ability = models.ForeignKey(EnemyLeaderAbility, related_name='enemy_leaders',
                                 on_delete=models.PROTECT,
                                 blank=True, null=True, default=None)
     damage_once = models.IntegerField(default=0, blank=True, null=True)  # урон лидера 1 раз
     damage_per_turn = models.IntegerField(default=0, blank=True, null=True)  # урон лидера каждый ход
     heal_self_per_turn = models.IntegerField(default=0, blank=True, null=True)  # самолечение каждый ход
+    value = models.IntegerField(default=0, blank=False, null=False)
+    timer = models.IntegerField(default=0, blank=False, null=False)
+    default_timer = models.IntegerField(default=0, blank=False, null=False)
+    reset_timer = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.id} - {self.name}, hp {self.hp}, passive {self.has_passive}, ' \
