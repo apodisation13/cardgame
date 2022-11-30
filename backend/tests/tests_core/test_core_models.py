@@ -1,15 +1,6 @@
 import pytest
 
-from apps.core.models import (
-    Ability,
-    Color,
-    EnemyLeaderAbility,
-    EnemyPassiveAbility,
-    Faction,
-    Move,
-    PassiveAbility,
-    Type,
-)
+from apps.core.models import Ability, Color, Faction, Type
 
 
 @pytest.mark.django_db
@@ -44,28 +35,3 @@ class TestModels:
         ability = Ability.objects.first()
         expected_result = '1 - damage-one'
         assert expected_result == ability.__str__()
-
-    def test_passive_ability(self):
-        """Проверка passive_ability"""
-        passive_ability = PassiveAbility.objects.first()
-        expected_result = '1 - add-charges-to-leader-if-play-special'
-        assert expected_result == passive_ability.__str__()
-
-    def test_move(self):
-        """Проверка способностей врагов ходить: down, stand, random"""
-        move = Move.objects.all()
-        expected_result = ['down', 'stand', 'random']
-        for ability in expected_result:
-            assert ability in move.__str__()
-
-    def test_enemy_passive_ability(self):
-        """Проверка пассивных способностей врагов"""
-        enemy_passive_ability = EnemyPassiveAbility.objects.first()
-        expected_result = '1 - increase-damage'
-        assert expected_result == enemy_passive_ability.__str__()
-
-    def test_enemy_leader_ability(self):
-        """Проверка способностей лидеров врагов"""
-        enemy_leader_ability = EnemyLeaderAbility.objects.first()
-        expected_result = '1 - damage-once'
-        assert expected_result == enemy_leader_ability.__str__()
