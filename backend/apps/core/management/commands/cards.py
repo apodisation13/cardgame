@@ -26,9 +26,14 @@ def cards_leaders(self, data):
                         ability_id=line[4],
                         damage=line[5],
                         charges=line[6],
-                        image=line[7],
-                        has_passive=line[8],
-                        passive_ability_id=line[9] if line[9] != "NULL" else None,
+                        heal=line[7],
+                        image=line[8],
+                        has_passive=line[9],
+                        passive_ability_id=line[10] if line[10] != "NULL" else None,
+                        value=line[11],
+                        timer=line[12],
+                        default_timer=line[13],
+                        reset_timer=line[14],
                     )
                     success += 1
                 except Exception as e:
@@ -68,7 +73,10 @@ def cards_cards(self, data):
                         has_passive=line[12],
                         has_passive_in_hand=line[13],
                         passive_ability_id=line[14] if line[14] != "NULL" else None,
-                        timer=line[15],
+                        value=line[15],
+                        timer=line[16],
+                        default_timer=line[17],
+                        reset_timer=line[18],
                     )
                     success += 1
                 except Exception as e:
