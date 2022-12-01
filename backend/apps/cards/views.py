@@ -95,6 +95,10 @@ class CraftUserCardViewSet(CardBaseMixin,
                            mixins.CreateModelMixin,
                            mixins.UpdateModelMixin,
                            ):
+    """Просмотр всех карт юзера, добавление карты или увеличение её количества на 1.
+    Возвращает все карты юзера.
+    Для увеличения количества никакие данные в запросе не нужны (кроме id в адресе).
+    """
     queryset = UserCard.objects.all()
     serializer_class = CraftUserCardSerializer
     authentication_classes = [TokenAuthentication]
@@ -105,6 +109,11 @@ class MillUserCardViewSet(CardBaseMixin,
                           GenericViewSet,
                           mixins.UpdateModelMixin
                           ):
+    """Уменьшение количества карты юзера на 1.
+    Возвращает все карты юзера.
+    Никакие данные в запросе не нужны (кроме id в адресе).
+    При уменьшении до 0 запись удаляется.
+    """
     queryset = UserCard.objects.all()
     serializer_class = MillUserCardSerializer
     authentication_classes = [TokenAuthentication]
@@ -117,6 +126,10 @@ class CraftUserLeaderViewSet(LeaderBaseMixin,
                              mixins.CreateModelMixin,
                              mixins.UpdateModelMixin,
                              ):
+    """Просмотр всех лидеров юзера, добавление лидера или увеличение его количества на 1.
+    Возвращает всех лидеров юзера.
+    Для увеличения количества никакие данные в запросе не нужны (кроме id в адресе).
+    """
     queryset = UserLeader.objects.all()
     serializer_class = CraftUserLeaderSerializer
     authentication_classes = [TokenAuthentication]
@@ -127,6 +140,11 @@ class MillUserLeaderViewSet(LeaderBaseMixin,
                             GenericViewSet,
                             mixins.UpdateModelMixin
                             ):
+    """Уменьшение количества карты лидера у юзера на 1.
+    Возвращает всех лидеров юзера.
+    Никакие данные в запросе не нужны (кроме id в адресе).
+    При уменьшении до 0 запись удаляется.
+    """
     queryset = UserLeader.objects.all()
     serializer_class = MillUserLeaderSerializer
     authentication_classes = [TokenAuthentication]
