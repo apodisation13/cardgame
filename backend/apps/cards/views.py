@@ -15,6 +15,7 @@ from apps.cards.serializers import (
     MillUserLeaderSerializer,
     UserDeckSerializer,
 )
+from apps.user_database.serializers import UserDecksThroughSerializer
 
 
 class CardViewSet(GenericViewSet,
@@ -61,11 +62,15 @@ class DeckViewSet(DeckBaseMixin,
         return {'request': self.request}
 
     def return_all_decks(self, status_code=status.HTTP_200_OK):
-        serializer = self.get_serializer(self.get_queryset(), many=True)
+        u_d = UserDeck.objects.filter(user_id=self.request.user.id).all()
+        serializer = UserDecksThroughSerializer(u_d, context=self.get_serializer_context(), many=True)
         return Response(serializer.data, status=status_code)
 
     def is_base_deck(self):
         return int(self.kwargs.get('pk')) == 1
+
+    def list(self, request, *args, **kwargs):
+        return self.return_all_decks()
 
     def create(self, request, *args, **kwargs):
         super().create(request, *args, **kwargs)
