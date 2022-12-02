@@ -89,6 +89,7 @@ class Deck(models.Model):
     leader = models.ForeignKey("Leader", related_name="decks",
                                on_delete=models.CASCADE,
                                blank=True, null=True, default=None)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f'{self.id}, name {self.name}, health {self.health}, {self.leader}'
@@ -139,3 +140,4 @@ class UserDeck(models.Model):
 
     class Meta:
         unique_together = ("deck", "user")
+        ordering = ['-deck__updated_at']
