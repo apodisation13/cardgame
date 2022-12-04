@@ -95,14 +95,39 @@ class CraftUserCardViewSet(CardBaseMixin,
                            mixins.CreateModelMixin,
                            mixins.UpdateModelMixin,
                            ):
-    """Просмотр всех карт юзера, добавление карты или увеличение её количества на 1.
-    Возвращает все карты юзера.
-    Для увеличения количества никакие данные в запросе не нужны (кроме id в адресе).
+    """GET - просмотр всех карт юзера (сейчас не работает),
+
+    POST - добавление юзеру списка карт cards (если нет - создаётся запись в UserCard, если есть - +1),
+
+    PATCH - увеличение количества на 1 (данные в запросе не нужны).
+
+    Все методы возвращают все карты юзера.
     """
     queryset = UserCard.objects.all()
     serializer_class = CraftUserCardSerializer
     authentication_classes = [TokenAuthentication]
     http_method_names = ["get", "post", "patch"]  # убрать метод PUT, который не нужен
+
+    def create(self, request, *args, **kwargs):
+        cards = request.data.get('cards')
+        if not cards:
+            return Response(data={'error': "No cards for craft. "
+                                           "Request body should contain 'cards': a list of card ids."},
+                            status=status.HTTP_400_BAD_REQUEST)
+        u_c = self.queryset.filter(user_id=request.user.id)
+        card__user_card_mapping = {obj.card_id: obj.id for obj in u_c}
+        for card in cards:
+            if card not in card__user_card_mapping.keys():
+                request.data.update(card=card)
+                response = super().create(request, *args, **kwargs)
+            else:
+                self.kwargs.update(pk=card__user_card_mapping[card])
+                request.data.pop('card', None)
+                response = super().update(request, *args, partial=True, **kwargs)
+        # self.kwargs.pop('pk', None)
+        # request.data.pop('card', None)
+        # return super().list(request, *args, **kwargs)
+        return response
 
 
 class MillUserCardViewSet(CardBaseMixin,
