@@ -40,7 +40,7 @@ class TestCardsAPI:
         assert response.status_code == status.HTTP_400_BAD_REQUEST, 'Нельзя уничтожить лидера из стартового набора'
 
     def test_craft_locked_card(self, api_client, authenticated_user):
-        data = {'user': authenticated_user.id, 'card': LOCKED_CARD}
+        data = {'user': authenticated_user.id, 'cards': [LOCKED_CARD]}
         url = '/api/v1/patchcards/craft_user_cards/'
         response = api_client.post(url, data=data)
         assert response.status_code == status.HTTP_201_CREATED, 'добавление карты'
@@ -48,14 +48,16 @@ class TestCardsAPI:
         user_cards = response.data.get('cards')
         u_c_id = None
         for item in user_cards:
-            if item['card']['id'] == data['card']:
+            if item['card']['id'] == data['cards'][0]:
                 u_c_id = item['id']
                 break
         assert u_c_id is not None, 'есть id записи в таблице UserCard'
         record = {'user': authenticated_user.id,
                   'card': item['card']['id'],
                   'count': item['count']}
-        assert record == {**data, 'count': INITIAL_COUNT}, 'данные записаны правильно'
+        assert record == {'user': data['user'],
+                          'card': data['cards'][0],
+                          'count': INITIAL_COUNT}, 'данные записаны правильно'
 
         response = api_client.patch(f"{url}{u_c_id}/")
         assert response.status_code == status.HTTP_200_OK, 'увеличение количества'

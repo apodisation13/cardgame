@@ -16,6 +16,7 @@ from apps.cards.serializers import (
     UserDeckSerializer,
 )
 from apps.user_database.serializers import UserDecksThroughSerializer
+from apps.user_database.utils import get_cards_for_user
 
 
 class CardViewSet(GenericViewSet,
@@ -91,22 +92,27 @@ class DeckViewSet(DeckBaseMixin,
 
 class CraftUserCardViewSet(CardBaseMixin,
                            GenericViewSet,
-                           mixins.ListModelMixin,
+                           # mixins.ListModelMixin,
                            mixins.CreateModelMixin,
                            mixins.UpdateModelMixin,
                            ):
-    """GET - просмотр всех карт юзера (сейчас не работает),
+    """GET - просмотр всех карт,
 
     POST - добавление юзеру списка карт cards (если нет - создаётся запись в UserCard, если есть - +1),
 
     PATCH - увеличение количества на 1 (данные в запросе не нужны).
 
-    Все методы возвращают все карты юзера.
+    Все методы возвращают все карты. Для карт юзера дополнительно
+    возвращется их количество и id записи в UserCard. Для для остальных count=0.
     """
     queryset = UserCard.objects.all()
     serializer_class = CraftUserCardSerializer
     authentication_classes = [TokenAuthentication]
     http_method_names = ["get", "post", "patch"]  # убрать метод PUT, который не нужен
+
+    def list(self, request, *args, status=status.HTTP_200_OK, **kwargs):
+        cards = get_cards_for_user(request, request.user.id, CardSerializer)
+        return Response({'cards': cards}, status=status)
 
     def create(self, request, *args, **kwargs):
         cards = request.data.get('cards')
@@ -119,15 +125,18 @@ class CraftUserCardViewSet(CardBaseMixin,
         for card in cards:
             if card not in card__user_card_mapping.keys():
                 request.data.update(card=card)
-                response = super().create(request, *args, **kwargs)
+                super().create(request, *args, **kwargs)
             else:
                 self.kwargs.update(pk=card__user_card_mapping[card])
                 request.data.pop('card', None)
-                response = super().update(request, *args, partial=True, **kwargs)
-        # self.kwargs.pop('pk', None)
-        # request.data.pop('card', None)
-        # return super().list(request, *args, **kwargs)
-        return response
+                super().update(request, *args, partial=True, **kwargs)
+        self.kwargs.pop('pk', None)
+        request.data.pop('card', None)
+        return self.list(request, *args, status=status.HTTP_201_CREATED, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        super().update(request, *args, **kwargs)
+        return self.list(request, *args, **kwargs)
 
 
 class MillUserCardViewSet(CardBaseMixin,
@@ -135,7 +144,7 @@ class MillUserCardViewSet(CardBaseMixin,
                           mixins.UpdateModelMixin
                           ):
     """Уменьшение количества карты юзера на 1.
-    Возвращает все карты юзера.
+    Возвращает все карты.
     Никакие данные в запросе не нужны (кроме id в адресе).
     При уменьшении до 0 запись удаляется.
     """
