@@ -1,6 +1,6 @@
 import pytest
 
-from apps.enemies.models import Enemy, EnemyLeader, Level, UserLevel
+from apps.enemies.models import Enemy, Level, UserLevel
 
 
 @pytest.mark.django_db
