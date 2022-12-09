@@ -1,0 +1,49 @@
+networks:
+  local_network:
+
+volumes:
+  pg_data:
+
+services:
+  db:
+    image: postgres:alpine
+    env_file: .env
+    container_name: ${POSTGRES_HOST}
+    networks:
+      local_network:
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [ 'CMD', 'pg_isready', '-U', '${POSTGRES_USER}', '-d', '${POSTGRES_DB}' ]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+
+  backend:
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file: .env
+    volumes:
+      - .:/backend
+    build:
+      context: .
+      dockerfile: local.Dockerfile
+    ports:
+      - "8000:8000"
+    command:
+      - sh
+      - -c
+      - |
+        python manage.py makemigrations --noinput
+        python manage.py migrate
+        python manage.py core
+        python manage.py cards
+        python manage.py enemies
+        python manage.py runserver 0.0.0.0:8000
+    networks:
+      local_network:
