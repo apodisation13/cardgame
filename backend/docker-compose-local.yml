@@ -1,3 +1,5 @@
+version: '3.9'
+
 networks:
   local_network:
 
@@ -8,11 +10,11 @@ services:
   db:
     image: postgres:alpine
     env_file: .env
-    container_name: ${POSTGRES_HOST}
+    container_name: cardgame_db
     networks:
       local_network:
     ports:
-      - "5432:5432"
+      - "${POSTGRES_PORT}:5432"
     volumes:
       - pg_data:/var/lib/postgresql/data
     healthcheck:
@@ -24,6 +26,7 @@ services:
       start_period: 10s
 
   backend:
+    container_name: cardgame_backend
     depends_on:
       db:
         condition: service_healthy
@@ -36,14 +39,14 @@ services:
     ports:
       - "8000:8000"
     command:
-      - sh
+      - bash
       - -c
       - |
-        python manage.py makemigrations --noinput
         python manage.py migrate
         python manage.py core
         python manage.py cards
         python manage.py enemies
+        python manage.py levels
         python manage.py runserver 0.0.0.0:8000
     networks:
       local_network:
