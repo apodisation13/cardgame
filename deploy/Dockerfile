@@ -6,10 +6,10 @@ WORKDIR /cardgame
 
 # Скопировать все файлы с локальной машины внутрь файловой системы виртуального образа.
 RUN echo 'we here 1'
-COPY ../backend/ .
+COPY . .
 RUN echo 'we here 2'
-COPY run.sh .
-COPY wait.sh .
+COPY ../deploy/run.sh .
+COPY ../deploy/wait.sh .
 RUN echo 'we here 3'
 
 
