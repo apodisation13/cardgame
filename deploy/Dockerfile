@@ -5,9 +5,9 @@ FROM python:3.9
 WORKDIR /cardgame
 
 # Скопировать все файлы с локальной машины внутрь файловой системы виртуального образа.
-COPY . .
-COPY ../deploy/run.sh .
-COPY ../deploy/wait.sh .
+COPY ../backend/ .
+COPY run.sh .
+COPY wait.sh .
 
 
 # принимаем аргумент из экшена билда, из секретов и записываем его в этот файл
