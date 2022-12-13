@@ -9,7 +9,7 @@ volumes:
 services:
   db:
     image: postgres:alpine
-    env_file: .env
+    env_file: ../backend/.env
     container_name: cardgame_db
     networks:
       local_network:
@@ -30,12 +30,12 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    env_file: .env
+    env_file: ../backend/.env
     volumes:
       - .:/backend
     build:
-      context: .
-      dockerfile: local.Dockerfile
+      context: ../backend
+      dockerfile: ../docker/Dockerfile
     ports:
       - "8000:8000"
     command:
