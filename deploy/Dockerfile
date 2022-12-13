@@ -5,11 +5,12 @@ FROM python:3.9
 WORKDIR /cardgame
 
 # Скопировать все файлы с локальной машины внутрь файловой системы виртуального образа.
+RUN pwd
 RUN echo 'we here 1'
 COPY . .
 RUN echo 'we here 2'
-COPY ../deploy/run.sh .
-COPY ../deploy/wait.sh .
+COPY ./deploy/run.sh .
+COPY ./deploy/wait.sh .
 RUN echo 'we here 3'
 
 
