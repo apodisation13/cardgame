@@ -5,8 +5,8 @@ FROM python:3.9
 WORKDIR /cardgame
 
 # Скопировать все файлы с локальной машины внутрь файловой системы виртуального образа.
-COPY run.sh .
-COPY wait.sh .
+COPY ./run.sh .
+COPY ./wait.sh .
 RUN echo "hello from here"
 COPY ./backend/ .
 RUN echo "hello from here 2"
