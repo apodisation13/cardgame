@@ -9,6 +9,8 @@
 !run.sh
 !wait.sh
 !google.json
+!database.ods
+!media/
 
 # Override allowed
 .idea/

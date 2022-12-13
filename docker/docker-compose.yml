@@ -1,0 +1,52 @@
+version: '3.9'
+
+networks:
+  local_network:
+
+volumes:
+  pg_data:
+
+services:
+  db:
+    image: postgres:alpine
+    env_file: ../backend/.env
+    container_name: cardgame_db
+    networks:
+      local_network:
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [ 'CMD', 'pg_isready', '-U', '${POSTGRES_USER}', '-d', '${POSTGRES_DB}' ]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+
+  backend:
+    container_name: cardgame_backend
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file: ../backend/.env
+    volumes:
+      - .:/backend
+    build:
+      context: ../backend
+      dockerfile: ../docker/Dockerfile
+    ports:
+      - "8000:8000"
+    command:
+      - bash
+      - -c
+      - |
+        python manage.py migrate
+        python manage.py core
+        python manage.py cards
+        python manage.py enemies
+        python manage.py levels
+        python manage.py runserver 0.0.0.0:8000
+    networks:
+      local_network:
