@@ -5,9 +5,12 @@ FROM python:3.9
 WORKDIR /cardgame
 
 # Скопировать все файлы с локальной машины внутрь файловой системы виртуального образа.
+RUN echo 'we here 1'
 COPY ../backend/ .
+RUN echo 'we here 2'
 COPY run.sh .
 COPY wait.sh .
+RUN echo 'we here 3'
 
 
 # принимаем аргумент из экшена билда, из секретов и записываем его в этот файл
