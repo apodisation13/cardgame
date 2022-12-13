@@ -5,12 +5,9 @@ FROM python:3.9
 WORKDIR /cardgame
 
 # Скопировать все файлы с локальной машины внутрь файловой системы виртуального образа.
-COPY ./run.sh .
-COPY ./wait.sh .
-RUN echo "hello from here"
-COPY ./backend/ .
-RUN echo "hello from here 2"
-
+COPY . .
+COPY ../deploy/wait.sh .
+COPY ../deploy/run.sh .
 
 # принимаем аргумент из экшена билда, из секретов и записываем его в этот файл
 ARG GOOGLE_SECRET
