@@ -96,7 +96,6 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: backend
-          file: ./deploy/Dockerfile
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.MODE }}
           cache-from: type=gha
