@@ -32,13 +32,18 @@ services:
       db:
         condition: service_healthy
     env_file: ../backend/.env
-    volumes:
-      - .:/backend
+#    volumes:
+#      - backend/database.ods:/cardgame/
+#      - backend/media/:/cardgame/
     build:
-      context: ../backend
-      dockerfile: ../docker/Dockerfile
+      # то место, откуда мы запускаем docker-compose, то есть в данном случае - директория docker,
+      # из неё выходим назад и берем ВСЮ директорию cardgame
+      context: ../
+      # путь относительно context до докерфайла, раз мы уже в cardgame, то оттуда просто docker/
+      dockerfile: docker/Dockerfile
     ports:
       - "8000:8000"
+    # здесь мы выдаем migrate, затем все менеджмент команды для загрузки БД, а затем запускаем проект
     command:
       - bash
       - -c
