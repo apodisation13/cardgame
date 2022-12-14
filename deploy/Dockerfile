@@ -5,7 +5,9 @@ FROM python:3.9
 WORKDIR /cardgame
 
 # Скопировать все файлы с локальной машины внутрь файловой системы виртуального образа.
-COPY . .
+COPY ../deploy/wait.sh .
+COPY ../deploy/run.sh .
+COPY ../backend .
 
 # принимаем аргумент из экшена билда, из секретов и записываем его в этот файл
 ARG GOOGLE_SECRET
