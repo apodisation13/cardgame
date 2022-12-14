@@ -24,6 +24,7 @@ services:
       timeout: 5s
       retries: 20
       start_period: 10s
+    restart: unless-stopped
 
   backend:
     container_name: cardgame_backend
@@ -50,3 +51,4 @@ services:
         python manage.py runserver 0.0.0.0:8000
     networks:
       local_network:
+    restart: unless-stopped
