@@ -50,6 +50,8 @@ class Card(models.Model):
     image = models.ImageField(upload_to='cards/', blank=True, null=True)
     has_passive = models.BooleanField(default=False)
     has_passive_in_hand = models.BooleanField(default=False)
+    has_passive_in_deck = models.BooleanField(default=False)
+    has_passive_in_grave = models.BooleanField(default=False)
     passive_ability = models.ForeignKey(PassiveAbility, related_name='cards',
                                         on_delete=models.PROTECT,
                                         blank=True, null=True, default=None)
@@ -57,6 +59,8 @@ class Card(models.Model):
     timer = models.IntegerField(default=0, blank=False, null=False)
     default_timer = models.IntegerField(default=0, blank=False, null=False)
     reset_timer = models.BooleanField(default=False)
+    # срабатывает ли пассивка каждый ход таймера (ТРУ) или только когда таймер 0 (фолс, дефолт)
+    each_tick = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.id} {self.name}, hp {self.hp}, ' \

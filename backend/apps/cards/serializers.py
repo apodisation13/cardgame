@@ -33,11 +33,14 @@ class CardSerializer(serializers.ModelSerializer):
             "image",
             "has_passive",
             "has_passive_in_hand",
+            "has_passive_in_deck",
+            "has_passive_in_grave",
             "passive_ability",
             "value",
             "timer",
             "default_timer",
             "reset_timer",
+            "each_tick",
         )
 
     @extend_schema_field(OpenApiTypes.URI)
