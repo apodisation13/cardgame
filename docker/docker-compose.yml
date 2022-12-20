@@ -32,9 +32,9 @@ services:
       db:
         condition: service_healthy
     env_file: ../backend/.env
-#    volumes:
-#      - backend/database.ods:/cardgame/
-#      - backend/media/:/cardgame/
+    volumes:
+      - ../backend/database.ods:/cardgame/database.ods
+      - ../backend/media/:/cardgame/media/
     build:
       # то место, откуда мы запускаем docker-compose, то есть в данном случае - директория docker,
       # из неё выходим назад и берем ВСЮ директорию cardgame
