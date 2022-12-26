@@ -32,11 +32,15 @@ class EnemySerializer(serializers.ModelSerializer):
             "shield",
             "image",
             "has_passive",
+            "has_passive_in_field",
+            "has_passive_in_deck",
+            "has_passive_in_grave",
             "passive_ability",
             "value",
             "timer",
             "default_timer",
             "reset_timer",
+            "each_tick",
             "has_deathwish",
             "deathwish",
             "deathwish_value",
@@ -65,6 +69,7 @@ class EnemyLeaderSerializer(serializers.ModelSerializer):
             "timer",
             "default_timer",
             "reset_timer",
+            "each_tick",
         )
 
 

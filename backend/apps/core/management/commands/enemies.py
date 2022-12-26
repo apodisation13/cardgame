@@ -35,6 +35,7 @@ def enemies_enemy_leader(self, data):
                         timer=line[12],
                         default_timer=line[13],
                         reset_timer=line[14],
+                        each_tick=line[15],
                     )
                     success += 1
                 except Exception as e:
@@ -71,15 +72,18 @@ def enemies_enemies(self, data):
                         shield=line[8],
                         image=line[9],
                         has_passive=line[10],
-                        passive_ability_id=line[11] if line[11] != "NULL" else None,
-                        value=line[12],
-                        timer=line[13],
-                        default_timer=line[14],
-                        reset_timer=line[15],
-                        has_deathwish=line[16],
-                        deathwish_id=line[17] if line[17] != "NULL" else None,
-                        deathwish_value=line[18],
-
+                        has_passive_in_field=line[11],
+                        has_passive_in_deck=line[12],
+                        has_passive_in_grave=line[13],
+                        passive_ability_id=line[14] if line[14] != "NULL" else None,
+                        value=line[15],
+                        timer=line[16],
+                        default_timer=line[17],
+                        reset_timer=line[18],
+                        each_tick=line[19],
+                        has_deathwish=line[20],
+                        deathwish_id=line[21] if line[21] != "NULL" else None,
+                        deathwish_value=line[22],
                     )
                     success += 1
                 except Exception as e:
