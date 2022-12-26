@@ -32,6 +32,9 @@ class Enemy(models.Model):
                              on_delete=models.PROTECT)
     shield = models.BooleanField(default=False)  # щит, есть или нет, по умолчанию нет
     has_passive = models.BooleanField(default=False)
+    has_passive_in_field = models.BooleanField(default=False)
+    has_passive_in_deck = models.BooleanField(default=False)
+    has_passive_in_grave = models.BooleanField(default=False)
     passive_ability = models.ForeignKey(EnemyPassiveAbility, related_name="enemies",
                                         on_delete=models.PROTECT,
                                         blank=True, null=True)
@@ -39,6 +42,7 @@ class Enemy(models.Model):
     timer = models.IntegerField(default=0, blank=False, null=False)
     default_timer = models.IntegerField(default=0, blank=False, null=False)
     reset_timer = models.BooleanField(default=False)
+    each_tick = models.BooleanField(default=False)
     has_deathwish = models.BooleanField(default=False)
     deathwish = models.ForeignKey(Deathwish, related_name='enemies',
                                   on_delete=models.PROTECT,
@@ -71,6 +75,7 @@ class EnemyLeader(models.Model):
     timer = models.IntegerField(default=0, blank=False, null=False)
     default_timer = models.IntegerField(default=0, blank=False, null=False)
     reset_timer = models.BooleanField(default=False)
+    each_tick = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.id} - {self.name}, hp {self.hp}, passive {self.has_passive}, ' \
