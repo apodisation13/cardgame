@@ -79,7 +79,7 @@ class EnemyLeader(models.Model):
 
     def __str__(self):
         return f'{self.id} - {self.name}, hp {self.hp}, passive {self.has_passive}, ' \
-               f'абилка - {self.ability.name}, пассивка - {self.passive_ability}'
+               f'абилка - {self.ability}, пассивка - {self.passive_ability}'
 
 
 class Level(models.Model):
