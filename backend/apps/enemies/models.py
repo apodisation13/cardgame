@@ -82,7 +82,6 @@ class EnemyLeader(models.Model):
                f'абилка - {self.ability.name}, пассивка - {self.passive_ability}'
 
 
-
 class Level(models.Model):
     name = models.CharField(max_length=64, blank=False, null=False, unique=True)
     starting_enemies_number = models.IntegerField(default=3,
