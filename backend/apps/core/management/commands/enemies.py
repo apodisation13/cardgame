@@ -23,19 +23,17 @@ def enemies_enemy_leader(self, data):
                     EnemyLeader.objects.create(
                         name=line[1],
                         faction_id=line[2],
-                        ability_id=line[3],
+                        ability_id=line[3] if line[3] != "NULL" else None,
                         hp=line[4],
                         base_hp=line[5],
-                        damage_once=line[6],
-                        damage_per_turn=line[7],
-                        heal_self_per_turn=line[8],
-                        has_passive=line[9],
-                        image=line[10],
-                        value=line[11],
-                        timer=line[12],
-                        default_timer=line[13],
-                        reset_timer=line[14],
-                        each_tick=line[15],
+                        has_passive=line[6],
+                        passive_ability_id=line[7] if line[7] != "NULL" else None,
+                        image=line[8],
+                        value=line[9],
+                        timer=line[10],
+                        default_timer=line[11],
+                        reset_timer=line[12],
+                        each_tick=line[13],
                     )
                     success += 1
                 except Exception as e:

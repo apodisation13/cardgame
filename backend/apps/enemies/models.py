@@ -68,9 +68,9 @@ class EnemyLeader(models.Model):
     ability = models.ForeignKey(EnemyLeaderAbility, related_name='enemy_leaders',
                                 on_delete=models.PROTECT,
                                 blank=True, null=True, default=None)
-    damage_once = models.IntegerField(default=0, blank=True, null=True)  # урон лидера 1 раз
-    damage_per_turn = models.IntegerField(default=0, blank=True, null=True)  # урон лидера каждый ход
-    heal_self_per_turn = models.IntegerField(default=0, blank=True, null=True)  # самолечение каждый ход
+    passive_ability = models.ForeignKey(EnemyPassiveAbility, related_name="enemy_leaders",
+                                        on_delete=models.PROTECT,
+                                        blank=True, null=True)
     value = models.IntegerField(default=0, blank=False, null=False)
     timer = models.IntegerField(default=0, blank=False, null=False)
     default_timer = models.IntegerField(default=0, blank=False, null=False)
@@ -79,8 +79,8 @@ class EnemyLeader(models.Model):
 
     def __str__(self):
         return f'{self.id} - {self.name}, hp {self.hp}, passive {self.has_passive}, ' \
-               f'абилка - {self.ability.name}, урон {self.damage_once}, ' \
-               f'урон/ход {self.damage_per_turn}, heal/turn {self.heal_self_per_turn}'
+               f'абилка - {self.ability.name}, пассивка - {self.passive_ability}'
+
 
 
 class Level(models.Model):
