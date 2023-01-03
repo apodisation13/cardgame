@@ -99,8 +99,6 @@ jobs:
           file: ./deploy/Dockerfile
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.MODE }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
           build-args: GOOGLE_SECRET=${{ secrets.GOOGLE_SECRET_JSON }}
 
   deploy:
