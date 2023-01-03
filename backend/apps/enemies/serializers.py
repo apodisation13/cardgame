@@ -50,6 +50,7 @@ class EnemySerializer(serializers.ModelSerializer):
 class EnemyLeaderSerializer(serializers.ModelSerializer):
     faction = serializers.CharField(source="faction.name")
     ability = EnemyLeaderAbilitySerializer(many=False, read_only=True)
+    passive_ability = EnemyPassiveAbilitySerializer(many=False, read_only=True)
 
     class Meta:
         model = EnemyLeader
@@ -62,9 +63,7 @@ class EnemyLeaderSerializer(serializers.ModelSerializer):
             "hp",
             "base_hp",
             "ability",
-            "damage_once",
-            "damage_per_turn",
-            "heal_self_per_turn",
+            "passive_ability",
             "value",
             "timer",
             "default_timer",
