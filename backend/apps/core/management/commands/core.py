@@ -1,3 +1,5 @@
+import json
+
 from django.core.management.base import BaseCommand
 from django.db import transaction
 from pyexcel_odsr import get_data
@@ -9,6 +11,7 @@ from apps.core.models import (
     EnemyLeaderAbility,
     EnemyPassiveAbility,
     Faction,
+    GameConst,
     Move,
     PassiveAbility,
     Type,
@@ -255,6 +258,30 @@ def core_deathwish(self, data):
         self.stdout.write(self.style.ERROR(f'Провалено, {failed}'))
 
 
+# Загрузка GameConst
+def core_game_const(self, data):
+    game_const = data["GameConst"]
+
+    with transaction.atomic():
+        success = 0
+        failed = 0
+        self.stdout.write(self.style.SUCCESS(f'Загружаем GameConst'))
+
+        last = GameConst.objects.all().count()
+
+        for line in game_const[last + 1:]:
+            if line:
+                try:
+                    GameConst.objects.create(data=json.loads(line[1]))
+                    success += 1
+                except Exception as e:
+                    self.stdout.write(self.style.ERROR(e))
+                    failed += 1
+
+        self.stdout.write(self.style.SUCCESS(f'Успешно, {success}'))
+        self.stdout.write(self.style.ERROR(f'Провалено, {failed}'))
+
+
 class Command(BaseCommand):
     help = 'core.Factions, core.Colors'
 
@@ -281,3 +308,4 @@ class Command(BaseCommand):
         core_enemy_passive_ability(self, data)
         core_enemy_leader_ability(self, data)
         core_deathwish(self, data)
+        core_game_const(self, data)

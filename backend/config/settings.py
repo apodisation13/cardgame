@@ -100,7 +100,8 @@ DATABASES = {
         "USER": env("POSTGRES_USER", default=""),
         "PASSWORD": env("POSTGRES_PASSWORD", default=""),
         "HOST": env("POSTGRES_HOST", default="localhost"),
-        "PORT": env("POSTGRES_PORT", cast=int, default=5432),
+        # "PORT": env("POSTGRES_PORT", cast=int, default=5432),
+        "PORT": 5432,
         "ATOMIC_REQUESTS": True,
     }
 }

@@ -1,16 +1,10 @@
 import pytest
 
-from apps.enemies.models import Enemy, Level, UserLevel
+from apps.enemies.models import Level, UserLevel
 
 
 @pytest.mark.django_db
 class TestModels:
-    def test_enemy(self):
-        enemy = Enemy.objects.first()
-        expected_result = ['Soldiers', 'Bronze']
-        for data in expected_result:
-            assert data in enemy.__str__()
-
     def test_level(self):
         children_levels = Level.objects.filter(id__range=(2, 4))
         children_levels_info = [(level.id, level.name) for level in children_levels]

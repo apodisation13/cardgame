@@ -32,6 +32,9 @@ class Enemy(models.Model):
                              on_delete=models.PROTECT)
     shield = models.BooleanField(default=False)  # щит, есть или нет, по умолчанию нет
     has_passive = models.BooleanField(default=False)
+    has_passive_in_field = models.BooleanField(default=False)
+    has_passive_in_deck = models.BooleanField(default=False)
+    has_passive_in_grave = models.BooleanField(default=False)
     passive_ability = models.ForeignKey(EnemyPassiveAbility, related_name="enemies",
                                         on_delete=models.PROTECT,
                                         blank=True, null=True)
@@ -39,6 +42,7 @@ class Enemy(models.Model):
     timer = models.IntegerField(default=0, blank=False, null=False)
     default_timer = models.IntegerField(default=0, blank=False, null=False)
     reset_timer = models.BooleanField(default=False)
+    each_tick = models.BooleanField(default=False)
     has_deathwish = models.BooleanField(default=False)
     deathwish = models.ForeignKey(Deathwish, related_name='enemies',
                                   on_delete=models.PROTECT,
@@ -64,18 +68,18 @@ class EnemyLeader(models.Model):
     ability = models.ForeignKey(EnemyLeaderAbility, related_name='enemy_leaders',
                                 on_delete=models.PROTECT,
                                 blank=True, null=True, default=None)
-    damage_once = models.IntegerField(default=0, blank=True, null=True)  # урон лидера 1 раз
-    damage_per_turn = models.IntegerField(default=0, blank=True, null=True)  # урон лидера каждый ход
-    heal_self_per_turn = models.IntegerField(default=0, blank=True, null=True)  # самолечение каждый ход
+    passive_ability = models.ForeignKey(EnemyPassiveAbility, related_name="enemy_leaders",
+                                        on_delete=models.PROTECT,
+                                        blank=True, null=True)
     value = models.IntegerField(default=0, blank=False, null=False)
     timer = models.IntegerField(default=0, blank=False, null=False)
     default_timer = models.IntegerField(default=0, blank=False, null=False)
     reset_timer = models.BooleanField(default=False)
+    each_tick = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.id} - {self.name}, hp {self.hp}, passive {self.has_passive}, ' \
-               f'абилка - {self.ability.name}, урон {self.damage_once}, ' \
-               f'урон/ход {self.damage_per_turn}, heal/turn {self.heal_self_per_turn}'
+               f'абилка - {self.ability}, пассивка - {self.passive_ability}'
 
 
 class Level(models.Model):

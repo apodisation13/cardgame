@@ -72,11 +72,14 @@ def cards_cards(self, data):
                         image=line[11],
                         has_passive=line[12],
                         has_passive_in_hand=line[13],
-                        passive_ability_id=line[14] if line[14] != "NULL" else None,
-                        value=line[15],
-                        timer=line[16],
-                        default_timer=line[17],
-                        reset_timer=line[18],
+                        has_passive_in_deck=line[14],
+                        has_passive_in_grave=line[15],
+                        passive_ability_id=line[16] if line[16] != "NULL" else None,
+                        value=line[17],
+                        timer=line[18],
+                        default_timer=line[19],
+                        reset_timer=line[20],
+                        each_tick=line[21],
                     )
                     success += 1
                 except Exception as e:
