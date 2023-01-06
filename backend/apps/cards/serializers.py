@@ -160,7 +160,7 @@ class CraftUserCardSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         return {"cards": get_cards_for_user(
-            self=self, user_id=instance.user_id,
+            request=self.context['request'], user_id=instance.user_id,
             card_serializer=CardSerializer
         )}
 
@@ -187,7 +187,7 @@ class MillUserCardSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         return {"cards": get_cards_for_user(
-            self=self, user_id=instance.user_id,
+            request=self.context['request'], user_id=instance.user_id,
             card_serializer=CardSerializer
         )}
 

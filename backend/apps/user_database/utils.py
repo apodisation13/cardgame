@@ -42,9 +42,9 @@ def get_opened_user_levels(self, user_id, level_serializer, season_id):
     return levels
 
 
-def get_cards_for_user(self, user_id, card_serializer):
+def get_cards_for_user(request, user_id, card_serializer):
     """
-    Принимает на вход self из сериализатора, user_id и сериализатор карт.
+    Принимает на вход request, user_id и сериализатор карт.
     Возвращает все карты!
     Если у юзера нет такой карты - у неё count=0.
     """
@@ -59,7 +59,7 @@ def get_cards_for_user(self, user_id, card_serializer):
             if card.pk == user_card["card__pk"]:
                 cards.append({
                     "card": card_serializer(card, context={
-                        "request": self.context["request"]}).data,
+                        "request": request}).data,
                     "count": user_card["count"],
                     "id": user_card["pk"],
                     # передаем id записи UserCard, с фронта по ней patch делается
@@ -68,7 +68,7 @@ def get_cards_for_user(self, user_id, card_serializer):
         else:
             cards.append({
                 "card": card_serializer(card, context={
-                    "request": self.context["request"]}).data,
+                    "request": request}).data,
                 "count": 0,
             })
     print(len(cards), "КАРТЫ")

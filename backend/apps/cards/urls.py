@@ -1,3 +1,4 @@
+from django.urls import path
 from rest_framework.routers import DefaultRouter
 
 from apps.cards.views import (
@@ -6,6 +7,7 @@ from apps.cards.views import (
     CraftUserLeaderViewSet,
     DeckViewSet,
     LeaderViewSet,
+    MegaMillCardView,
     MillUserCardViewSet,
     MillUserLeaderViewSet,
     UserDeckViewSet,
@@ -21,4 +23,6 @@ router.register("patchleaders/craft_user_leaders", CraftUserLeaderViewSet, basen
 router.register("patchleaders/mill_user_leaders", MillUserLeaderViewSet, basename="mill_user_leaders")
 router.register("userdecks", UserDeckViewSet, basename="userdecks")
 
-urlpatterns = router.urls
+urlpatterns = [
+    path("patchcards/mega_mill/", MegaMillCardView.as_view()),
+] + router.urls

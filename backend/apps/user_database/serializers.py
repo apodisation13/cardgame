@@ -38,7 +38,7 @@ class UserDatabaseSerializer(serializers.ModelSerializer):
 
     @extend_schema_field(CardSerializer(many=True))
     def get_cards(self, user):
-        return get_cards_for_user(self=self, user_id=user.id, card_serializer=CardSerializer)
+        return get_cards_for_user(request=self.context['request'], user_id=user.id, card_serializer=CardSerializer)
 
     @extend_schema_field(LeaderSerializer(many=True))
     def get_leaders(self, user):

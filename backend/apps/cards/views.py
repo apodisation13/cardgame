@@ -1,8 +1,12 @@
+from django.db.models import F
 from rest_framework import mixins, status
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 
+from apps.accounts.models import CustomUser
 from apps.cards.mixins import CardBaseMixin, DeckBaseMixin, LeaderBaseMixin
 from apps.cards.models import Card, Deck, Leader, UserCard, UserDeck, UserLeader
 from apps.cards.serializers import (
@@ -15,7 +19,9 @@ from apps.cards.serializers import (
     MillUserLeaderSerializer,
     UserDeckSerializer,
 )
+from apps.cards.utils import get_cards_to_mill
 from apps.user_database.serializers import UserDecksThroughSerializer
+from apps.user_database.utils import get_cards_for_user
 
 
 class CardViewSet(GenericViewSet,
@@ -118,6 +124,43 @@ class MillUserCardViewSet(CardBaseMixin,
     serializer_class = MillUserCardSerializer
     authentication_classes = [TokenAuthentication]
     http_method_names = ["patch"]
+
+
+class MegaMillCardView(APIView):
+    """Mega Mill - оставляет всех карт по одной,
+    остальные уничтожает, возвращая часть ресурсов
+    """
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    http_method_names = ['get', 'post']
+
+    def get(self, request):
+        """Считает, сколько карт будет уничтожено и сколько ресурсов получено"""
+        user_cards = UserCard.objects.filter(user_id=request.user.id)
+        cards_to_mill = get_cards_to_mill(user_cards)
+        return Response(cards_to_mill)
+
+    def post(self, request):
+        """Оставляет всех карт по одной, остальные уничтожает.
+        Возвращает карты и ресурсы в обновлённом количестве.
+        """
+        user_cards = UserCard.objects.filter(user_id=request.user.id)
+        cards_to_mill = get_cards_to_mill(user_cards)
+        total_for_mill = sum(item['mill_count'] * item['scraps_for_card']
+                             for item in cards_to_mill)
+
+        user_cards.update(count=1)
+        user = CustomUser.objects.get(id=request.user.id)
+        user.scraps = F('scraps') + total_for_mill
+        user.save()
+        user.refresh_from_db()
+
+        return Response({
+            "cards": get_cards_for_user(request=request,
+                                        user_id=request.user.id,
+                                        card_serializer=CardSerializer),
+            "scraps": user.scraps
+        })
 
 
 class CraftUserLeaderViewSet(LeaderBaseMixin,
