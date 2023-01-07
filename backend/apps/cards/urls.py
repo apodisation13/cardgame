@@ -24,5 +24,5 @@ router.register("patchleaders/mill_user_leaders", MillUserLeaderViewSet, basenam
 router.register("userdecks", UserDeckViewSet, basename="userdecks")
 
 urlpatterns = [
-    path("patchcards/mega_mill/", MegaMillCardView.as_view()),
+    path("patchcards/mega_mill/", MegaMillCardView.as_view(), name='mega-mill'),
 ] + router.urls

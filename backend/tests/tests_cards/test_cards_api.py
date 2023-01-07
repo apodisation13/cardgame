@@ -1,8 +1,11 @@
 import pytest
 import rest_framework.status as status
+from django.db.models import F
+from django.urls import reverse
 from model_bakery import baker
 
 from apps.cards.models import Card, Deck, Leader, UserCard, UserDeck, UserLeader
+from apps.core.models import GameConst
 
 LOCKED_CARD = 1  # id карты НЕ из стартового набора
 UNLOCKED_CARD = 2  # id карты из стартового набора
@@ -11,6 +14,9 @@ UNLOCKED_LEADER = 1  # id лидера из стартового набора
 BASE_DECK = 1  # id базовой колоды
 INITIAL_COUNT = 1  # Количество карты при создании
 TEST_DECK = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]  # Колода для тестирования
+GOLD_CARD = 2  # id золотой карты из стартового набора
+SILVER_CARD = 8  # id серебряной карты из стартового набора
+BRONZE_CARD = 3  # id бронзовой карты из стартового набора
 
 
 @pytest.mark.django_db
@@ -251,3 +257,23 @@ class TestCardsAPI:
         response = api_client.patch(url, data)
 
         assert response.status_code == status.HTTP_403_FORBIDDEN, 'изменение базовой колоды'
+
+    def test_mega_mill(self, api_client, authenticated_user):
+        url = reverse('mega-mill')
+        user_cards = UserCard.objects.filter(user_id=authenticated_user.id)
+        user_cards.filter(
+            card__in=[BRONZE_CARD, SILVER_CARD, GOLD_CARD]
+        ).update(count=F('count') + 1)
+        initial_scraps = authenticated_user.scraps
+        game_const = GameConst.objects.first().data
+        scraps_to_add = sum(
+            game_const[item]
+            for item in ['mill_gold', 'mill_silver', 'mill_bronze']
+        )
+
+        response = api_client.post(url)
+
+        assert response.status_code == status.HTTP_200_OK, 'Mega Mill'
+        assert response.data['scraps'] == initial_scraps + scraps_to_add, 'Добавление ресурсов'
+        for card in response.data['cards']:
+            assert card['count'] <= 1, 'Количество каждой карты не больше 1'
