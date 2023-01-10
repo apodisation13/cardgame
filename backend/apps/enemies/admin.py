@@ -39,6 +39,7 @@ class LevelAdmin(admin.ModelAdmin):
     list_display_links = ("id", "name", "starting_enemies_number_admin", "enemy_leader_admin",
                           "difficulty", "number_of_enemies_admin",
                           "get_related_levels", "season")
+    search_fields = ['name']
 
     @admin.display(description="enemy_leader")
     def enemy_leader_admin(self, obj):

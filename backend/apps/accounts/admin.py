@@ -9,21 +9,25 @@ from apps.enemies.models import UserLevel
 class UserCardInLine(admin.TabularInline):
     model = UserCard
     extra = 0
+    autocomplete_fields = ['card']
 
 
 class UserLevelInline(admin.TabularInline):
     model = UserLevel
     extra = 0
+    autocomplete_fields = ['level']
 
 
 class UserLeaderInline(admin.TabularInline):
     model = UserLeader
     extra = 0
+    autocomplete_fields = ['leader']
 
 
 class UserDeckInline(admin.TabularInline):
     model = UserDeck
     extra = 0
+    autocomplete_fields = ['deck']
 
 
 class CustomUserAdmin(UserAdmin):
