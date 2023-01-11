@@ -23,6 +23,8 @@ class CardAdmin(admin.ModelAdmin):
 
 class CardDeckInLine(admin.TabularInline):
     model = CardDeck
+    extra = 0
+    autocomplete_fields = ['card']
 
 
 @admin.register(Deck)

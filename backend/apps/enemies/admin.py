@@ -18,16 +18,23 @@ class EnemyAdmin(admin.ModelAdmin):
                    "has_deathwish", "deathwish")
     list_display = [field.name for field in Enemy._meta.fields]
     list_display_links = [field.name for field in Enemy._meta.fields]
+    search_fields = ['name']
 
 
 class LevelEnemyInLine(admin.TabularInline):
     model = LevelEnemy
+    extra = 0
+    verbose_name_plural = 'level enemies'
+    autocomplete_fields = ['enemy']
 
 
 class LevelInline(admin.TabularInline):
     model = LevelRelatedLevels
     fk_name = "level"
     fields = ("line", "related_level")
+    extra = 0
+    verbose_name_plural = 'level related levels'
+    autocomplete_fields = ['related_level']
 
 
 @admin.register(Level)
