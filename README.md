@@ -4,9 +4,13 @@
 
 #### Подготовка
 1. Клонировать репозиторий на свой компьютер  
-`git clone https://github.com/apodisation13/cardgame/`
+```
+git clone https://github.com/apodisation13/cardgame/
+```
 2. Перейти в директорию `backend/`  
-`cd backend/`
+```
+cd backend/
+```
 3. Создать файл `.env` с переменными окружения, аналогичный [.env.template](backend/.env.template)
 4. Открыть на Google Sheets [файл с данными игры](https://docs.google.com/spreadsheets/d/1gQtc5_fB4OxdnL9KfIaXLPBkXhFJWfKT4cnN1YpA0Iw/edit?usp=share_link) 
 и скачать его в формате `OpenDocument (.ods)` в директорию `backend/`
@@ -16,11 +20,17 @@
 
 #### Запуск
 1. Перейти в директорию `docker/`  
-`cd ../docker/`
+```
+cd ../docker/
+```
 2. Выполнить команду  
-`docker-compose --env-file ../backend/.env up --build -d`
+```
+docker-compose --env-file ../backend/.env up --build -d
+```
 3. Создать суперпользователя для входа в административную панель  
-`docker exec -it cardgame_backend python manage.py createsuperuser`
+```
+docker exec -it cardgame_backend python manage.py createsuperuser
+```
 
 После успешного запуска сервера доступны следующие адреса:
 
